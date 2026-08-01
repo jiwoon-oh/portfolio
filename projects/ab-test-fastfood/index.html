@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>세 개의 프로모션, 하나의 탈락자 — 패스트푸드 프로모션 A/B 테스트</title>
+<meta name="description" content="137개 매장 4주 실험 데이터로 세 가지 프로모션의 매출 효과를 검정한 사례 연구. ANOVA, Tukey HSD, 교란변수 점검, 다중검정 보정까지.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css">
+<style>
+:root{
+  --ink:#23233A;
+  --ink-2:#4A4A66;
+  --ink-3:#7B7B96;
+  --wash-a:#EFEDFC;
+  --wash-b:#E3F0FB;
+  --glass:rgba(255,255,255,.66);
+  --glass-2:rgba(255,255,255,.42);
+  --edge:rgba(255,255,255,.85);
+  --blue:#4C7FE0;
+  --violet:#7B6FD8;
+  --rose:#D9536B;
+  --mint:#2F9E88;
+  --amber:#C97A2E;
+  --r:16px;
+  --sans:"Pretendard Variable",Pretendard,-apple-system,system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{
+  margin:0;
+  font-family:var(--sans);
+  color:var(--ink);
+  background:linear-gradient(168deg,var(--wash-a) 0%,var(--wash-b) 62%,#E9F2FA 100%);
+  background-attachment:fixed;
+  line-height:1.75;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:0 28px}
+
+/* ---------- hero ---------- */
+.hero{padding:96px 0 64px}
+.eyebrow{
+  font-family:var(--mono);font-size:12px;letter-spacing:.16em;text-transform:uppercase;
+  color:var(--ink-3);margin:0 0 22px
+}
+h1{
+  font-size:clamp(38px,6.2vw,68px);line-height:1.14;letter-spacing:-.03em;
+  font-weight:700;margin:0 0 22px;max-width:16ch
+}
+h1 .out{color:var(--rose)}
+.lede{font-size:clamp(16px,1.9vw,19px);color:var(--ink-2);max-width:60ch;margin:0 0 14px}
+.meta{font-family:var(--mono);font-size:13px;color:var(--ink-3);margin:0}
+
+/* ---------- elimination ---------- */
+.picks{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:52px 0 0;
+}
+.pick{
+  position:relative;overflow:hidden;
+  background:var(--glass);border:1px solid var(--edge);border-radius:var(--r);
+  padding:26px 24px 22px;
+  opacity:0;transform:translateY(14px);
+  animation:rise .62s cubic-bezier(.2,.7,.3,1) forwards;
+}
+.pick:nth-child(1){animation-delay:.05s}
+.pick:nth-child(2){animation-delay:.35s}
+.pick:nth-child(3){animation-delay:.2s}
+@keyframes rise{to{opacity:1;transform:none}}
+.pick .name{font-family:var(--mono);font-size:13px;letter-spacing:.08em;color:var(--ink-3);margin:0 0 10px}
+.pick .val{font-family:var(--mono);font-size:clamp(26px,3.4vw,36px);font-weight:600;letter-spacing:-.02em;margin:0;line-height:1.1}
+.pick .unit{font-size:13px;color:var(--ink-3);font-weight:400;margin-left:4px}
+.pick .tag{
+  display:inline-block;margin-top:16px;font-size:12.5px;font-weight:600;
+  padding:5px 12px;border-radius:999px
+}
+.pick.keep .val{color:var(--blue)}
+.pick.keep .tag{background:rgba(47,158,136,.14);color:var(--mint)}
+.pick.drop{background:var(--glass-2);border-color:rgba(217,83,107,.32)}
+.pick.drop .val{color:var(--rose)}
+.pick.drop .tag{background:rgba(217,83,107,.14);color:var(--rose)}
+.pick.drop .name{color:var(--rose);opacity:.75}
+.pick.drop::after{
+  content:"";position:absolute;inset:0;
+  background:repeating-linear-gradient(-45deg,transparent 0 10px,rgba(217,83,107,.055) 10px 20px);
+  pointer-events:none
+}
+.picks-note{font-size:14px;color:var(--ink-3);margin:16px 0 0;font-family:var(--mono)}
+
+/* ---------- layout ---------- */
+.main{display:grid;grid-template-columns:250px 1fr;gap:48px;padding:80px 0 40px;align-items:start}
+
+/* ---------- rail ---------- */
+.rail{position:sticky;top:36px}
+.rail h2{
+  font-family:var(--mono);font-size:11.5px;letter-spacing:.15em;text-transform:uppercase;
+  color:var(--ink-3);margin:0 0 14px;font-weight:500
+}
+.rail ol{list-style:none;margin:0;padding:0}
+.rail li{margin:0 0 3px}
+.rail a{
+  display:block;text-decoration:none;color:var(--ink-2);
+  padding:8px 12px;border-radius:9px;font-size:13.5px;line-height:1.45;
+  transition:background .18s,color .18s
+}
+.rail a:hover{background:rgba(255,255,255,.6);color:var(--ink)}
+.rail a.on{background:rgba(255,255,255,.9);color:var(--ink);font-weight:600}
+.rail .p{font-family:var(--mono);font-size:11.5px;color:var(--ink-3);display:block}
+.rail a.on .p{color:var(--blue)}
+
+/* ---------- sections ---------- */
+section{scroll-margin-top:28px;margin:0 0 64px}
+.sec-no{font-family:var(--mono);font-size:12px;color:var(--ink-3);letter-spacing:.1em;margin:0 0 6px}
+h3{font-size:clamp(22px,2.6vw,28px);letter-spacing:-.02em;font-weight:700;margin:0 0 8px;line-height:1.3}
+.sec-sub{color:var(--ink-3);font-size:15px;margin:0 0 26px}
+p{margin:0 0 16px;max-width:74ch}
+.card{
+  background:var(--glass);border:1px solid var(--edge);border-radius:var(--r);
+  padding:26px 28px;margin:0 0 18px
+}
+.card.tight{padding:20px 24px}
+.card h4{font-size:15.5px;font-weight:600;margin:0 0 10px;letter-spacing:-.01em}
+.card p:last-child{margin-bottom:0}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.grid2>.card,.grid3>.card{margin:0}
+
+/* ---------- stat / verdict ---------- */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px;margin:0 0 18px}
+.stat{background:var(--glass-2);border-radius:12px;padding:18px 20px}
+.stat .k{font-family:var(--mono);font-size:11.5px;letter-spacing:.09em;color:var(--ink-3);margin:0 0 6px}
+.stat .v{font-family:var(--mono);font-size:22px;font-weight:600;margin:0;letter-spacing:-.02em}
+.v.blue{color:var(--blue)} .v.violet{color:var(--violet)}
+.v.rose{color:var(--rose)} .v.mint{color:var(--mint)} .v.ink{color:var(--ink-2)}
+.chip{
+  display:inline-block;font-size:12px;font-weight:600;padding:4px 11px;border-radius:999px;
+  font-family:var(--sans);white-space:nowrap
+}
+.chip.rej{background:rgba(217,83,107,.13);color:var(--rose)}
+.chip.hold{background:rgba(47,158,136,.14);color:var(--mint)}
+.chip.na{background:rgba(123,111,216,.13);color:var(--violet)}
+.chip.warn{background:rgba(201,122,46,.14);color:var(--amber)}
+
+/* ---------- figure ---------- */
+figure{margin:0 0 18px;background:var(--glass);border:1px solid var(--edge);border-radius:var(--r);padding:22px 24px 16px}
+figure img{width:100%;height:auto;display:block}
+figcaption{font-size:13px;color:var(--ink-3);margin-top:12px;line-height:1.6}
+
+/* ---------- table ---------- */
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{padding:11px 10px;text-align:right;border-bottom:1px solid rgba(35,35,58,.09)}
+th:first-child,td:first-child{text-align:left}
+th{font-family:var(--mono);font-size:11.5px;letter-spacing:.07em;color:var(--ink-3);font-weight:500;text-transform:uppercase}
+td.num{font-family:var(--mono)}
+tr:last-child td{border-bottom:none}
+
+/* ---------- pair rows ---------- */
+.pair{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;padding:14px 0;border-bottom:1px solid rgba(35,35,58,.08)}
+.pair:last-child{border-bottom:none}
+.pair .lbl{font-family:var(--mono);font-size:14px;font-weight:600;min-width:86px}
+.pair .txt{flex:1;min-width:220px;font-size:14.5px;color:var(--ink-2)}
+.pair .num{font-family:var(--mono);font-size:13px;color:var(--ink-3)}
+
+/* ---------- callout ---------- */
+.callout{
+  background:rgba(255,255,255,.5);border:1px solid var(--edge);
+  border-radius:var(--r);padding:28px 30px;margin:0 0 18px
+}
+.callout .big{font-size:19px;font-weight:700;letter-spacing:-.02em;margin:0 0 10px}
+.money{font-family:var(--mono);font-size:clamp(30px,4.4vw,44px);font-weight:600;letter-spacing:-.03em;margin:0;line-height:1.1}
+
+/* ---------- footer ---------- */
+footer{padding:40px 0 80px;border-top:1px solid rgba(35,35,58,.1);margin-top:20px}
+footer p{font-size:13.5px;color:var(--ink-3);margin:0 0 6px}
+footer a{color:var(--blue);text-decoration:none}
+footer a:hover{text-decoration:underline}
+
+a:focus-visible,.rail a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+
+@media (max-width:900px){
+  .main{grid-template-columns:1fr;gap:0;padding-top:52px}
+  .rail{position:static;margin-bottom:44px}
+  .rail ol{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px}
+  .rail li{flex:0 0 auto}
+  .rail a{white-space:nowrap;background:rgba(255,255,255,.55)}
+  .grid2,.grid3{grid-template-columns:1fr}
+  .picks{grid-template-columns:1fr}
+  .hero{padding:64px 0 40px}
+}
+@media (prefers-reduced-motion:reduce){
+  .pick{animation:none;opacity:1;transform:none}
+}
+</style>
+</head>
+<body>
+
+<header class="wrap hero">
+  <p class="eyebrow">Case study · 가설검정과 인과추론</p>
+  <h1>세 개의 프로모션,<br>하나의 <span class="out">탈락자</span></h1>
+  <p class="lede">패스트푸드 체인이 신메뉴 출시를 앞두고 세 가지 프로모션을 서로 다른 매장에 배정했다. 4주가 지난 뒤, 데이터는 승자를 가려주지 않았다. 대신 확실한 패자를 알려줬다.</p>
+  <p class="meta">137개 매장 · 4주 · 548건 관측 · Python / pandas / SciPy / statsmodels</p>
+
+  <div class="picks">
+    <div class="pick keep">
+      <p class="name">PROMOTION 1</p>
+      <p class="val">$58,100<span class="unit">/주</span></p>
+      <span class="tag">유력 후보</span>
+    </div>
+    <div class="pick drop">
+      <p class="name">PROMOTION 2</p>
+      <p class="val">$47,330<span class="unit">/주</span></p>
+      <span class="tag">탈락 · 유의하게 낮음</span>
+    </div>
+    <div class="pick keep">
+      <p class="name">PROMOTION 3</p>
+      <p class="val">$55,360<span class="unit">/주</span></p>
+      <span class="tag">유력 후보</span>
+    </div>
+  </div>
+  <p class="picks-note">매장 1곳의 주간 평균 매출 · Promotion 1과 3의 차이는 통계적으로 구분되지 않음 (p = .686)</p>
+</header>
+
+<div class="wrap main">
+
+  <nav class="rail" aria-label="검정 로그">
+    <h2>검정 로그</h2>
+    <ol>
+      <li><a href="#s1">① 설계와 가설</a></li>
+      <li><a href="#s2">② 데이터 위생<span class="p">SRM p = .890 · 정상</span></a></li>
+      <li><a href="#s3">③ 분석 단위<span class="p">week 효과 p = .994</span></a></li>
+      <li><a href="#s4">④ 가정 점검<span class="p">Levene p = .627 · 충족</span></a></li>
+      <li><a href="#s5">⑤ 주 검정<span class="p">ANOVA p = .0037 · 기각</span></a></li>
+      <li><a href="#s6">⑥ 사후 검정<span class="p">Tukey · P2만 유의</span></a></li>
+      <li><a href="#s7">⑦ 이상치와 강건성<span class="p">민감도 · 결론 불변</span></a></li>
+      <li><a href="#s8">⑧ 교란변수<span class="p">χ² p = .880 · 없음</span></a></li>
+      <li><a href="#s9">⑨ 세그먼트 일관성<span class="p">Bonferroni 3/3 유의</span></a></li>
+      <li><a href="#s10">⑩ 비즈니스 임팩트</a></li>
+      <li><a href="#s11">⑪ 결론과 제안</a></li>
+      <li><a href="#s12">⑫ 한계</a></li>
+    </ol>
+  </nav>
+
+  <main>
+
+  <section id="s1">
+    <p class="sec-no">01</p>
+    <h3>설계와 가설</h3>
+    <p class="sec-sub">무엇을 물었고, 무엇을 반증하려 했는가</p>
+    <p>체인은 신메뉴 프로모션 세 가지 중 하나를 전사 도입하려 한다. 어떤 안이 매출을 가장 끌어올리는지 알 수 없어, 여러 지역의 매장에 프로모션을 배정하고 4주간 주간 매출을 기록했다. 매장 단위 무작위 배정이므로 관찰 데이터가 아닌 실험 데이터다.</p>
+    <div class="grid2">
+      <div class="card">
+        <h4>귀무가설 H₀</h4>
+        <p>세 프로모션 간 평균 매출에 차이가 없다. <span class="num" style="font-family:var(--mono)">μ₁ = μ₂ = μ₃</span></p>
+      </div>
+      <div class="card">
+        <h4>대립가설 H₁</h4>
+        <p>적어도 하나의 프로모션은 평균 매출이 다르다.</p>
+      </div>
+    </div>
+    <div class="stats">
+      <div class="stat"><p class="k">유의수준</p><p class="v violet">α = 0.05</p></div>
+      <div class="stat"><p class="k">주 검정</p><p class="v blue">One-way ANOVA</p></div>
+      <div class="stat"><p class="k">사후 검정</p><p class="v mint">Tukey HSD</p></div>
+    </div>
+    <div class="card tight">
+      <p>독립변수 <code style="font-family:var(--mono)">Promotion</code>은 3개 수준의 범주형, 종속변수 <code style="font-family:var(--mono)">SalesInThousands</code>는 연속형이며 비교 대상이 집단 평균이므로 ANOVA가 적합하다. F검정은 방향을 지정하지 않는 비방향적 검정이라 “어느 쪽이 더 높은가”는 답하지 못한다. 그건 사후 검정의 몫이다.</p>
+    </div>
+  </section>
+
+  <section id="s2">
+    <p class="sec-no">02</p>
+    <h3>데이터 위생</h3>
+    <p class="sec-sub">검정에 들어가기 전에 데이터를 먼저 의심한다</p>
+    <p>결과를 믿으려면 배정이 깨지지 않았다는 것부터 확인해야 한다. 중복 행, 같은 매장의 주차 중복, 한 매장이 여러 프로모션에 걸친 경우, 관측 주차 누락을 모두 점검했다.</p>
+    <div class="card">
+      <table>
+        <thead><tr><th>점검 항목</th><th>결과</th><th>판정</th></tr></thead>
+        <tbody>
+          <tr><td>완전 중복 행</td><td class="num">0건</td><td><span class="chip hold">이상 없음</span></td></tr>
+          <tr><td>LocationID + week 중복</td><td class="num">0건</td><td><span class="chip hold">이상 없음</span></td></tr>
+          <tr><td>매장별 프로모션 배정 불일치</td><td class="num">0건</td><td><span class="chip hold">이상 없음</span></td></tr>
+          <tr><td>매장당 관측 주차</td><td class="num">137개 전부 4주</td><td><span class="chip hold">완비</span></td></tr>
+          <tr><td>SRM (배정 균형, χ² 적합도)</td><td class="num">p = 0.890</td><td><span class="chip hold">정상</span></td></tr>
+          <tr><td>IQR 이상치</td><td class="num">46건</td><td><span class="chip warn">검토 대상</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>SRM(Sample Ratio Mismatch)은 실험군 배정 비율이 의도와 어긋났는지 보는 점검이다. 배정 단위가 매장이므로 548개 행이 아니라 137개 매장 기준으로 검정했고, 43 : 47 : 47이라는 배분은 무작위 배정에서 충분히 나올 수 있는 수준이었다.</p>
+    <p><strong>정제 전 548행 → 정제 후 548행.</strong> 중복·결측·배정 오류가 없어 행을 제거하지 않았다. 이상치 46건은 아래 ⑦에서 따로 다룬다.</p>
+  </section>
+
+  <section id="s3">
+    <p class="sec-no">03</p>
+    <h3>분석 단위</h3>
+    <p class="sec-sub">548행을 그대로 쓰면 p값이 거짓말을 한다</p>
+    <p>ANOVA는 관측치가 서로 독립이라고 가정한다. 그런데 이 데이터는 매장 하나가 4주치 행으로 들어가 있다. 같은 매장의 1주차와 2주차 매출은 독립이 아니라 서로 닮아 있다(자기상관). 548행을 그대로 넣으면 실제로는 137개뿐인 독립 단위를 548개로 부풀려 세는 셈이고, 표본이 커진 만큼 p값은 실제보다 작아진다.</p>
+    <p>프로모션은 매장 단위로 배정됐으므로 분석 단위도 매장에 맞췄다. 매장별 4주 평균 매출을 대표값으로 삼아 137개 관측치로 압축했다. 정보를 버리는 결정이라 근거를 세 가지로 확인했다.</p>
+    <div class="grid3">
+      <div class="card tight">
+        <h4>주차 효과가 없다</h4>
+        <p class="num" style="font-family:var(--mono);color:var(--ink-3);font-size:13px">F = 0.028 · p = 0.9935</p>
+        <p style="font-size:14px">1주차든 4주차든 매출에 체계적 차이가 없다. 평균을 내도 추세 정보를 잃지 않는다.</p>
+      </div>
+      <div class="card tight">
+        <h4>변동은 매장 사이에 있다</h4>
+        <p class="num" style="font-family:var(--mono);color:var(--ink-3);font-size:13px">매장 간 16.19 vs 매장 내 4.73</p>
+        <p style="font-size:14px">매장 간 표준편차가 약 3.4배 크다. 주차별 요동은 신호가 아니라 노이즈에 가깝다.</p>
+      </div>
+      <div class="card tight">
+        <h4>대안은 과했다</h4>
+        <p class="num" style="font-family:var(--mono);color:var(--ink-3);font-size:13px">Repeated measures / 혼합모형</p>
+        <p style="font-size:14px">주차 정보를 살리려면 혼합모형이 필요하지만, 살릴 정보가 노이즈뿐이라 복잡도를 지불할 이유가 없었다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="s4">
+    <p class="sec-no">04</p>
+    <h3>가정 점검</h3>
+    <p class="sec-sub">정규성은 깨졌고, 등분산은 지켜졌다</p>
+    <figure>
+      <img src="assets/qq.png" alt="세 프로모션 그룹의 Q-Q plot. 중앙부는 기준선에 붙어 있으나 오른쪽 꼬리가 위로 벌어진다.">
+      <figcaption>세 그룹 모두 중앙부는 정규분포에 잘 맞지만, 오른쪽 꼬리에서 점들이 기준선 위로 벌어진다. 매출이 구조적으로 높은 대형 시장 매장들이다.</figcaption>
+    </figure>
+    <div class="grid2">
+      <div class="card">
+        <h4>Shapiro-Wilk <span class="chip rej">정규성 기각</span></h4>
+        <p class="num" style="font-family:var(--mono);font-size:13.5px;color:var(--ink-2)">P1 p = .0002 · P2 p &lt; .0001 · P3 p = .0001</p>
+        <p style="font-size:14.5px">세 그룹 모두 기각. 다만 원인은 소수의 대형 시장 매장이라 분포가 근본적으로 다른 건 아니다.</p>
+      </div>
+      <div class="card">
+        <h4>Levene <span class="chip hold">등분산 충족</span></h4>
+        <p class="num" style="font-family:var(--mono);font-size:13.5px;color:var(--ink-2)">stat = 0.468 · p = 0.6272</p>
+        <p style="font-size:14.5px">세 그룹의 분산은 통계적으로 동일하다고 볼 수 있다.</p>
+      </div>
+    </div>
+    <div class="card tight">
+      <p>정규성이 깨졌으니 ANOVA를 밀어붙일 근거가 약하다. 그렇다고 비모수로 갈아타면 “평균이 얼마나 다른가”를 말하기 어려워진다. 그룹 크기가 43·47·47로 균형적이고 등분산이 지켜졌다는 점에 기대어, <strong>ANOVA와 Kruskal-Wallis를 함께 돌려 결론이 일치하는지 교차 검증하는 쪽</strong>을 택했다.</p>
+    </div>
+  </section>
+
+  <section id="s5">
+    <p class="sec-no">05</p>
+    <h3>주 검정</h3>
+    <p class="sec-sub">차이는 있다. 다만 그게 전부는 아니다</p>
+    <figure>
+      <img src="assets/box.png" alt="세 프로모션의 매장 평균 매출 박스플롯. Promotion 2의 중앙값이 가장 낮다.">
+      <figcaption>매장 4주 평균 매출 분포. Promotion 2의 상자 전체가 아래로 내려가 있다.</figcaption>
+    </figure>
+    <div class="stats">
+      <div class="stat"><p class="k">ANOVA F</p><p class="v blue">5.846</p></div>
+      <div class="stat"><p class="k">p-value</p><p class="v rose">0.0037</p></div>
+      <div class="stat"><p class="k">효과크기 η²</p><p class="v violet">0.080</p></div>
+      <div class="stat"><p class="k">Kruskal-Wallis</p><p class="v mint">p = 0.0002</p></div>
+    </div>
+    <p>모수·비모수 검정이 같은 결론에 도달했다. 정규성 위반에도 결론이 흔들리지 않는다는 뜻이다.</p>
+    <div class="card tight">
+      <p>다만 <strong>η² = 0.080</strong>은 프로모션이 매출 분산의 약 8%만 설명한다는 뜻이다. 나머지 92%는 시장 규모 같은 다른 요인이 쥐고 있다. “유의하다”와 “중요하다”는 다른 말이고, 이 실험에서 프로모션은 유의하지만 지배적인 요인은 아니다.</p>
+    </div>
+  </section>
+
+  <section id="s6">
+    <p class="sec-no">06</p>
+    <h3>사후 검정</h3>
+    <p class="sec-sub">어느 쌍이, 얼마나</p>
+    <figure>
+      <img src="assets/tukey.png" alt="Tukey HSD 95% 신뢰구간. P1 vs P2와 P2 vs P3는 0을 지나지 않고, P1 vs P3는 0을 포함한다.">
+      <figcaption>Tukey HSD 95% 신뢰구간. 구간이 0(점선)을 지나지 않으면 유의하다.</figcaption>
+    </figure>
+    <div class="card">
+      <div class="pair">
+        <span class="lbl">P1 · P2</span>
+        <span class="txt">Promotion 2가 1보다 주당 <strong>$10,770</strong> 낮다 <span style="color:var(--rose)">(−18.5%)</span></span>
+        <span class="num">p = .004 · d = 0.71</span>
+        <span class="chip rej">유의</span>
+      </div>
+      <div class="pair">
+        <span class="lbl">P1 · P3</span>
+        <span class="txt">Promotion 3이 1보다 주당 $2,734 낮지만 구간이 0을 포함한다</span>
+        <span class="num">p = .686 · d = 0.17</span>
+        <span class="chip na">차이 없음</span>
+      </div>
+      <div class="pair">
+        <span class="lbl">P2 · P3</span>
+        <span class="txt">Promotion 3이 2보다 주당 <strong>$8,035</strong> 높다 <span style="color:var(--mint)">(+17.0%)</span></span>
+        <span class="num">p = .037 · d = 0.52</span>
+        <span class="chip rej">유의</span>
+      </div>
+    </div>
+    <p>서열은 <strong>Promotion 1 ≈ Promotion 3 &gt; Promotion 2</strong>다. 1과 3은 통계적으로 구분되지 않고, 2만 두 대안 모두보다 낮다. 이 실험이 답한 것은 “무엇을 고를까”가 아니라 <strong>“무엇을 버릴까”</strong>였다.</p>
+  </section>
+
+  <section id="s7">
+    <p class="sec-no">07</p>
+    <h3>이상치와 강건성</h3>
+    <p class="sec-sub">튀는 값이 오류인지 구조인지 구분한다</p>
+    <p>IQR 기준으로 46건이 이상치로 잡혔는데, <strong>그중 45건이 MarketID 3(Large)</strong>에 몰려 있었다. 대형 시장 매장은 원래 매출이 높다는 뜻이지 기록이 잘못됐다는 뜻이 아니다. 이런 값을 제거하면 실제 신호를 지우는 셈이 된다.</p>
+    <figure>
+      <img src="assets/outlier507.png" alt="LocationID 507 매장의 주차별 매출 막대그래프. 2주차만 17.34로 낮다.">
+      <figcaption>유일한 예외였던 LocationID 507. 4주 평균은 28.14로 같은 시장(28.14~43.32) 안에서 최저지만 이례적이지 않다. 2주차 한 주만 17.34로 내려앉았다.</figcaption>
+    </figure>
+    <p>자릿수 오류라면 흔적이 남았을 텐데 그렇지 않았고, 재고 부족이나 휴무 같은 사유를 확인할 컬럼도 없었다. 지울 근거가 없어 남겨두고, 대신 <strong>이 값이 결론을 좌우하는지 직접 확인</strong>했다.</p>
+    <div class="grid2">
+      <div class="card tight">
+        <h4>제거 전 (원본)</h4>
+        <p class="num" style="font-family:var(--mono);font-size:17px;color:var(--blue)">F = 5.846 · p = 0.0037</p>
+      </div>
+      <div class="card tight">
+        <h4>507번 2주차 제거 후</h4>
+        <p class="num" style="font-family:var(--mono);font-size:17px;color:var(--blue)">F = 5.778 · p = 0.0039</p>
+      </div>
+    </div>
+    <p>결론은 특정 관측치 하나에 기대고 있지 않았다. 그래서 원본 548행을 그대로 유지했다.</p>
+  </section>
+
+  <section id="s8">
+    <p class="sec-no">08</p>
+    <h3>교란변수</h3>
+    <p class="sec-sub">Promotion 2가 불리한 시장에 몰린 건 아닐까</p>
+    <p>“Promotion 2가 낮다”는 결과를 믿기 전에, 애초에 그 프로모션이 작은 시장이나 오래된 매장에 몰려 배정된 건 아닌지 확인해야 한다. 그렇다면 프로모션 효과가 아니라 배정 편향을 본 것이 된다.</p>
+    <div class="grid2">
+      <div class="card tight">
+        <h4>Promotion × MarketSize <span class="chip hold">독립</span></h4>
+        <p class="num" style="font-family:var(--mono);font-size:13.5px;color:var(--ink-2)">χ² = 1.189 · p = 0.880</p>
+        <p style="font-size:14.5px">특정 프로모션이 큰 시장이나 작은 시장으로 쏠리지 않았다.</p>
+      </div>
+      <div class="card tight">
+        <h4>Promotion × 매장 연차 <span class="chip hold">차이 없음</span></h4>
+        <p class="num" style="font-family:var(--mono);font-size:13.5px;color:var(--ink-2)">F = 0.450 · p = 0.639</p>
+        <p style="font-size:14.5px">세 그룹의 매장 연차에도 유의한 차이가 없었다.</p>
+      </div>
+    </div>
+    <div class="card">
+      <h4>MarketSize를 통제한 이원 ANOVA</h4>
+      <div class="stats" style="margin-bottom:12px">
+        <div class="stat"><p class="k">Promotion</p><p class="v blue">F = 16.04</p></div>
+        <div class="stat"><p class="k">MarketSize</p><p class="v violet">F = 96.13</p></div>
+        <div class="stat"><p class="k">교호작용</p><p class="v ink">p = 0.266</p></div>
+      </div>
+      <p>여기서 흥미로운 일이 벌어진다. MarketSize를 모델에 넣자 Promotion의 F값이 5.85에서 <strong>16.04로 오히려 커졌다.</strong> 교란변수였다면 통제 후 효과가 약해져야 하는데 반대로 선명해진 것이다. MarketSize는 매출을 크게 흔들지만 프로모션 배정과는 무관한 노이즈였고, 그 노이즈를 걷어내니 프로모션의 순수 효과가 드러났다. 교호작용도 유의하지 않아(p = .266) 프로모션 효과의 크기가 시장 규모에 따라 달라지지도 않는다.</p>
+    </div>
+  </section>
+
+  <section id="s9">
+    <p class="sec-no">09</p>
+    <h3>세그먼트 일관성</h3>
+    <p class="sec-sub">쪼개서 봐도 같은 결론인가 — 그리고 그 반복이 만든 함정</p>
+    <figure>
+      <img src="assets/segbar.png" alt="시장 규모별 프로모션 평균 매출 막대그래프. Small, Medium, Large 모두 Promotion 2가 가장 낮다.">
+      <figcaption>Small · Medium · Large 어디에서나 Promotion 2가 가장 낮다.</figcaption>
+    </figure>
+    <p>시장 규모별로 나눠 ANOVA를 세 번 반복했다. 그런데 검정을 반복하면 그 자체로 우연히 유의해질 확률이 올라간다. α = .05로 3회 검정하면 모두 우연이어도 최소 하나가 유의할 확률이 약 14%다. 그래서 Bonferroni 보정을 적용해 비교했다.</p>
+    <div class="card">
+      <table>
+        <thead><tr><th>세그먼트</th><th>n</th><th>p (원값)</th><th>Bonferroni</th><th>판정</th></tr></thead>
+        <tbody>
+          <tr><td>Small</td><td class="num">15</td><td class="num">0.0032</td><td class="num">0.0096</td><td><span class="chip rej">유의</span></td></tr>
+          <tr><td>Medium</td><td class="num">80</td><td class="num">0.0001</td><td class="num">0.0003</td><td><span class="chip rej">유의</span></td></tr>
+          <tr><td>Large</td><td class="num">42</td><td class="num">0.0077</td><td class="num">0.0232</td><td><span class="chip rej">유의</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>보정 후에도 세 세그먼트 모두 살아남았다(BH 보정 결과도 동일). Promotion 2의 열세는 특정 시장에서 우연히 나온 결과가 아니라 일관된 패턴이다. 다만 Small은 매장이 15개(그룹당 약 5개)뿐이라 다른 두 세그먼트보다 결론의 확실성이 낮다.</p>
+  </section>
+
+  <section id="s10">
+    <p class="sec-no">10</p>
+    <h3>비즈니스 임팩트</h3>
+    <p class="sec-sub">p값을 돈으로 환산하면</p>
+    <div class="grid2">
+      <div class="callout">
+        <p class="big">vs Promotion 1</p>
+        <p class="money" style="color:var(--rose)">$2,024,700</p>
+        <p style="font-size:14px;color:var(--ink-3);margin:10px 0 0">47개 매장 · 4주 합산 추정<br>매장 1곳당 주간 $10,770 (−18.5%)</p>
+      </div>
+      <div class="callout">
+        <p class="big">vs Promotion 3</p>
+        <p class="money" style="color:var(--amber)">$1,510,600</p>
+        <p style="font-size:14px;color:var(--ink-3);margin:10px 0 0">47개 매장 · 4주 합산 추정<br>매장 1곳당 주간 $8,035 (−14.5%)</p>
+      </div>
+    </div>
+    <div class="card">
+      <h4>이 숫자를 어떻게 읽어야 하나</h4>
+      <p>매장 1곳·1주 기준 차이는 약 $10,770이다. 작아 보이지만 47개 매장과 4주에 걸쳐 누적되면 200만 달러가 된다. 반대로 말하면, <strong>200만 달러라는 숫자는 매장 하나가 잃은 금액이 아니다.</strong> 스케일을 명시하지 않으면 과장으로 읽힌다.</p>
+      <p>또한 이건 점추정이다. Tukey의 95% 신뢰구간(매장당 $2,944 ~ $18,595)을 그대로 곱하면 총액은 <strong>약 55만 ~ 350만 달러</strong> 범위가 된다. 200만은 그 안에서 가장 그럴듯한 값일 뿐이다. 그리고 매출 기준이라 프로모션 실행 비용은 빠져 있다.</p>
+    </div>
+  </section>
+
+  <section id="s11">
+    <p class="sec-no">11</p>
+    <h3>결론과 제안</h3>
+    <p class="sec-sub">데이터가 답한 것과 답하지 않은 것</p>
+    <div class="card">
+      <h4><span class="chip rej">보류</span> &nbsp;Promotion 2는 채택하지 않는다</h4>
+      <p>통계적 유의성(p = .004), 중간 수준의 효과크기(η² = .080, d = 0.71), 교란변수 부재, 세 세그먼트 전반의 일관성, 이상치에 대한 강건성까지 모두 통과했다. 어느 한 검정에 기댄 결론이 아니다.</p>
+    </div>
+    <div class="card">
+      <h4><span class="chip na">동등</span> &nbsp;Promotion 1과 3은 매출로 가릴 수 없다</h4>
+      <p>Tukey에서 유의하지 않았고(p = .686), 시장 규모별로 나눠도 방향이 엇갈렸다(Small −0.65 · Medium −2.20 · Large +1.97, 단위 천 달러). 두 안은 매출 측면에서 실질적으로 동등한 대안이다.</p>
+      <p>따라서 최종 선택은 이 데이터 밖에서 이뤄져야 한다. 실행 비용, 운영 난이도, 재고와 물류 부담을 함께 놓고 결정할 것을 제안한다. 억지로 하나를 고르는 것보다, 무엇을 더 알아야 고를 수 있는지 말하는 편이 정확하다.</p>
+    </div>
+  </section>
+
+  <section id="s12">
+    <p class="sec-no">12</p>
+    <h3>한계</h3>
+    <p class="sec-sub">이 분석이 답하지 못한 것</p>
+    <div class="grid2">
+      <div class="card tight">
+        <h4>4주라는 짧은 창</h4>
+        <p style="font-size:14.5px">초기 반응이 신기함 때문인지(novelty effect) 지속되는 효과인지 구분할 수 없다. 4주 이후 추이를 봐야 한다.</p>
+      </div>
+      <div class="card tight">
+        <h4>집계로 잃은 정보</h4>
+        <p style="font-size:14.5px">독립성을 확보하려고 매장별 4주 평균을 썼다. 주차별 변동 패턴은 분석에 반영되지 않았다.</p>
+      </div>
+      <div class="card tight">
+        <h4>비용 정보 부재</h4>
+        <p style="font-size:14.5px">매출만으로 비교했다. 프로모션별 실행 비용이 다르다면 순이익 기준 서열은 달라질 수 있다.</p>
+      </div>
+      <div class="card tight">
+        <h4>작은 세그먼트</h4>
+        <p style="font-size:14.5px">Small market은 그룹당 약 5개 매장뿐이다. 보정 후에도 유의했지만 표본을 더 확보해 재검증하는 편이 안전하다.</p>
+      </div>
+    </div>
+    <div class="card tight">
+      <h4>추가로 수집할 것</h4>
+      <p>① 프로모션별 실행 비용(인건비 · 마케팅비 · 재고 부담) &nbsp;② 4주 이후의 장기 매출 추이 &nbsp;③ Small market 표본 추가 확보</p>
+    </div>
+  </section>
+
+  </main>
+</div>
+
+<footer class="wrap">
+  <p>데이터 출처 · IBM Watson Analytics “Fast Food Marketing Campaign A/B Test” (Kaggle)</p>
+  <p>분석 · Python 3, pandas, SciPy, statsmodels, matplotlib</p>
+</footer>
+
+<script>
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail a'));
+  var secs  = links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+  if(!('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(!e.isIntersecting) return;
+      var i = secs.indexOf(e.target);
+      links.forEach(function(a,j){ a.classList.toggle('on', j===i); });
+    });
+  }, { rootMargin: '-10% 0px -70% 0px', threshold: 0 });
+  secs.forEach(function(s){ if(s) io.observe(s); });
+})();
+</script>
+
+</body>
+</html>
