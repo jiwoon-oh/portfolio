@@ -130,6 +130,7 @@ th,td{padding:10px 9px;text-align:right;border-bottom:1px solid rgba(35,35,58,.0
 th:first-child,td:first-child{text-align:left}
 th{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--ink-3);font-weight:500;text-transform:uppercase}
 td.num{font-family:var(--mono)}
+th.tl,td.tl{text-align:left}
 td.lead{font-weight:600}
 tr:last-child td{border-bottom:none}
 tr.mark td{background:rgba(76,127,224,.055)}
@@ -152,6 +153,23 @@ tr.mark td{background:rgba(76,127,224,.055)}
 .rrow dd{margin:0;padding:14px 24px 14px 6px;font-size:15px;line-height:1.6;color:var(--ink-2)}
 .rrow dd strong{color:var(--ink);font-weight:600}
 dl{margin:0}
+
+/* ── verification log ─────────────────────────────────────── */
+.vlog{display:grid;gap:14px;margin:0 0 20px}
+.vcard{background:var(--glass);border:1px solid var(--edge);border-radius:var(--r);overflow:hidden}
+.vcard > header{display:flex;gap:12px;align-items:baseline;flex-wrap:wrap;
+  padding:16px 22px;border-bottom:1px solid rgba(35,35,58,.08);background:var(--glass-2)}
+.vcard .vid{font-family:var(--mono);font-size:12px;font-weight:600;color:var(--blue);flex:none}
+.vcard .vt{font-size:15.5px;font-weight:600;letter-spacing:-.012em;flex:1 1 auto;min-width:0}
+.vrow{display:grid;grid-template-columns:104px 1fr;border-bottom:1px solid rgba(35,35,58,.06)}
+.vrow:last-child{border-bottom:none}
+.vrow dt{font-family:var(--mono);font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--ink-3);padding:13px 0 13px 22px}
+.vrow dd{margin:0;padding:13px 22px 13px 6px;font-size:14.8px;line-height:1.62;color:var(--ink-2)}
+.vrow dd strong{color:var(--ink);font-weight:600}
+/* mono block — install lines, formulas, run order */
+.code{font-family:var(--mono);font-size:12.5px;color:var(--ink-2);background:var(--glass-2);
+  border-radius:10px;padding:13px 17px;margin:0 0 14px;overflow-x:auto;white-space:pre;line-height:1.75}
 /* callout */
 .callout{background:rgba(255,255,255,.5);border:1px solid var(--edge);border-radius:var(--r);padding:26px 28px;margin:0}
 .callout .big{font-size:14px;font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin:0 0 12px}
@@ -175,6 +193,9 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
   .picks{grid-template-columns:1fr}
   .pair{grid-template-columns:1fr;gap:5px}
   .rrow{grid-template-columns:1fr}
+  .vrow{grid-template-columns:1fr}
+  .vrow dt{padding:13px 22px 0}
+  .vrow dd{padding:4px 22px 13px}
   .rrow dt{padding:14px 24px 0}
   .rrow dd{padding:4px 24px 14px}
   .hero{padding:64px 0 36px}
