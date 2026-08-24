@@ -47,31 +47,83 @@
 <nav class="rail" aria-label="Analysis log">
   <h2>Analysis log</h2>
   <ol>
-    <li><a href="#s1">1 · Question</a></li>
-    <li><a href="#s2">2 · Judgment calls<span class="p">995,377 → 67,475</span></a></li>
-    <li><a href="#s3">3 · The label<span class="p">43.7% no-event cells</span></a></li>
-    <li><a href="#s4">4 · Choosing the test<span class="p">normality 39/39 rejected</span></a></li>
-    <li><a href="#s5">5 · Selection effect<span class="p">permutation p = .344</span></a></li>
-    <li><a href="#s6">6 · Matching<span class="p">SMD 1.00 → 0.037</span></a></li>
-    <li><a href="#s7">7 · Heterogeneity<span class="p">Woolf p &lt; .0001</span></a></li>
-    <li><a href="#s8">8 · What moves it<span class="p">footfall p = .078</span></a></li>
-    <li><a href="#s9">9 · Location sensitivity<span class="p">ε² 0.120 vs 0.0002</span></a></li>
-    <li><a href="#s10">10 · Baselines<span class="p">official index lift 0.937</span></a></li>
-    <li><a href="#s11">11 · Reliability<span class="p">ceiling 0.444 &lt; 0.515</span></a></li>
-    <li><a href="#s12">12 · Forecast<span class="p">2026 Q2 · 2,737 cells</span></a></li>
-    <li><a href="#s13">13 · Recommendations</a></li>
-    <li><a href="#s14">14 · Limitations</a></li>
+    <li><a href="#s0">00 · Verification log<span class="p">5 doubts · 2 discarded</span></a></li>
+    <li><a href="#s1">01 · The question</a></li>
+    <li><a href="#s2">02 · Data &amp; preprocessing<span class="p">995,377 → 67,475</span></a></li>
+    <li><a href="#s3">03 · The label<span class="p">43.7% no-event cells</span></a></li>
+    <li><a href="#s4">04 · Choosing the test<span class="p">normality 39/39 rejected</span></a></li>
+    <li><a href="#s5">05 · A · Selection effect<span class="p">permutation p = .344</span></a></li>
+    <li><a href="#s6">06 · B · Matching<span class="p">Woolf p &lt; .0001</span></a></li>
+    <li><a href="#s7">07 · C·D · What moves it<span class="p">footfall p = .078</span></a></li>
+    <li><a href="#s8">08 · E · Performance<span class="p">rolling AUC 0.666</span></a></li>
+    <li><a href="#s9">09 · F · Location sensitivity<span class="p">ε² 0.120 vs 0.0002</span></a></li>
+    <li><a href="#s10">10 · G · Forecast<span class="p">2026 Q2 · 2,737 cells</span></a></li>
+    <li><a href="#s11">11 · Insights</a></li>
+    <li><a href="#s12">12 · Recommendations</a></li>
+    <li><a href="#s13">13 · Limits &amp; reproducibility</a></li>
   </ol>
 </nav>
 
 <main>
 
-<!-- 1 -->
+<section id="s0">
+  <p class="sec-no">00</p>
+  <h3>Verification log</h3>
+  <p class="sec-sub">Every result that was doubted, and what the doubt returned</p>
+  <p class="takeaway">The strength of this project is not the difficulty of the methods. It is the number of times the result was doubted — <span class="hl">five times, and twice the result was thrown out.</span></p>
+  <div class="vlog">
+    <article class="vcard">
+      <header><span class="vid">V-01</span><span class="vt">Permutation test — was the gap real?</span><span class="chip rej">gap rejected</span></header>
+      <dl>
+        <div class="vrow"><dt>Doubt</dt><dd>We picked the highest of ten categories. Even with no real difference between them, the top one lands above the average.</dd></div>
+        <div class="vrow"><dt>Measure</dt><dd>Shuffled the label 1,000 times — breaking any link between category and outcome while holding every group size fixed — and measured how large a top-minus-mean gap appears on its own.</dd></div>
+        <div class="vrow"><dt>Verdict</dt><dd>Observed <strong>+1.70 pp</strong> against a null of <strong>+1.49 pp</strong>. <strong>p = .344</strong> — 88% of the gap is the act of choosing.</dd></div>
+      </dl>
+    </article>
+    <article class="vcard">
+      <header><span class="vid">V-02</span><span class="vt">SMD balance check — did the matching actually work?</span><span class="chip hold">balance passed</span></header>
+      <dl>
+        <div class="vrow"><dt>Doubt</dt><dd>Saying &ldquo;we matched on store count&rdquo; is not the same as the groups being comparable.</dd></div>
+        <div class="vrow"><dt>Measure</dt><dd>Standardised mean difference on all four covariates, before and after. Threshold |SMD| &lt; 0.1.</dd></div>
+        <div class="vrow"><dt>Verdict</dt><dd>Store count <strong>1.00 → 0.037</strong> (96.3% reduction). All four clear the threshold — the ATT is interpretable.</dd></div>
+      </dl>
+    </article>
+    <article class="vcard">
+      <header><span class="vid">V-03</span><span class="vt">Woolf homogeneity — may one number summarise it?</span><span class="chip warn">not summarisable</span></header>
+      <dl>
+        <div class="vrow"><dt>Doubt</dt><dd>A mean will blend two effects pointing in opposite directions into one tidy number.</dd></div>
+        <div class="vrow"><dt>Measure</dt><dd>Split the 7,042 matched pairs into store-count quintiles and tested whether the stratum odds ratios can be treated as one.</dd></div>
+        <div class="vrow"><dt>Verdict</dt><dd><strong>p &lt; .0001</strong> — the strata differ and the sign flips in the largest band. −5.77 pp must never be quoted alone.</dd></div>
+      </dl>
+    </article>
+    <article class="vcard">
+      <header><span class="vid">V-04</span><span class="vt">Two-stage decomposition — is the size effect an illusion too?</span><span class="chip warn">label defect</span></header>
+      <dl>
+        <div class="vrow"><dt>Doubt</dt><dd>&ldquo;Bigger cells are riskier&rdquo; might only mean &ldquo;bigger cells have events more often.&rdquo;</dd></div>
+        <div class="vrow"><dt>Measure</dt><dd>Decomposed P(decline) = P(event) × P(decline | event) and estimated the store-count coefficient at each stage.</dd></div>
+        <div class="vrow"><dt>Verdict</dt><dd>Stage 1 <strong>+1.483</strong>, stage 2 <strong>+0.046</strong> (p = .114) — the size dependence is entirely trapped in stage 1.</dd></div>
+      </dl>
+    </article>
+    <article class="vcard">
+      <header><span class="vid">V-05</span><span class="vt">Split-half reliability — is the answer key itself trustworthy?</span><span class="chip rej">result discarded</span></header>
+      <dl>
+        <div class="vrow"><dt>Doubt</dt><dd>A category rank correlation of <strong>0.915</strong> appeared — but store count alone reproduced it.</dd></div>
+        <div class="vrow"><dt>Measure</dt><dd>Split the data in half, ranked the categories independently in each half, and correlated the two rankings to get the reliability of the target.</dd></div>
+        <div class="vrow"><dt>Verdict</dt><dd>Reliability <strong>0.198</strong> → ceiling √0.198 = <strong>0.444</strong>. Our 0.515 exceeds a ceiling it should not be able to reach, so it is noise.</dd></div>
+      </dl>
+    </article>
+  </div>
+  <div class="card">
+    <h4>The number I threw away <span class="chip rej">not reported</span></h4>
+    <p class="small">Category rank correlation <span class="hl-r">0.515</span> looked like the strongest result in the project. It was removed, because the thing it measures — a ranking of ten categories — is itself too unstable to support it (V-05). Performance is stated only in cell-level terms: <span class="hl">AUC 0.717</span> and a <span class="hl">1.52× top-decile lift</span>, both against an explicit baseline.</p>
+  </div>
+</section>
+
 <section id="s1">
   <p class="sec-no">01</p>
-  <h3>Question</h3>
+  <h3>The question</h3>
   <p class="sec-sub">Who decides what with this number, and what could go wrong</p>
-  <p class="takeaway">District officers allocate consulting and emergency loans using a metric nobody had audited. The audit is the project.</p>
+<p class="takeaway">District officers allocate consulting and emergency loans using a metric nobody had audited. The audit is the project.</p>
   <p>The unit of analysis throughout is a <strong>cell</strong> — one commercial district × one food category × one quarter. Seoul's Commercial District Analysis Service publishes a <span class="hl">net decline</span> flag per cell each quarter — true when closures exceed openings. Officers rank food categories by it and send support to the top of the list. Korean restaurants sit at #1 every quarter.</p>
   <p>Korean restaurants are also the largest category in alley districts, averaging <span class="hl">21.3 stores per cell</span> against <span class="hl">10.3</span> for the other nine categories. More stores means more open/close events, and more events means more chances to land on the wrong side of a subtraction. The metric may be ranking size rather than risk.</p>
   <div class="grid2">
@@ -95,12 +147,11 @@
   </div>
 </section>
 
-<!-- 2 -->
 <section id="s2">
   <p class="sec-no">02</p>
-  <h3>Judgment calls</h3>
-  <p class="sec-sub">Four preprocessing decisions, and why each one was made</p>
-  <p class="takeaway">One column had silently changed meaning between file versions. Finding it moved the sample by 20.9% — more than any modelling choice in this project.</p>
+  <h3>Data and preprocessing</h3>
+  <p class="sec-sub">Five decisions, and why each one was made</p>
+<p class="takeaway">One column had silently changed meaning between file versions. Finding it moved the sample by 20.9% — more than any modelling choice in this project.</p>
   <div class="card">
     <div class="table-wrap">
     <table>
@@ -138,6 +189,16 @@
     </div>
   </div>
 
+
+  <div class="card">
+    <h4>⑤ A three-layer guard on every join <span class="chip info">silent failure</span></h4>
+    <p class="small">Five tables merge into one panel. A duplicated key raises no error — it silently multiplies rows, and every statistic downstream is then computed on inflated data. Because the failure is silent, the guard has to be explicit:</p>
+    <p class="code">1  assert the right-hand key is unique     before merging
+2  merge(..., validate="many_to_one")    pandas raises if the relation breaks
+3  assert len(out) == len(left)          the row count must not move</p>
+    <p class="small">All three fired clean on every merge. Row counts are stated at each stage above so a reader can check the arithmetic rather than take it on trust.</p>
+  </div>
+
   <div class="card tight">
     <div class="table-wrap">
     <table>
@@ -152,12 +213,11 @@
   </div>
 </section>
 
-<!-- 3 -->
 <section id="s3">
   <p class="sec-no">03</p>
   <h3>The label</h3>
-  <p class="sec-sub">Why a small cell records "safe" without being safe</p>
-  <p class="takeaway">43.7% of cells recorded a zero because nothing happened at all — not because nothing bad happened.</p>
+  <p class="sec-sub">Why a small cell records &ldquo;safe&rdquo; without being safe</p>
+<p class="takeaway">43.7% of cells recorded a zero because nothing happened at all — not because nothing bad happened.</p>
   <p>The flag fires when closures outnumber openings in the following quarter:</p>
   <p class="figures">net_decline(t) = 1 &nbsp;if&nbsp; closures(t+1) &gt; openings(t+1)</p>
   <p>A cell with five stores has a <span class="hl">71%</span> chance that neither an opening nor a closure occurs at all next quarter — and with nothing on either side of the comparison, the cell is filed as safe. A cell with 51 or more stores has a <span class="hl">98%</span> chance that something happens.</p>
@@ -183,12 +243,11 @@
   </div>
 </section>
 
-<!-- 4 -->
 <section id="s4">
   <p class="sec-no">04</p>
   <h3>Choosing the test</h3>
   <p class="sec-sub">The distribution picks the test, not the analyst</p>
-  <p class="takeaway">The label is binary, so normality could not be tested on it directly — the unit of analysis had to be lifted first.</p>
+<p class="takeaway">The label is binary, so normality could not be tested on it directly — the unit of analysis had to be lifted first.</p>
   <p>Running Shapiro-Wilk on a 0/1 variable is meaningless: it is not normal by definition, and with a large sample the p-value is always zero. So each (district × category) cell was collapsed to its <span class="hl">net-decline rate across 12 quarters</span>, a continuous value on [0,1] and the natural unit for comparing risk between groups. Cells observed fewer than six quarters were dropped as unstable.</p>
   <div class="stats">
     <div class="stat"><p class="k">Cells</p><p class="v blue">5,687</p></div>
@@ -211,12 +270,11 @@
   <p>Normality fails in <span class="hl-r">all 39 groups</span>. The distribution piles up near zero — 7.1% of cells never declined once in twelve quarters — and trails right. A mean-based test would be dragged by the tail, so <span class="hl">Kruskal-Wallis</span> became the primary test and Levene was run on medians rather than means, since a mean-centred Levene is itself distorted under skew.</p>
 </section>
 
-<!-- 5 -->
 <section id="s5">
   <p class="sec-no">05</p>
-  <h3>Selection effect</h3>
+  <h3>A · The gap was never real</h3>
   <p class="sec-sub">Picking the top of ten manufactures a gap on its own</p>
-  <p class="takeaway">Before explaining why Korean restaurants rank first, it was worth checking whether ranking first means anything.</p>
+<p class="takeaway">Before explaining why Korean restaurants rank first, it was worth checking whether ranking first means anything.</p>
   <p>Shuffling the label breaks any relationship between category and outcome while holding every group size fixed. Under that null, the top category still sits above the overall mean — because with ten finite samples, one of them is always lucky. Measuring that bump takes 1,000 shuffles.</p>
   <div class="card">
     <div class="table-wrap">
@@ -238,12 +296,11 @@
   </div>
 </section>
 
-<!-- 6 -->
 <section id="s6">
   <p class="sec-no">06</p>
-  <h3>Matching</h3>
-  <p class="sec-sub">Comparable cells, and what happens to the gap</p>
-  <p class="takeaway">Treated and control groups differed by a full standard deviation in store count. They were never comparable to begin with.</p>
+  <h3>B · Conditioning reverses it</h3>
+  <p class="sec-sub">Comparable cells — and whether the average survives a split</p>
+<p class="takeaway">Treated and control groups differed by a full standard deviation in store count. They were never comparable to begin with.</p>
   <p>Each Korean-restaurant cell was paired 1:1 with the nearest non-Korean cell on the propensity-score logit, exact-matched on quarter, without replacement and inside a caliper. Quarter has to be fixed because overall risk moves between quarters; sampling without replacement stops one lucky control cell from being reused into the result.</p>
   <div class="card">
     <div class="table-wrap">
@@ -271,14 +328,8 @@
   </div>
   <p>The interval comes from a <span class="hl">district-level</span> cluster bootstrap — cells inside one commercial district are not independent, and resampling cells individually would fake a narrower interval. Across ten designs varying caliper width, replacement and seed, the ATT stays inside <span class="hl">[−6.0, −4.0]</span>.</p>
   <p class="small" style="color:var(--ink-3)">Treated match rate is 70.7%. The unmatched 29.3% are mostly very large Korean cells with no comparable control, so the estimate applies to the size range where comparison is possible — which turns out to matter more than expected.</p>
-</section>
 
-<!-- 7 -->
-<section id="s7">
-  <p class="sec-no">07</p>
-  <h3>Heterogeneity</h3>
-  <p class="sec-sub">Testing whether the average is allowed to be an average</p>
-  <p class="takeaway">A mean will happily summarise two effects pointing in opposite directions. Before reporting −5.77, the pairs were split by size to see whether that number is a summary or a blend.</p>
+<p class="takeaway">A mean will happily summarise two effects pointing in opposite directions. Before reporting −5.77, the pairs were split by size to see whether that number is a summary or a blend.</p>
   <figure>
     <img src="assets/strata-att.png" alt="Stratum ATT by store-count quintile: −13.0, −10.4, −6.6, −1.3 and +2.4 percentage points. The sign flips in the largest band.">
     <figcaption>The 7,042 matched pairs split into store-count quintiles. The effect moves monotonically from −13.0 pp to +2.4 pp and changes sign in the top band.</figcaption>
@@ -311,12 +362,11 @@
   </div>
 </section>
 
-<!-- 8 -->
-<section id="s8">
-  <p class="sec-no">08</p>
-  <h3>What moves the gap</h3>
+<section id="s7">
+  <p class="sec-no">07</p>
+  <h3>C · D · What moves the gap</h3>
   <p class="sec-sub">One covariate at a time, then the mechanism behind the null</p>
-  <p class="takeaway">Of the four covariates, only store count moves anything. Footfall — one of the two variables H2 named — contributes nothing at all.</p>
+<p class="takeaway">Of the four covariates, only store count moves anything. Footfall — one of the two variables H2 named — contributes nothing at all.</p>
   <div class="card">
     <div class="table-wrap">
     <table>
@@ -353,6 +403,12 @@
     <img src="assets/openclose.png" alt="Paired coefficients for openings and closures. Footfall pushes both up; store count and food-category share push them in opposite directions.">
     <figcaption>Negative-binomial models with a log-store-count offset, fitted separately to openings and closures. Overdispersion ratios of 1.81 and 1.65 rule out Poisson. When both bars point the same way, the difference between them — which is what net decline measures — cancels.</figcaption>
   </figure>
+
+  <div class="card tight">
+    <h4>Why not ordinary regression here</h4>
+    <p class="small">The outcome is a count — 0, 1, 2 openings — floored at zero and strongly skewed. Least squares would predict negative openings and assume constant variance, while count variance grows with the mean. And the quantity of interest is a <em>rate</em> (events per store), so store count belongs in the model as an <strong>offset</strong>, entered with its coefficient fixed at 1, rather than as one more predictor.</p>
+    <p class="small">Poisson was the next candidate and does not fit either: variance ÷ mean is <span class="hl">1.81</span> for openings and <span class="hl">1.65</span> for closures against the 1.0 Poisson assumes. Using it would shrink the standard errors and manufacture significance, so the negative binomial — which carries its own dispersion parameter — is the honest choice.</p>
+  </div>
   <div class="grid2">
     <div class="card tight">
       <h4>Reason 1 · It cancels in the subtraction</h4>
@@ -367,42 +423,11 @@
   </div>
 </section>
 
-<!-- 9 -->
-<section id="s9">
-  <p class="sec-no">09</p>
-  <h3>Location sensitivity</h3>
-  <p class="sec-sub">Which categories care where they are</p>
-  <p class="takeaway">Some categories are highly sensitive to district type. One is completely indifferent — which changes what kind of support can possibly work for it.</p>
-  <p>Testing all categories at once would let category mix leak into the district-type effect, so each category was fixed and district types compared inside it. Ten repeats means Bonferroni correction, and with thousands of cells p-values go significant on trivial differences — so the ranking is by effect size, not by p.</p>
-  <div class="card">
-    <div class="table-wrap">
-    <table>
-      <thead><tr><th>Category</th><th>n</th><th>H</th><th>p</th><th>ε²</th><th>Effect</th></tr></thead>
-      <tbody>
-        <tr class="mark"><td class="lead">Pub / bar</td><td class="num">709</td><td class="num">86.9</td><td class="num">&lt;.0001</td><td class="num lead">0.1202</td><td><span class="chip rej">medium</span></td></tr>
-        <tr><td>Cafe / beverage</td><td class="num">1,006</td><td class="num">67.4</td><td class="num">&lt;.0001</td><td class="num">0.0652</td><td><span class="chip rej">medium</span></td></tr>
-        <tr><td>Korean</td><td class="num">1,306</td><td class="num">81.0</td><td class="num">&lt;.0001</td><td class="num">0.0607</td><td><span class="chip rej">medium</span></td></tr>
-        <tr><td>Western</td><td class="num">352</td><td class="num">18.8</td><td class="num">.0001</td><td class="num">0.0483</td><td><span class="chip warn">small</span></td></tr>
-        <tr><td>Snack bar</td><td class="num">637</td><td class="num">32.5</td><td class="num">&lt;.0001</td><td class="num">0.0481</td><td><span class="chip warn">small</span></td></tr>
-        <tr><td>Japanese</td><td class="num">307</td><td class="num">15.6</td><td class="num">.0004</td><td class="num">0.0448</td><td><span class="chip warn">small</span></td></tr>
-        <tr><td>Bakery</td><td class="num">347</td><td class="num">12.9</td><td class="num">.0015</td><td class="num">0.0318</td><td><span class="chip warn">small</span></td></tr>
-        <tr><td>Chinese</td><td class="num">302</td><td class="num">11.0</td><td class="num">.0041</td><td class="num">0.0300</td><td><span class="chip warn">small</span></td></tr>
-        <tr><td>Fast food</td><td class="num">322</td><td class="num">7.1</td><td class="num">.0281</td><td class="num">0.0161</td><td><span class="chip na">not significant</span></td></tr>
-        <tr class="mark"><td class="lead">Chicken</td><td class="num">341</td><td class="num">2.1</td><td class="num">.3552</td><td class="num lead">0.0002</td><td><span class="chip na">none</span></td></tr>
-      </tbody>
-    </table>
-    </div>
-  </div>
-  <p>Bonferroni α = .0050 · 8 of 10 significant. Effect sizes read as 0.01 small, 0.06 medium, 0.14 large.</p>
-  <p>The spread between pub/bar and chicken is <span class="hl-r">600×</span>. Chicken shops carry the same risk wherever they sit, which means <span class="hl">district-level intervention cannot move them</span> — a plausible read is high delivery share reducing location dependence, though nothing in this dataset measures delivery.</p>
-</section>
-
-<!-- 10 -->
-<section id="s10">
-  <p class="sec-no">10</p>
-  <h3>Baselines and operating point</h3>
-  <p class="sec-sub">What the model has to beat, and where it actually beats it</p>
-  <p class="takeaway">The city's own contraction indicator performs worse than random. The strongest baseline is not a model at all — it is sorting by store count.</p>
+<section id="s8">
+  <p class="sec-no">08</p>
+  <h3>E · Performance, honestly</h3>
+  <p class="sec-sub">What the model must beat, and where it actually beats it</p>
+<p class="takeaway">The city's own contraction indicator performs worse than random. The strongest baseline is not a model at all — it is sorting by store count.</p>
   <div class="card">
     <h4>Seoul's commercial-district change indicator</h4>
     <div class="table-wrap">
@@ -453,14 +478,15 @@
     <p class="figures">rolling AUC 0.666 ± 0.010 over 6 quarters &nbsp;·&nbsp; count model AUC 0.717 vs 0.705 store-count baseline &nbsp;·&nbsp; Poisson deviance 0.976 vs 1.002 &nbsp;·&nbsp; top-decile lift 1.52×</p>
     <p class="small">The single-quarter validation AUC is 0.668, but the model was <em>selected</em> on that quarter, so it is optimistic by construction. The rolling figure is the one reported. On aggregate ranking the whole feature set adds <span class="hl">+0.012</span> over store count — small, and concentrated in the small-district bands above.</p>
   </div>
-</section>
 
-<!-- 11 -->
-<section id="s11">
-  <p class="sec-no">11</p>
-  <h3>Reliability</h3>
-  <p class="sec-sub">Deleting a good-looking number</p>
-  <p class="takeaway">An early result showed rank correlation 0.915 between predicted and actual category risk. It was discarded, because a model cannot beat the noise in its own target.</p>
+
+  <div class="card">
+    <h4>Why F1 is not reported</h4>
+    <p class="small"><strong>It fixes an operating point.</strong> F1 defaults to a 0.5 threshold, and the whole finding here is that the operating point <em>is</em> the decision — precision runs from 0.760 at fifty cells to 0.393 at two thousand.</p>
+    <p class="small"><strong>It weights precision and recall equally.</strong> In early warning they are not equal. An officer can contact fifty districts, so recall is capped by that capacity rather than by the model, and precision at a small K is the number that decides anything.</p>
+    <p class="small"><strong>It carries no baseline.</strong> An F1 of 0.42 means nothing on its own. What makes 0.760 meaningful is that the store-count rule scores 0.380 on the same fifty cells.</p>
+  </div>
+<p class="takeaway">An early result showed rank correlation 0.915 between predicted and actual category risk. It was discarded, because a model cannot beat the noise in its own target.</p>
   <p>The first check was the baseline ladder: store count alone reproduced 0.915. The second was to stop measuring the model and measure the <em>target</em>. Splitting the data in half, ranking categories in each half independently and correlating the two rankings gives the reliability of the answer key itself.</p>
   <div class="stats">
     <div class="stat"><p class="k">Split-half</p><p class="v ink">0.110</p></div>
@@ -485,12 +511,40 @@
   </div>
 </section>
 
-<!-- 12 -->
-<section id="s12">
-  <p class="sec-no">12</p>
-  <h3>Forecast</h3>
+<section id="s9">
+  <p class="sec-no">09</p>
+  <h3>F · Location sensitivity</h3>
+  <p class="sec-sub">Which categories care where they are</p>
+<p class="takeaway">Some categories are highly sensitive to district type. One is completely indifferent — which changes what kind of support can possibly work for it.</p>
+  <p>Testing all categories at once would let category mix leak into the district-type effect, so each category was fixed and district types compared inside it. Ten repeats means Bonferroni correction, and with thousands of cells p-values go significant on trivial differences — so the ranking is by effect size, not by p.</p>
+  <div class="card">
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>Category</th><th>n</th><th>H</th><th>p</th><th>ε²</th><th>Effect</th></tr></thead>
+      <tbody>
+        <tr class="mark"><td class="lead">Pub / bar</td><td class="num">709</td><td class="num">86.9</td><td class="num">&lt;.0001</td><td class="num lead">0.1202</td><td><span class="chip rej">medium</span></td></tr>
+        <tr><td>Cafe / beverage</td><td class="num">1,006</td><td class="num">67.4</td><td class="num">&lt;.0001</td><td class="num">0.0652</td><td><span class="chip rej">medium</span></td></tr>
+        <tr><td>Korean</td><td class="num">1,306</td><td class="num">81.0</td><td class="num">&lt;.0001</td><td class="num">0.0607</td><td><span class="chip rej">medium</span></td></tr>
+        <tr><td>Western</td><td class="num">352</td><td class="num">18.8</td><td class="num">.0001</td><td class="num">0.0483</td><td><span class="chip warn">small</span></td></tr>
+        <tr><td>Snack bar</td><td class="num">637</td><td class="num">32.5</td><td class="num">&lt;.0001</td><td class="num">0.0481</td><td><span class="chip warn">small</span></td></tr>
+        <tr><td>Japanese</td><td class="num">307</td><td class="num">15.6</td><td class="num">.0004</td><td class="num">0.0448</td><td><span class="chip warn">small</span></td></tr>
+        <tr><td>Bakery</td><td class="num">347</td><td class="num">12.9</td><td class="num">.0015</td><td class="num">0.0318</td><td><span class="chip warn">small</span></td></tr>
+        <tr><td>Chinese</td><td class="num">302</td><td class="num">11.0</td><td class="num">.0041</td><td class="num">0.0300</td><td><span class="chip warn">small</span></td></tr>
+        <tr><td>Fast food</td><td class="num">322</td><td class="num">7.1</td><td class="num">.0281</td><td class="num">0.0161</td><td><span class="chip na">not significant</span></td></tr>
+        <tr class="mark"><td class="lead">Chicken</td><td class="num">341</td><td class="num">2.1</td><td class="num">.3552</td><td class="num lead">0.0002</td><td><span class="chip na">none</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+  <p>Bonferroni α = .0050 · 8 of 10 significant. Effect sizes read as 0.01 small, 0.06 medium, 0.14 large.</p>
+  <p>The spread between pub/bar and chicken is <span class="hl-r">600×</span>. Chicken shops carry the same risk wherever they sit, which means <span class="hl">district-level intervention cannot move them</span> — a plausible read is high delivery share reducing location dependence, though nothing in this dataset measures delivery.</p>
+</section>
+
+<section id="s10">
+  <p class="sec-no">10</p>
+  <h3>G · Forecast</h3>
   <p class="sec-sub">2026 Q2, and the two metrics disagreeing</p>
-  <p class="takeaway">The category that Seoul's metric ranks most at risk finishes ninth of ten on predicted closure rate.</p>
+<p class="takeaway">The category that Seoul's metric ranks most at risk finishes ninth of ten on predicted closure rate.</p>
   <figure>
     <img src="assets/forecast.png" alt="Predicted closure rate per 100 stores for 2026 Q2 by category, with 95% intervals. Fast food highest at 5.45%, pub/bar lowest at 3.99%, Korean ninth at 4.04% but first by the net-decline metric.">
     <figcaption>2,737 alley-district cells. Intervals are district-level cluster bootstraps over 500 resamples, so they widen for categories with fewer cells. They capture sampling variation only — model error is not in them, and true uncertainty is wider.</figcaption>
@@ -498,13 +552,38 @@
   <p>Rank correlation between the two metrics is <span class="hl-r">−0.406</span>. They point in close to opposite directions, which means the choice of metric — not the analysis behind it — decides who gets support.</p>
 </section>
 
-<!-- 13 -->
-<section id="s13">
-  <p class="sec-no">13</p>
+<section id="s11">
+  <p class="sec-no">11</p>
+  <h3>From findings to insights</h3>
+  <p class="sec-sub">What the numbers mean for the people using them</p>
+  <p class="takeaway">Five readings follow from section 05–10. None of them is a restatement of a coefficient.</p>
+  <div class="card">
+    <h4>① The published metric ranks size, not risk</h4>
+    <p class="small">The definition itself — closures minus openings — promotes cells where events are frequent. Korean restaurants top it because their cells are large, not because they are fragile. The city&rsquo;s other instrument, the commercial-district change indicator, does not work either (lift 0.937). <strong>Both current decision tools are broken, in different ways.</strong></p>
+  </div>
+  <div class="card">
+    <h4>② &ldquo;Open where the footfall is&rdquo; is half of a sentence</h4>
+    <p class="small">Footfall raises openings and closures alike. A busy district is not a safe one — it is a <strong>fast-turnover</strong> one. And within a cell over time it predicts nothing at all, so it is standing in for fixed location traits rather than acting on its own.</p>
+  </div>
+  <div class="card">
+    <h4>③ Matching on size matters more than choosing a category — but only in small cells</h4>
+    <p class="small">Conditioned on circumstances, Korean restaurants are the safer side. Below twenty stores that advantage is large; above forty it inverts. <strong>Neither &ldquo;Korean is safe&rdquo; nor &ldquo;Korean is risky&rdquo; is a true sentence.</strong> The signal lives in the category-by-size combination.</p>
+  </div>
+  <div class="card">
+    <h4>④ The finest unit this data can support is the cell</h4>
+    <p class="small">District × category has a single-quarter split-half reliability of 0.035 — re-measure and the ranking reshuffles. Cell-level scores are stored so the aggregation is possible, but publishing that ranking would be publishing noise. <strong>Declining to answer is part of the answer.</strong></p>
+  </div>
+  <div class="card">
+    <h4>⑤ The model earns its place on small districts, not on the leaderboard</h4>
+    <p class="small">On aggregate ranking it adds +0.012 over store count. Hold size constant and store count stops discriminating entirely while the model keeps working — and small districts are exactly where early warning is needed. <strong>Reading the aggregate number alone would lead to scrapping the model for the wrong reason.</strong></p>
+  </div>
+</section>
+
+<section id="s12">
+  <p class="sec-no">12</p>
   <h3>Recommendations</h3>
   <p class="sec-sub">Who does what, when, and how to tell whether it worked</p>
-
-  <div class="rec">
+<div class="rec">
     <h4><span class="rn">01</span> Allocate by cell risk score, not by category rank</h4>
     <dl>
       <div class="rrow"><dt>Who</dt><dd>District small-business offices allocating consulting and emergency loans</dd></div>
@@ -549,12 +628,11 @@
   </div>
 </section>
 
-<!-- 14 -->
-<section id="s14">
-  <p class="sec-no">14</p>
-  <h3>Limitations</h3>
-  <p class="sec-sub">What this analysis cannot support</p>
-  <p class="takeaway">Aggregated quarterly counts cannot say which shop closed, and matching only balances what was measured.</p>
+<section id="s13">
+  <p class="sec-no">13</p>
+  <h3>Limits and reproducibility</h3>
+  <p class="sec-sub">What this cannot support, and how to run it</p>
+<p class="takeaway">Aggregated quarterly counts cannot say which shop closed, and matching only balances what was measured.</p>
   <div class="grid2">
     <div class="card tight">
       <h4>The average is not a summary</h4>
@@ -589,9 +667,37 @@
       <p class="small">Split-half reliability at city-district level is 0.086 for one quarter against 0.537 pooled over six. No aggregation level should be ranked from a single quarter.</p>
     </div>
   </div>
+  <h4 style="margin-top:34px">What would move this forward</h4>
+  <div class="card">
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th>Rank</th><th class="tl">Data needed</th><th class="tl">What it unlocks</th></tr></thead>
+      <tbody>
+        <tr><td class="num">1</td><td class="lead tl">Business-registry event histories</td><td class="tl">Survival analysis instead of quarterly counts — &ldquo;which shop, at what age&rdquo; becomes answerable, and a risk window by tenure becomes actionable</td></tr>
+        <tr><td class="num">2</td><td class="lead tl">District-level rent</td><td class="tl">Explains <em>why</em> store count matters at all — the standing hypothesis is that a large cell means expensive frontage and a heavier fixed-cost floor. The available rent data is city-district level and has no discriminating power</td></tr>
+        <tr><td class="num">2.5</td><td class="lead tl">Average months in operation</td><td class="tl">Already in the change-indicator file and not leakage — it is built from operating rather than closed businesses. Univariate AUC 0.538: weak, directional, and uncorrelated with size (−0.085)</td></tr>
+        <tr><td class="num">3</td><td class="lead tl">Delivery-platform share</td><td class="tl">Tests whether the location-indifference of chicken and fast food is a delivery effect, which is currently an inference and nothing more</td></tr>
+        <tr><td class="num">4</td><td class="lead tl">Staggered programme rollouts</td><td class="tl">Difference-in-differences — the only route here to ruling out unobserved confounding rather than merely naming it</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <h4 style="margin-top:34px">Two things that must not be mixed</h4>
   <div class="card tight">
-    <h4>What would move this forward</h4>
-    <p class="small"><strong>Business-registry event histories</strong> — turns this into survival analysis and makes "which shop, at what age" answerable &nbsp;·&nbsp; <strong>district-level rent</strong> — the central variable is store count and nothing here explains <em>why</em> size matters; the available rent data is city-district level and has no discriminating power &nbsp;·&nbsp; <strong>average months in operation</strong>, already in the change-indicator file and not leakage since it is built from operating rather than closed businesses (univariate AUC 0.538, correlation with size −0.085) &nbsp;·&nbsp; <strong>delivery-platform share</strong> &nbsp;·&nbsp; <strong>a quasi-experimental design</strong> using staggered district programme rollouts.</p>
+    <p class="small">The <strong>stratum ATT</strong> splits actual matched pairs by size. The <strong>dose-response curve</strong> is a counterfactual model predicting at substituted covariate values. They are different objects and should never be quoted as though they were the same evidence — and whenever −5.77 pp appears, the stratum table has to appear with it.</p>
+  </div>
+
+  <h4 style="margin-top:34px">Reproducing this</h4>
+  <p class="code">pip install pandas numpy scipy statsmodels             scikit-learn matplotlib pyarrow ipykernel
+
+# drop the source CSVs into data/raw/
+# then run the notebooks in src/ in numbered order</p>
+  <p>Each notebook&rsquo;s first cell walks up the tree for <span style="font-family:var(--mono);font-size:14px">config.py</span> and chdirs to the project root, so they run from any working directory. After editing that file, restart the kernel — Python caches the old module and the failure surfaces as a confusing <span style="font-family:var(--mono);font-size:14px">ImportError</span>.</p>
+  <div class="card tight">
+    <h4>Known non-determinism <span class="chip warn">disclosed</span></h4>
+    <p class="small">Nearest-neighbour matching is greedy and therefore order-dependent. Re-running the upstream steps holds the pair count at 7,042 but changes <em>which</em> pairs are selected, moving the ATT in the second decimal. Conclusions are unaffected; pinning the treated-unit sort order before matching would make it bit-reproducible, and that is the next fix.</p>
+    <p class="small">A related trap was found and repaired during this work: the final summary notebook had upstream estimates <strong>hard-coded</strong> into its print statements, so re-running the matching left that one document quoting stale numbers. It now reads every upstream value from file.</p>
   </div>
 </section>
 
@@ -602,6 +708,7 @@
   <p>Data · Seoul Open Data Plaza, “Seoul Commercial District Analysis Service” (store, estimated sales, area, street population, attraction facilities, change indicator) · 2023 Q1 – 2026 Q1</p>
   <p>Tools · Python 3, pandas, NumPy, statsmodels, scikit-learn, SciPy, matplotlib</p>
   <p>Scope · This page covers hypothesis H2 and the second sub-question. The core question and H1 were handled by other team members.</p>
+  <p>Code · <a href="https://github.com/jiwoon-oh/ai-data-bootcamp/tree/feat/Insite-digging-MLproject/project/h2_nb">Notebooks, config and outputs on GitHub</a></p>
 </footer>
 
 <script>
