@@ -31,7 +31,7 @@
     </div>
     <div class="pick keep">
       <p class="name">MATCHED ON CONDITIONS</p>
-      <p class="val">−5.75<span class="unit">pp</span></p>
+      <p class="val">−5.77<span class="unit">pp</span></p>
       <span class="tag">Sign reversed</span>
     </div>
     <div class="pick split">
@@ -73,7 +73,7 @@
   <p class="sec-sub">Who decides what with this number, and what could go wrong</p>
   <p class="takeaway">District officers allocate consulting and emergency loans using a metric nobody had audited. The audit is the project.</p>
   <p>The unit of analysis throughout is a <strong>cell</strong> — one commercial district × one food category × one quarter. Seoul's Commercial District Analysis Service publishes a <span class="hl">net decline</span> flag per cell each quarter — true when closures exceed openings. Officers rank food categories by it and send support to the top of the list. Korean restaurants sit at #1 every quarter.</p>
-  <p>Korean restaurants are also the largest category in alley districts, averaging <span class="hl">21.3 stores per cell</span> against a sample mean of 15. More stores means more open/close events, and more events means more chances to land on the wrong side of a subtraction. The metric may be ranking size rather than risk.</p>
+  <p>Korean restaurants are also the largest category in alley districts, averaging <span class="hl">21.3 stores per cell</span> against <span class="hl">10.3</span> for the other nine categories. More stores means more open/close events, and more events means more chances to land on the wrong side of a subtraction. The metric may be ranking size rather than risk.</p>
   <div class="grid2">
     <div class="card">
       <h4>Hypothesis H2</h4>
@@ -158,7 +158,10 @@
   <h3>The label</h3>
   <p class="sec-sub">Why a small cell records "safe" without being safe</p>
   <p class="takeaway">43.7% of cells recorded a zero because nothing happened at all — not because nothing bad happened.</p>
-  <p>Net decline is <span style="font-family:var(--mono)">openings(t+1) − closures(t+1) &lt; 0</span>. A cell with five stores has a <span class="hl">71%</span> chance that neither an opening nor a closure occurs next quarter. Zero minus zero is not negative, so the cell is filed as safe. A cell with 51 or more stores has a <span class="hl">98%</span> chance that something happens, and once something happens it is roughly a coin flip.</p>
+  <p>The flag fires when closures outnumber openings in the following quarter:</p>
+  <p class="figures">net_decline(t) = 1 &nbsp;if&nbsp; closures(t+1) &gt; openings(t+1)</p>
+  <p>A cell with five stores has a <span class="hl">71%</span> chance that neither an opening nor a closure occurs at all next quarter — and with nothing on either side of the comparison, the cell is filed as safe. A cell with 51 or more stores has a <span class="hl">98%</span> chance that something happens.</p>
+  <p>Once something does happen, the chance that it nets out negative sits between <span class="hl">38% and 50%</span> whatever the size — and it <em>falls</em> as cells get larger. So what separates a flagged cell from an unflagged one is almost entirely whether an event occurred, which is a question about size.</p>
   <figure>
     <img src="assets/label-arithmetic.png" alt="Grouped bars by store-count band. Event rate rises steeply from 29% to 98%; the overall net-decline rate rises with it; the net-decline rate conditional on an event falls from 50% to 39%.">
     <figcaption>Blue climbs from 29% to 98%. Orange follows it. Green — the decline rate among cells where something actually happened — moves in the opposite direction. The orange series is tracking the blue one, not risk.</figcaption>
@@ -250,23 +253,23 @@
         <tr class="mark"><td class="lead">log store count</td><td class="num">0.999</td><td class="num lead">0.037</td><td><span class="chip hold">balanced</span></td></tr>
         <tr><td>log footfall</td><td class="num">−0.447</td><td class="num">0.022</td><td><span class="chip hold">balanced</span></td></tr>
         <tr><td>log area</td><td class="num">−0.473</td><td class="num">0.031</td><td><span class="chip hold">balanced</span></td></tr>
-        <tr><td>log attraction facilities</td><td class="num">−0.461</td><td class="num">0.031</td><td><span class="chip hold">balanced</span></td></tr>
+        <tr><td>log attraction facilities</td><td class="num">−0.461</td><td class="num">0.032</td><td><span class="chip hold">balanced</span></td></tr>
       </tbody>
     </table>
     </div>
   </div>
   <p>All four clear the |SMD| &lt; 0.1 threshold, so the comparison is licensed. Only then is the gap worth reading.</p>
   <figure>
-    <img src="assets/gap-reversal.png" alt="Diverging bars. The raw comparison sits at +2.40 points; propensity matching, doubly robust estimation, counterfactual simulation and an alternative label all sit between −5.75 and −8.73.">
+    <img src="assets/gap-reversal.png" alt="Diverging bars. The raw comparison sits at +2.40 points; propensity matching, doubly robust estimation, counterfactual simulation and an alternative label all sit between −5.77 and −8.73.">
     <figcaption>Four estimators with different failure modes. Matching balances covariates; the doubly robust estimator survives misspecification in either the outcome or the treatment model; the simulation substitutes covariate values directly; the alternative label replaces net decline with the next-quarter closure rate entirely.</figcaption>
   </figure>
   <div class="stats">
-    <div class="stat"><p class="k">ATT</p><p class="v blue">−5.75 pp</p></div>
-    <div class="stat"><p class="k">95% CI</p><p class="v ink">−7.23 · −4.20</p></div>
-    <div class="stat"><p class="k">McNemar</p><p class="v rose">p = 5.9e−15</p></div>
+    <div class="stat"><p class="k">ATT</p><p class="v blue">−5.77 pp</p></div>
+    <div class="stat"><p class="k">95% CI</p><p class="v ink">−7.23 · −4.23</p></div>
+    <div class="stat"><p class="k">McNemar</p><p class="v rose">p = 5.0e−15</p></div>
     <div class="stat"><p class="k">Pairs</p><p class="v violet">7,042</p></div>
   </div>
-  <p>The interval comes from a <span class="hl">district-level</span> cluster bootstrap — cells inside one commercial district are not independent, and resampling cells individually would fake a narrower interval. Across ten designs varying caliper width, replacement and seed, the ATT stays inside <span class="hl">[−6.0, −4.4]</span>.</p>
+  <p>The interval comes from a <span class="hl">district-level</span> cluster bootstrap — cells inside one commercial district are not independent, and resampling cells individually would fake a narrower interval. Across ten designs varying caliper width, replacement and seed, the ATT stays inside <span class="hl">[−6.0, −4.0]</span>.</p>
   <p class="small" style="color:var(--ink-3)">Treated match rate is 70.7%. The unmatched 29.3% are mostly very large Korean cells with no comparable control, so the estimate applies to the size range where comparison is possible — which turns out to matter more than expected.</p>
 </section>
 
@@ -275,7 +278,7 @@
   <p class="sec-no">07</p>
   <h3>Heterogeneity</h3>
   <p class="sec-sub">Testing whether the average is allowed to be an average</p>
-  <p class="takeaway">A mean will happily summarise two effects pointing in opposite directions. Before reporting −5.75, the pairs were split by size to see whether that number is a summary or a blend.</p>
+  <p class="takeaway">A mean will happily summarise two effects pointing in opposite directions. Before reporting −5.77, the pairs were split by size to see whether that number is a summary or a blend.</p>
   <figure>
     <img src="assets/strata-att.png" alt="Stratum ATT by store-count quintile: −13.0, −10.4, −6.6, −1.3 and +2.4 percentage points. The sign flips in the largest band.">
     <figcaption>The 7,042 matched pairs split into store-count quintiles. The effect moves monotonically from −13.0 pp to +2.4 pp and changes sign in the top band.</figcaption>
@@ -303,7 +306,7 @@
   <p>Woolf's test asks whether the stratum odds ratios can be treated as one number. This is a test where a <em>large</em> p-value is the desirable outcome, and it is not what came back. <span class="hl-r">The average is a blend, not a summary.</span></p>
   <div class="card">
     <h4>The statement that survives</h4>
-    <p class="small">Korean restaurants are markedly safer in small cells, the advantage disappears past roughly twenty stores, and near forty stores it inverts. Quoting −5.75 pp on its own hides a band pointing the other way.</p>
+    <p class="small">Korean restaurants are markedly safer in small cells, the advantage disappears past roughly twenty stores, and near forty stores it inverts. Quoting −5.77 pp on its own hides a band pointing the other way.</p>
     <p class="small">H2 itself is unaffected: its prediction was that the gap would <em>narrow</em>, and that does not happen in any band. The size confounding is confirmed. What changes is the scope the conclusion is allowed to claim.</p>
   </div>
 </section>
@@ -555,7 +558,7 @@
   <div class="grid2">
     <div class="card tight">
       <h4>The average is not a summary</h4>
-      <p class="small">Woolf p &lt; .0001. The ATT runs from −13.0 pp to +2.4 pp across size bands and changes sign. Quoting −5.75 pp alone conceals a band pointing the other way.</p>
+      <p class="small">Woolf p &lt; .0001. The ATT runs from −13.0 pp to +2.4 pp across size bands and changes sign. Quoting −5.77 pp alone conceals a band pointing the other way.</p>
     </div>
     <div class="card tight">
       <h4>Scope</h4>
