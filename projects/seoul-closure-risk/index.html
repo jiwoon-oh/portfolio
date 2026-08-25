@@ -168,8 +168,10 @@
   </div>
 
   <div class="card">
-    <h4>① A five-store floor <span class="chip warn">−54% of rows</span></h4>
-    <p class="small">Cells with two or fewer stores have <span class="hl">100% suppressed sales</span> — the city withholds them so individual businesses can't be identified. Sales missingness falls from <span class="hl">45.4%</span> overall to <span class="hl">7.1%</span> once the floor is applied, which is what identifies the cause as disclosure policy rather than data loss. A three-store cell also swings to −33% net decline when one shop closes, so the label itself is unstable down there. The cost is more than half the rows, so every conclusion carries the scope note "cells with five or more stores."</p>
+    <h4>① A five-store floor <span class="chip warn">−54.1% of rows</span></h4>
+    <p class="small"><strong>The primary reason is the label, not the data.</strong> A three-store cell swings to −33% net decline when one shop closes. That is sample size, not district decline — left in, those rows teach the model to find small cells rather than risky ones.</p>
+    <p class="small">Sales missingness points the same way: <span class="hl">45.4%</span> overall, <span class="hl">7.1%</span> at five stores or more, <span class="hl">100%</span> at two or fewer. A rate of exactly 100% is a rule, not attrition. <strong>What the rule is, this project could not confirm</strong> — no published suppression threshold was located, and a competing reading exists (the smallest cells may have no card-sales record to begin with). It is reported here as an observation, not a cause.</p>
+    <p class="small">Note that the filter is on <em>store count</em> — a covariate — and not on missingness. The label is observed for every cell either way, so this narrows the population rather than selecting on the outcome. Cost: 147,138 → 67,495 rows, which is why every conclusion carries the scope note "cells with five or more stores."</p>
   </div>
 
   <div class="card">
@@ -481,6 +483,24 @@
 
 
   <div class="card">
+    <h4>Why gradient boosting <span class="chip na">margin within noise</span></h4>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th class="tl">Candidate</th><th>AUC</th><th>PR-AUC</th><th>Brier</th></tr></thead>
+      <tbody>
+        <tr><td class="tl">Best rule baseline · category mean</td><td class="num">0.554</td><td class="num">0.291</td><td class="num">0.191</td></tr>
+        <tr><td class="tl">Logistic regression</td><td class="num">0.670</td><td class="num">0.407</td><td class="num">0.180</td></tr>
+        <tr class="mark"><td class="lead tl">HistGradientBoosting</td><td class="num">0.668</td><td class="num lead">0.417</td><td class="num lead">0.179</td></tr>
+        <tr><td class="tl">Random forest</td><td class="num">0.662</td><td class="num">0.412</td><td class="num">0.180</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="small" style="margin-top:14px">Selection was on PR-AUC, not accuracy — always predicting "safe" scores 74.0% — and not F1, for the reasons below. Note the arithmetic: <span class="hl">rules to models is +0.116; model to model is +0.011</span>.</p>
+    <p class="small"><strong>The deciding reason is not the score.</strong> 7.1% of cells still carry no sales figure, and HistGradientBoosting splits on missing values natively. Logistic regression and random forest would need imputation — and missingness varies by category, which is the treatment variable, so imputing reinjects the very bias the matching design exists to remove.</p>
+    <p class="small">Across six rolling quarters boosting averages AUC <span class="hl">0.6661</span> against logistic <span class="hl">0.6645</span>, winning four of six. Boosting's own PR-AUC ranges 0.392–0.445 over those quarters, so <strong>quarter-to-quarter variation is roughly five times the gap between model families</strong>. The family is not what carries this project — the feature set is, and that adds only +0.012 itself.</p>
+  </div>
+
+  <div class="card">
     <h4>Why F1 is not reported</h4>
     <p class="small"><strong>It fixes an operating point.</strong> F1 defaults to a 0.5 threshold, and the whole finding here is that the operating point <em>is</em> the decision — precision runs from 0.760 at fifty cells to 0.393 at two thousand.</p>
     <p class="small"><strong>It weights precision and recall equally.</strong> In early warning they are not equal. An officer can contact fifty districts, so recall is capped by that capacity rather than by the model, and precision at a small K is the number that decides anything.</p>
@@ -649,6 +669,10 @@
     <div class="card tight">
       <h4>Unobserved confounding</h4>
       <p class="small">Matching balances <em>measured</em> covariates. Rent, owner age, tenure and capitalisation are absent. The cell fixed-effects model absorbs time-invariant traits but only for within-cell variation.</p>
+    </div>
+    <div class="card tight">
+      <h4>Sales missingness is undiagnosed</h4>
+      <p class="small">The handling is conservative — excluded from matching, never imputed — but four checks were skipped: whether the residual 7.1% correlates with the outcome, whether those are true NaNs or rows absent from the source, what the 100% rule actually is, and how much the score moves without the sales feature. The ATT does not use sales, so the exposure is confined to the prediction model.</p>
     </div>
     <div class="card tight">
       <h4>An undocumented covariate</h4>
