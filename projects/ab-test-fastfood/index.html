@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>When the data won't pick a winner — A/B test case study</title>
-<meta name="description" content="A three-arm promotion experiment across 137 restaurant locations. ANOVA, Tukey HSD, confounder checks, multiple-comparison correction, and an honest verdict.">
-<meta property="og:title" content="When the data won't pick a winner">
-<meta property="og:description" content="A three-arm promotion A/B test across 137 restaurant locations — and why the answer was an elimination, not a choice.">
+<title>Fast-Food Promotion Experiment — A/B test analysis</title>
+<meta name="description" content="Three promotional strategies tested across 137 restaurant locations over four weeks. Experimental validation, hypothesis testing, effect size, and a business recommendation.">
+<meta property="og:title" content="Fast-Food Promotion Experiment Analysis">
+<meta property="og:description" content="Did the promotion actually move sales? A three-arm experiment across 137 locations — and why the answer was an elimination, not a winner.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -32,19 +32,17 @@ body{
 .wrap{max-width:1160px;margin:0 auto;padding:0 32px}
 
 /* hero */
-.hero{padding:104px 0 56px}
+.hero{padding:100px 32px 56px}
 .eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);margin:0 0 24px}
-h1{font-size:clamp(40px,6vw,72px);line-height:1.08;letter-spacing:-.035em;font-weight:600;margin:0 0 24px;max-width:15ch}
+h1{font-size:clamp(38px,5.4vw,64px);line-height:1.1;letter-spacing:-.035em;font-weight:600;margin:0 0 22px;max-width:17ch}
 h1 em{font-style:normal;color:var(--rose)}
-.lede{font-size:clamp(16.5px,1.7vw,19px);color:var(--ink-2);max-width:62ch;margin:0 0 18px}
+.lede{font-size:clamp(16.5px,1.7vw,19px);color:var(--ink-2);max-width:64ch;margin:0 0 18px}
 .meta{font-family:var(--mono);font-size:12.5px;color:var(--ink-3);margin:0;letter-spacing:.01em}
 
-.picks{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:48px 0 0}
-.pick{
-  position:relative;overflow:hidden;background:var(--glass);
-  border:1px solid var(--edge);border-radius:var(--r);padding:24px 22px 20px;
-  opacity:0;transform:translateY(12px);animation:rise .6s cubic-bezier(.2,.7,.3,1) forwards;
-}
+.picks{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:46px 0 0}
+.pick{position:relative;overflow:hidden;background:var(--glass);border:1px solid var(--edge);
+  border-radius:var(--r);padding:24px 22px 20px;
+  opacity:0;transform:translateY(12px);animation:rise .6s cubic-bezier(.2,.7,.3,1) forwards}
 .pick:nth-child(1){animation-delay:.05s}
 .pick:nth-child(2){animation-delay:.34s}
 .pick:nth-child(3){animation-delay:.19s}
@@ -64,7 +62,7 @@ h1 em{font-style:normal;color:var(--rose)}
 .picks-note{font-family:var(--mono);font-size:12.5px;color:var(--ink-3);margin:14px 0 0}
 
 /* layout */
-.main{display:grid;grid-template-columns:216px minmax(0,1fr);gap:56px;padding:76px 0 32px;align-items:start}
+.main{display:grid;grid-template-columns:212px minmax(0,1fr);gap:56px;padding:72px 32px 32px;align-items:start}
 main{min-width:0}
 
 /* rail */
@@ -72,18 +70,20 @@ main{min-width:0}
 .rail h2{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);margin:0 0 12px;font-weight:500}
 .rail ol{list-style:none;margin:0;padding:0}
 .rail li{margin:0 0 2px}
-.rail a{display:block;text-decoration:none;color:var(--ink-2);padding:7px 11px;border-radius:9px;font-size:13px;line-height:1.4;transition:background .18s,color .18s}
+.rail a{display:block;text-decoration:none;color:var(--ink-2);padding:7px 11px;border-radius:9px;font-size:13.5px;line-height:1.4;transition:background .18s,color .18s}
 .rail a:hover{background:rgba(255,255,255,.6);color:var(--ink)}
 .rail a.on{background:rgba(255,255,255,.92);color:var(--ink);font-weight:600}
-.rail .p{font-family:var(--mono);font-size:10.5px;color:var(--ink-3);display:block;letter-spacing:.01em}
-.rail a.on .p{color:var(--blue)}
+.rail .n{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-right:7px}
+.rail a.on .n{color:var(--blue)}
 
 /* sections */
 section{scroll-margin-top:26px;margin:0 0 68px}
 .sec-no{font-family:var(--mono);font-size:11.5px;color:var(--ink-3);letter-spacing:.12em;margin:0 0 6px}
 h3{font-size:clamp(22px,2.4vw,29px);letter-spacing:-.025em;font-weight:600;margin:0 0 7px;line-height:1.25}
+h4.blk{font-size:17px;font-weight:600;letter-spacing:-.015em;margin:36px 0 12px}
 .sec-sub{color:var(--ink-3);font-size:15px;margin:0 0 22px}
 p{margin:0 0 16px;max-width:70ch;font-size:16px}
+.takeaway{font-size:17.5px;font-weight:500;line-height:1.6;color:var(--ink);max-width:64ch;margin:0 0 20px;letter-spacing:-.012em}
 .card{background:var(--glass);border:1px solid var(--edge);border-radius:var(--r);padding:24px 26px;margin:0 0 20px}
 .card.tight{padding:20px 22px}
 .card h4{font-size:15.5px;font-weight:600;margin:0 0 10px;letter-spacing:-.01em}
@@ -94,16 +94,25 @@ p{margin:0 0 16px;max-width:70ch;font-size:16px}
 .grid2>*,.grid3>*{margin:0}
 .small{font-size:15.5px}
 .figures{font-family:var(--mono);font-size:13px;color:var(--ink-3);margin:0 0 9px}
-
-/* lead sentence — one per section, for scanning */
-.takeaway{font-size:17.5px;font-weight:500;line-height:1.6;color:var(--ink);
-  max-width:64ch;margin:0 0 20px;letter-spacing:-.012em}
-
-/* inline emphasis — numbers only */
 .hl{font-weight:600;color:var(--ink)}
 .hl-r{font-weight:600;color:var(--rose)}
-.hl-m{font-weight:600;color:var(--mint)}
 .hl-b{font-weight:600;color:var(--blue)}
+
+/* quote-style business question */
+.bq{background:var(--glass);border:1px solid var(--edge);border-radius:var(--r);padding:34px 36px;margin:0 0 20px}
+.bq .q{font-size:clamp(20px,2.5vw,27px);font-weight:600;letter-spacing:-.025em;line-height:1.35;margin:0;max-width:26ch}
+.bq ul{margin:22px 0 0;padding:0;list-style:none}
+.bq li{position:relative;padding-left:20px;font-size:15.5px;color:var(--ink-2);margin:0 0 8px}
+.bq li::before{content:"";position:absolute;left:0;top:11px;width:7px;height:7px;border-radius:50%;background:var(--violet);opacity:.65}
+.bq li:last-child{margin-bottom:0}
+
+/* decision blocks — the core of Methodology */
+.dec{background:var(--glass);border:1px solid var(--edge);border-radius:var(--r);padding:22px 24px;margin:0 0 12px;
+  display:grid;grid-template-columns:34px 1fr;gap:16px}
+.dec .idx{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--violet);padding-top:2px}
+.dec h4{font-size:16px;font-weight:600;margin:0 0 7px;letter-spacing:-.015em}
+.dec .why{font-size:15.5px;color:var(--ink-2);margin:0}
+.dec .why b{color:var(--ink);font-weight:600}
 
 /* stats */
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin:0 0 20px}
@@ -125,7 +134,7 @@ figcaption{font-size:13.5px;color:var(--ink-3);margin-top:11px;line-height:1.6;m
 
 /* table */
 .table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:14px;min-width:420px}
+table{width:100%;border-collapse:collapse;font-size:14.5px;min-width:420px}
 th,td{padding:10px 9px;text-align:right;border-bottom:1px solid rgba(35,35,58,.09)}
 th:first-child,td:first-child{text-align:left}
 th{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--ink-3);font-weight:500;text-transform:uppercase}
@@ -133,12 +142,11 @@ td.num{font-family:var(--mono)}
 tr:last-child td{border-bottom:none}
 
 /* pair rows */
-.pair{display:grid;grid-template-columns:78px 1fr auto auto;gap:14px;align-items:baseline;
+.pair{display:grid;grid-template-columns:78px 1fr auto;gap:14px;align-items:baseline;
   padding:13px 0;border-bottom:1px solid rgba(35,35,58,.08)}
 .pair:last-child{border-bottom:none}
 .pair .lbl{font-family:var(--mono);font-size:13.5px;font-weight:600}
 .pair .txt{font-size:15.5px;color:var(--ink-2);line-height:1.55}
-.pair .num{font-family:var(--mono);font-size:12.5px;color:var(--ink-3);white-space:nowrap}
 
 /* callout */
 .callout{background:rgba(255,255,255,.5);border:1px solid var(--edge);border-radius:var(--r);padding:26px 28px;margin:0}
@@ -146,23 +154,40 @@ tr:last-child td{border-bottom:none}
 .money{font-family:var(--mono);font-size:clamp(28px,3.8vw,40px);font-weight:600;letter-spacing:-.035em;margin:0;line-height:1.05}
 .callout .sub{font-size:14px;color:var(--ink-3);margin:12px 0 0;line-height:1.6}
 
-footer{padding:36px 0 80px;border-top:1px solid rgba(35,35,58,.1);margin-top:16px}
+/* skills / contribution lists */
+.tags{display:flex;flex-wrap:wrap;gap:7px;margin:0}
+.tags span{font-size:13.5px;background:var(--glass-2);border-radius:8px;padding:6px 12px;color:var(--ink-2)}
+ul.plain{margin:0;padding:0;list-style:none}
+ul.plain li{position:relative;padding-left:19px;font-size:15.5px;color:var(--ink-2);margin:0 0 9px}
+ul.plain li::before{content:"";position:absolute;left:0;top:11px;width:6px;height:6px;border-radius:50%;background:var(--mint);opacity:.7}
+ul.plain li:last-child{margin-bottom:0}
+
+/* repo link */
+.repo{display:inline-flex;align-items:center;gap:10px;background:var(--glass);border:1px solid var(--edge);
+  border-radius:12px;padding:15px 22px;text-decoration:none;color:var(--ink);font-size:15.5px;font-weight:500;
+  transition:background .18s}
+.repo:hover{background:rgba(255,255,255,.9)}
+.repo span{font-family:var(--mono);font-size:13.5px;color:var(--blue)}
+
+.note{font-size:14px;color:var(--ink-3);line-height:1.65;max-width:76ch}
+
+footer{padding:36px 32px 80px;border-top:1px solid rgba(35,35,58,.1);margin-top:16px}
 footer p{font-size:13px;color:var(--ink-3);margin:0 0 5px}
 footer a{color:var(--blue);text-decoration:none}
 footer a:hover{text-decoration:underline}
 a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 
 @media (max-width:920px){
-  .main{grid-template-columns:1fr;gap:0;padding-top:48px}
+  .main{grid-template-columns:1fr;gap:0;padding:48px 22px 32px}
   .rail{position:static;margin-bottom:40px}
   .rail ol{display:flex;gap:7px;overflow-x:auto;padding-bottom:6px}
   .rail li{flex:0 0 auto}
   .rail a{white-space:nowrap;background:rgba(255,255,255,.55)}
-  .rail .p{display:none}
-  .grid2,.grid3{grid-template-columns:1fr}
-  .picks{grid-template-columns:1fr}
+  .grid2,.grid3,.picks{grid-template-columns:1fr}
   .pair{grid-template-columns:1fr;gap:5px}
-  .hero{padding:64px 0 36px}
+  .dec{grid-template-columns:1fr;gap:8px}
+  .hero{padding:64px 22px 36px}
+  footer{padding:36px 22px 80px}
   .wrap{padding:0 22px}
 }
 @media (prefers-reduced-motion:reduce){.pick{animation:none;opacity:1;transform:none}}
@@ -171,9 +196,9 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 <body>
 
 <header class="wrap hero">
-  <p class="eyebrow">Case study · Experimental design &amp; causal inference</p>
-  <h1>When the data won't pick a <em>winner</em></h1>
-  <p class="lede">A restaurant chain tested three promotions for a new menu item across 137 locations. After four weeks the data refused to crown a winner — but it named a loser with confidence, and put a price tag on keeping it.</p>
+  <p class="eyebrow">Case study · A/B testing &amp; experimental analysis</p>
+  <h1>Did the promotion actually move <em>sales</em>?</h1>
+  <p class="lede">A fast-food chain tested three promotional strategies for a new menu item across 137 stores. After four weeks the data would not crown a winner — but it named a loser with confidence, and put a price on keeping it.</p>
   <p class="meta">137 stores · 4 weeks · 548 observations · Python, pandas, SciPy, statsmodels</p>
 
   <div class="picks">
@@ -185,7 +210,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
     <div class="pick drop">
       <p class="name">PROMOTION 2</p>
       <p class="val">$47,330<span class="unit">/wk</span></p>
-      <span class="tag">Eliminated</span>
+      <span class="tag">Do not continue</span>
     </div>
     <div class="pick keep">
       <p class="name">PROMOTION 3</p>
@@ -193,339 +218,400 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
       <span class="tag">Viable</span>
     </div>
   </div>
-  <p class="picks-note">Mean weekly sales per store · Promotions 1 and 3 are statistically indistinguishable (p = .686)</p>
+  <p class="picks-note">Mean weekly sales per store · Promotions 1 and 3 are statistically indistinguishable</p>
 </header>
 
 <div class="wrap main">
 
-  <nav class="rail" aria-label="Test log">
-    <h2>Test log</h2>
+  <nav class="rail" aria-label="Contents">
+    <h2>Contents</h2>
     <ol>
-      <li><a href="#s1">1 · Design</a></li>
-      <li><a href="#s2">2 · Data hygiene<span class="p">SRM p = .890 · clean</span></a></li>
-      <li><a href="#s3">3 · Unit of analysis<span class="p">Week effect p = .994</span></a></li>
-      <li><a href="#s4">4 · Assumptions<span class="p">Levene p = .627 · met</span></a></li>
-      <li><a href="#s5">5 · Main test<span class="p">ANOVA p = .0037 · reject</span></a></li>
-      <li><a href="#s6">6 · Post hoc<span class="p">Tukey · P2 only</span></a></li>
-      <li><a href="#s7">7 · Robustness<span class="p">Sensitivity · unchanged</span></a></li>
-      <li><a href="#s8">8 · Confounders<span class="p">χ² p = .880 · none</span></a></li>
-      <li><a href="#s9">9 · Segments<span class="p">Bonferroni 3 of 3</span></a></li>
-      <li><a href="#s10">10 · Business impact</a></li>
-      <li><a href="#s11">11 · Recommendation</a></li>
-      <li><a href="#s12">12 · Limitations</a></li>
+      <li><a href="#s1"><span class="n">01</span>Overview</a></li>
+      <li><a href="#s2"><span class="n">02</span>Business Question</a></li>
+      <li><a href="#s3"><span class="n">03</span>Data</a></li>
+      <li><a href="#s4"><span class="n">04</span>Methodology</a></li>
+      <li><a href="#s5"><span class="n">05</span>Analysis</a></li>
+      <li><a href="#s6"><span class="n">06</span>Results</a></li>
+      <li><a href="#s7"><span class="n">07</span>Business Insights</a></li>
+      <li><a href="#s8"><span class="n">08</span>Limitations</a></li>
+      <li><a href="#s9"><span class="n">09</span>My Contribution</a></li>
+      <li><a href="#s10"><span class="n">10</span>Tools &amp; Skills</a></li>
+      <li><a href="#s11"><span class="n">11</span>Repository</a></li>
     </ol>
   </nav>
 
   <main>
 
+  <!-- 01 ---------------------------------------------------- -->
   <section id="s1">
     <p class="sec-no">01</p>
-    <h3>Design</h3>
-    <p class="sec-sub">What was asked, and what the analysis tried to disprove</p>
-    <p class="takeaway">Because promotions were randomly assigned at the store level, this is a real experiment — causal language is earned here, not borrowed.</p>
-    <p>Each of <span class="hl">137 locations</span> ran a single promotion for four weeks.</p>
-    <div class="grid2">
-      <div class="card">
-        <h4>Null hypothesis H₀</h4>
-        <p class="small">Mean sales are equal across the three promotions.<br><span style="font-family:var(--mono)">μ₁ = μ₂ = μ₃</span></p>
-      </div>
-      <div class="card">
-        <h4>Alternative H₁</h4>
-        <p class="small">At least one promotion differs in mean sales.</p>
-      </div>
-    </div>
-    <div class="stats">
-      <div class="stat"><p class="k">Alpha</p><p class="v violet">0.05</p></div>
-      <div class="stat"><p class="k">Main test</p><p class="v blue">One-way ANOVA</p></div>
-      <div class="stat"><p class="k">Post hoc</p><p class="v mint">Tukey HSD</p></div>
-    </div>
-    <div class="card tight">
-      <p class="small">Three categorical levels, a continuous outcome, a comparison of means — ANOVA fits. Its F test is non-directional, so it can say <em>that</em> the groups differ but never <em>which one wins</em>. That belongs to the post hoc stage.</p>
-    </div>
+    <h3>Overview</h3>
+    <p class="sec-sub">What the company was trying to decide</p>
+    <p class="takeaway">A chain about to launch a new menu item had three candidate promotions and no basis for choosing between them.</p>
+    <p>Each of 137 stores was assigned a single promotion and its weekly sales were recorded for four weeks. Because assignment happened at the store level and was randomized, the data supports causal claims rather than correlational ones.</p>
+    <p>This project evaluates whether the three strategies produced genuinely different sales performance, and converts that answer into a recommendation the business can act on.</p>
   </section>
 
+  <!-- 02 ---------------------------------------------------- -->
   <section id="s2">
     <p class="sec-no">02</p>
-    <h3>Data hygiene</h3>
-    <p class="sec-sub">Doubt the data before doubting the null</p>
-    <p class="takeaway">A clean p-value on broken assignment is worthless, so the data got checked before the hypothesis did.</p>
+    <h3>Business Question</h3>
+    <p class="sec-sub">The decision the analysis has to serve</p>
+    <div class="bq">
+      <p class="q">Which of the three promotional strategies generated the strongest sales performance?</p>
+      <ul>
+        <li>Did average sales differ meaningfully between the three promotions?</li>
+        <li>Which promotion performed better or worse than the others, and by how much?</li>
+        <li>Could differences in market characteristics explain the result instead?</li>
+        <li>Are the findings robust to outliers and to repeated testing?</li>
+      </ul>
+    </div>
+    <p class="note">The last two questions matter as much as the first. A ranking that disappears once market size is accounted for, or one that only holds in a single segment, is not something a company should reorganize a launch around.</p>
+  </section>
+
+  <!-- 03 ---------------------------------------------------- -->
+  <section id="s3">
+    <p class="sec-no">03</p>
+    <h3>Data</h3>
+    <p class="sec-sub">Structure, variables, and source</p>
+    <div class="stats">
+      <div class="stat"><p class="k">Observations</p><p class="v blue">548</p></div>
+      <div class="stat"><p class="k">Variables</p><p class="v violet">7</p></div>
+      <div class="stat"><p class="k">Stores</p><p class="v mint">137</p></div>
+      <div class="stat"><p class="k">Weeks per store</p><p class="v ink">4</p></div>
+    </div>
     <div class="card">
       <div class="table-wrap">
       <table>
-        <thead><tr><th>Check</th><th>Result</th><th>Verdict</th></tr></thead>
+        <thead><tr><th>Variable</th><th>Description</th></tr></thead>
         <tbody>
-          <tr><td>Exact duplicate rows</td><td class="num">0</td><td><span class="chip hold">clean</span></td></tr>
-          <tr><td>Duplicate store × week</td><td class="num">0</td><td><span class="chip hold">clean</span></td></tr>
-          <tr><td>Stores with mixed promotions</td><td class="num">0</td><td><span class="chip hold">clean</span></td></tr>
-          <tr><td>Weeks observed per store</td><td class="num">4 for all 137</td><td><span class="chip hold">complete</span></td></tr>
-          <tr><td>Sample ratio mismatch (χ² GOF)</td><td class="num">p = 0.890</td><td><span class="chip hold">balanced</span></td></tr>
-          <tr><td>IQR outliers</td><td class="num">46 rows</td><td><span class="chip warn">flagged</span></td></tr>
+          <tr><td class="num">MarketID</td><td>Geographic market containing the stores</td></tr>
+          <tr><td class="num">LocationID</td><td>Individual store identifier</td></tr>
+          <tr><td class="num">MarketSize</td><td>Market size category — Small, Medium, Large</td></tr>
+          <tr><td class="num">Promotion</td><td>Promotional strategy assigned to the store (1, 2, 3)</td></tr>
+          <tr><td class="num">Week</td><td>Observation week</td></tr>
+          <tr><td class="num">SalesInThousands</td><td>Weekly sales revenue, in thousands of dollars</td></tr>
+          <tr><td class="num">AgeOfStore</td><td>Store age in years</td></tr>
         </tbody>
       </table>
       </div>
     </div>
-    <p>Sample ratio mismatch tests whether the split landed where the design intended. Since assignment was per store, it ran on 137 stores rather than 548 rows: <span class="hl">43 / 47 / 47</span> is well inside what randomization produces.</p>
-    <p><span class="hl">548 rows in, 548 rows out.</span> Nothing was dropped because nothing was broken. The 46 flagged outliers are handled in section 7 rather than quietly deleted here.</p>
+    <p><span class="hl">Promotion</span> is stored numerically as 1, 2 and 3, but the values are labels rather than quantities. It was converted to a categorical type before any grouping or modelling, so no step could accidentally treat promotion 3 as “three times promotion 1”.</p>
+    <p class="note"><strong>Source ·</strong> IBM Watson Analytics, “Fast Food Marketing Campaign A/B Test”, distributed via Kaggle. The dataset was used for educational portfolio purposes. All analysis, statistical testing, interpretations, and recommendations were independently developed as part of this project.</p>
   </section>
 
-  <section id="s3">
-    <p class="sec-no">03</p>
-    <h3>Unit of analysis</h3>
-    <p class="sec-sub">Feed it 548 rows and the p-value will lie to you</p>
-    <p class="takeaway">Each store appears as four weekly rows, so the raw file offers 548 observations where the design only earns 137.</p>
-    <p>A store's week 1 and week 2 are not independent. Feeding all 548 rows to ANOVA inflates the sample fourfold and shrinks the p-value accordingly. Since assignment was per store, each location was collapsed to its four-week mean. That discards information, so the decision needed evidence:</p>
-    <div class="grid3">
-      <div class="card tight">
-        <h4>Week carries no signal</h4>
-        <p class="figures">F = 0.028 · p = 0.9935</p>
-        <p class="small">Week 1 and week 4 are indistinguishable. Averaging destroys no trend because there is no trend.</p>
-      </div>
-      <div class="card tight">
-        <h4>Variance lives between stores</h4>
-        <p class="figures">Between 16.19 · Within 4.73</p>
-        <p class="small">Store-to-store spread is roughly 3.4× the week-to-week spread. Weekly wobble is noise, not signal.</p>
-      </div>
-      <div class="card tight">
-        <h4>The alternative wasn't worth it</h4>
-        <p class="figures">Repeated measures / mixed model</p>
-        <p class="small">A mixed model would preserve weekly structure — but the structure it preserves is noise, so the added complexity buys nothing.</p>
-      </div>
-    </div>
-  </section>
-
+  <!-- 04 ---------------------------------------------------- -->
   <section id="s4">
     <p class="sec-no">04</p>
-    <h3>Assumptions</h3>
-    <p class="sec-sub">Normality failed; equal variance held</p>
-    <p class="takeaway">Normality was rejected in all three groups — so the result had to survive a test that doesn't assume it.</p>
-    <figure>
-      <img src="assets/qq.png" alt="Q-Q plots for the three promotion groups. Each follows the reference line through the middle but lifts away at the upper tail.">
-      <figcaption>All three groups track the reference line through the body of the distribution and lift away at the right tail — the large-market stores that sit structurally higher.</figcaption>
-    </figure>
-    <div class="grid2">
-      <div class="card">
-        <h4>Shapiro-Wilk <span class="chip rej">normality rejected</span></h4>
-        <p class="figures">P1 p = .0002 · P2 p &lt; .0001 · P3 p = .0001</p>
-        <p class="small">Driven by a handful of high-revenue stores in one market, not a fundamentally different distribution.</p>
-      </div>
-      <div class="card">
-        <h4>Levene <span class="chip hold">equal variance met</span></h4>
-        <p class="figures">stat = 0.468 · p = 0.6272</p>
-        <p class="small">Group variances are statistically indistinguishable.</p>
+    <h3>Methodology</h3>
+    <p class="sec-sub">The reasoning behind each step, not just the sequence</p>
+    <p class="takeaway">Most of the work in this project was deciding what to do — the tests themselves were the short part.</p>
+
+    <div class="dec">
+      <p class="idx">01</p>
+      <div>
+        <h4>Validate the experiment before testing anything</h4>
+        <p class="why">A clean p-value computed on broken assignment is worthless. Duplicates, stores drifting between promotions, missing weeks and assignment balance were all checked first, <b>so that later results could be attributed to the promotion rather than to a data defect.</b></p>
       </div>
     </div>
-    <div class="card tight">
-      <p class="small">ANOVA alone would have been hard to defend; a rank-based test alone would have cost the ability to state the gap in dollars. With balanced groups and equal variances, the compromise was to <span class="hl">run both and require them to agree.</span></p>
+
+    <div class="dec">
+      <p class="idx">02</p>
+      <div>
+        <h4>Match the analysis unit to the assignment unit</h4>
+        <p class="why">Promotions were assigned per store, but the file stores each location as four weekly rows. Treating those as independent would inflate the sample fourfold. Each store was collapsed to its four-week average, <b>because the design earns 137 independent observations, not 548.</b></p>
+      </div>
+    </div>
+
+    <div class="dec">
+      <p class="idx">03</p>
+      <div>
+        <h4>Check assumptions, then choose the test accordingly</h4>
+        <p class="why">Normality failed while equal variance held. Rather than force one method, ANOVA and a rank-based alternative were run together, <b>so the conclusion had to survive both a parametric and a non-parametric route to count.</b></p>
+      </div>
+    </div>
+
+    <div class="dec">
+      <p class="idx">04</p>
+      <div>
+        <h4>Follow the group test with a pairwise comparison</h4>
+        <p class="why">ANOVA can only say that groups differ, never which one wins. Tukey's HSD identified the specific pairs <b>and reported the gap in dollars, which is the form the business actually needs.</b></p>
+      </div>
+    </div>
+
+    <div class="dec">
+      <p class="idx">05</p>
+      <div>
+        <h4>Report effect size alongside significance</h4>
+        <p class="why">Significant and important are different claims. Effect size was reported <b>to prevent a real but modest effect from being sold as a decisive one.</b></p>
+      </div>
+    </div>
+
+    <div class="dec">
+      <p class="idx">06</p>
+      <div>
+        <h4>Try to break the finding before believing it</h4>
+        <p class="why">Three separate attempts: control for market size and store age, re-run without the one questionable observation, and correct for the false positives that repeated segment testing manufactures. <b>A result that survives deliberate attempts to dismantle it is worth acting on.</b></p>
+      </div>
+    </div>
+
+    <div class="dec">
+      <p class="idx">07</p>
+      <div>
+        <h4>Translate the statistics into money and a decision</h4>
+        <p class="why">The revenue gap was scaled to the affected stores and weeks, with its uncertainty stated. <b>A recommendation without a magnitude is not actionable, and a magnitude without a range is misleading.</b></p>
+      </div>
     </div>
   </section>
 
+  <!-- 05 ---------------------------------------------------- -->
   <section id="s5">
     <p class="sec-no">05</p>
-    <h3>Main test</h3>
-    <p class="sec-sub">There is a difference — but it isn't the whole story</p>
-    <p class="takeaway">Both tests reject the null, and both land in the same place.</p>
-    <figure>
-      <img src="assets/box.png" alt="Box plot of mean weekly sales per store by promotion. Promotion 2 sits lowest.">
-      <figcaption>Four-week mean sales per store. The entire box for Promotion 2 sits below the other two.</figcaption>
-    </figure>
-    <div class="stats">
-      <div class="stat"><p class="k">ANOVA F</p><p class="v blue">5.846</p></div>
-      <div class="stat"><p class="k">p-value</p><p class="v rose">0.0037</p></div>
-      <div class="stat"><p class="k">Effect size η²</p><p class="v violet">0.080</p></div>
-      <div class="stat"><p class="k">Kruskal-Wallis</p><p class="v mint">p = 0.0002</p></div>
-    </div>
-    <p>Agreement between the parametric and rank-based tests means the normality violation is not driving the result.</p>
-    <div class="card tight">
-      <p class="small"><span class="hl-b">η² = 0.080</span> means promotion explains about <span class="hl">8%</span> of the variance in store sales. The other 92% belongs elsewhere — market size, mostly. Significant and important are different claims: this effect is real without being dominant, and saying so is more useful than overselling it.</p>
-    </div>
-  </section>
+    <h3>Analysis</h3>
+    <p class="sec-sub">Where the judgement calls actually happened</p>
 
-  <section id="s6">
-    <p class="sec-no">06</p>
-    <h3>Post hoc</h3>
-    <p class="sec-sub">Which pair, and by how much</p>
-    <p class="takeaway">Promotion 2 loses to both alternatives. Promotions 1 and 3 cannot be told apart.</p>
+    <h4 class="blk">Was the experiment sound?</h4>
+    <p>Nothing in the structural checks was broken — no duplicate rows, no store split across promotions, no missing weeks, and every store observed for the full four weeks. Assignment balance was also consistent with random allocation, so the three groups can be compared as designed.</p>
+    <div class="card tight">
+      <p class="small"><span class="hl">548 rows in, 548 rows out.</span> Nothing was deleted, because nothing was wrong. The outliers the IQR rule flagged were held over for a separate decision rather than quietly dropped here — removing rows silently is how a clean-looking result gets manufactured.</p>
+    </div>
+
+    <h4 class="blk">Why the data was reduced from 548 rows to 137</h4>
+    <p>A store's week 1 and week 2 are not independent observations; they resemble each other. Aggregating to store averages fixes that, but it throws away the weekly detail, so the decision needed support.</p>
+    <div class="grid3">
+      <div class="card tight">
+        <h4>Week carried no signal</h4>
+        <p class="small">Sales did not differ systematically across the four weeks, so averaging destroys no trend.</p>
+      </div>
+      <div class="card tight">
+        <h4>Variation lives between stores</h4>
+        <p class="small">Store-to-store spread was roughly <span class="hl">3.4×</span> the week-to-week spread. Weekly movement was noise.</p>
+      </div>
+      <div class="card tight">
+        <h4>The complex alternative bought nothing</h4>
+        <p class="small">A mixed model would preserve weekly structure — but that structure was noise, so the added complexity had no payoff.</p>
+      </div>
+    </div>
+
+    <h4 class="blk">Choosing the statistical test</h4>
     <figure>
-      <img src="assets/tukey.png" alt="Tukey HSD 95% confidence intervals. P1 vs P2 and P2 vs P3 exclude zero; P1 vs P3 crosses it.">
-      <figcaption>Tukey HSD 95% confidence intervals. An interval that clears the dashed zero line is significant.</figcaption>
+      <img src="assets/qq.png" alt="Q-Q plots for the three promotion groups. Each follows the reference line through the middle but lifts away at the upper tail.">
+      <figcaption>All three groups track the reference line through the body of the distribution and lift away at the upper tail — the large-market stores that sit structurally higher.</figcaption>
+    </figure>
+    <div class="grid2">
+      <div class="card tight">
+        <h4>Normality <span class="chip rej">not met</span></h4>
+        <p class="small">Driven by a handful of high-revenue stores in one large market, rather than by a fundamentally different distribution.</p>
+      </div>
+      <div class="card tight">
+        <h4>Equal variance <span class="chip hold">met</span></h4>
+        <p class="small">Group variances were statistically similar, which keeps the parametric route viable.</p>
+      </div>
+    </div>
+    <p>Relying on ANOVA alone would have been hard to defend; relying only on a rank-based test would have cost the ability to state the gap in dollars. With balanced group sizes and equal variances, both were run and <span class="hl">required to agree</span> — and they did.</p>
+
+    <h4 class="blk">Which promotions actually differ</h4>
+    <figure>
+      <img src="assets/tukey.png" alt="Tukey HSD 95% confidence intervals. Promotion 1 vs 2 and 2 vs 3 exclude zero; 1 vs 3 crosses it.">
+      <figcaption>Pairwise comparisons with 95% confidence intervals. An interval that clears the dashed zero line indicates a real difference.</figcaption>
     </figure>
     <div class="card">
       <div class="pair">
         <span class="lbl">P1 · P2</span>
-        <span class="txt">Promotion 2 earns <strong>$10,770 less</strong> per store-week than Promotion 1 <span style="color:var(--rose)">(−18.5%)</span></span>
-        <span class="num">p = .004 · d = 0.71</span>
-        <span><span class="chip rej">significant</span></span>
+        <span class="txt">Promotion 2 earns about <strong>$10,770 less</strong> per store-week than Promotion 1</span>
+        <span><span class="chip rej">real difference</span></span>
       </div>
       <div class="pair">
         <span class="lbl">P1 · P3</span>
-        <span class="txt">Promotion 3 trails Promotion 1 by $2,734, but the interval contains zero</span>
-        <span class="num">p = .686 · d = 0.17</span>
+        <span class="txt">The $2,734 gap between Promotions 1 and 3 cannot be distinguished from zero</span>
         <span><span class="chip na">no difference</span></span>
       </div>
       <div class="pair">
         <span class="lbl">P2 · P3</span>
-        <span class="txt">Promotion 3 earns <strong>$8,035 more</strong> per store-week than Promotion 2 <span style="color:var(--mint)">(+17.0%)</span></span>
-        <span class="num">p = .037 · d = 0.52</span>
-        <span><span class="chip rej">significant</span></span>
+        <span class="txt">Promotion 3 earns about <strong>$8,035 more</strong> per store-week than Promotion 2</span>
+        <span><span class="chip rej">real difference</span></span>
       </div>
     </div>
-    <p>The ordering is <span class="hl">Promotion 1 ≈ Promotion 3 &gt; Promotion 2</span>. The experiment answered <em>what to drop</em>, not <em>what to pick</em>.</p>
-  </section>
 
-  <section id="s7">
-    <p class="sec-no">07</p>
-    <h3>Robustness</h3>
-    <p class="sec-sub">Telling a bad reading apart from a real one</p>
-    <p class="takeaway">Of 46 flagged outliers, <span class="hl-r">45 came from one large market</span> — structure, not error.</p>
-    <p>Those stores sell more because the market is bigger. Deleting them would delete signal rather than clean noise.</p>
-    <figure>
-      <img src="assets/outlier507.png" alt="Weekly sales for store 507. Weeks 1, 3 and 4 sit near the market average; week 2 drops to 17.34.">
-      <figcaption>Store 507 was the only genuine exception. Its four-week mean of 28.14 is the lowest in its market but sits inside the local range of 28.14–43.32. Only week 2 collapsed.</figcaption>
-    </figure>
-    <p>No digit-shift trace suggests a transcription error, and no column records closures or stockouts. With no grounds to delete it the value stayed — and the analysis checked whether it mattered instead.</p>
-    <div class="grid2">
-      <div class="card tight">
-        <h4>Original</h4>
-        <p style="font-family:var(--mono);font-size:16px;color:var(--blue);margin:0">F = 5.846 · p = 0.0037</p>
-      </div>
-      <div class="card tight">
-        <h4>Store 507, week 2 removed</h4>
-        <p style="font-family:var(--mono);font-size:16px;color:var(--blue);margin:0">F = 5.778 · p = 0.0039</p>
-      </div>
-    </div>
-    <p>The conclusion does not rest on a single observation, so all 548 rows were kept.</p>
-    <p class="small" style="color:var(--ink-3)">Reporting the check is the point. An outlier decision without a sensitivity test is an opinion.</p>
-  </section>
+    <h4 class="blk">Trying to break the finding</h4>
+    <p>Three deliberate attempts to explain away Promotion 2's weakness, none of which succeeded.</p>
 
-  <section id="s8">
-    <p class="sec-no">08</p>
-    <h3>Confounders</h3>
-    <p class="sec-sub">Was Promotion 2 simply dealt a worse hand?</p>
-    <p class="takeaway">If Promotion 2 had been handed the smaller markets, the whole finding would collapse. It wasn't.</p>
-    <div class="grid2">
-      <div class="card tight">
-        <h4>Promotion × market size <span class="chip hold">independent</span></h4>
-        <p class="figures">χ² = 1.189 · p = 0.880</p>
-        <p class="small">No promotion clustered into larger or smaller markets.</p>
-      </div>
-      <div class="card tight">
-        <h4>Promotion × store age <span class="chip hold">no difference</span></h4>
-        <p class="figures">F = 0.450 · p = 0.639</p>
-        <p class="small">Store tenure is balanced across the three groups.</p>
-      </div>
-    </div>
     <div class="card">
-      <h4>Two-way ANOVA controlling for market size</h4>
-      <div class="stats" style="margin-bottom:11px">
-        <div class="stat"><p class="k">Promotion</p><p class="v blue">F = 16.04</p></div>
-        <div class="stat"><p class="k">Market size</p><p class="v violet">F = 96.13</p></div>
-        <div class="stat"><p class="k">Interaction</p><p class="v ink">p = 0.266</p></div>
-      </div>
-      <p class="small">Adding market size pushed the promotion F statistic <span class="hl-b">up</span> from 5.85 to 16.04. A confounder would have weakened the effect once controlled; instead it sharpened. Market size drives sales hard but is unrelated to assignment, so it was acting as noise — and removing that noise exposed the promotion effect. The interaction is not significant, so the effect does not change with market size.</p>
+      <h4>Could market size be the real cause?</h4>
+      <p class="small">Market size turned out to be a far stronger driver of sales than promotion — but it was <span class="hl">unrelated to how promotions were assigned</span>, and store age was balanced across groups too. Controlling for market size actually made the promotion effect <span class="hl-b">clearer</span>, not weaker: a genuine confounder would have absorbed the effect, whereas removing an unrelated source of variation sharpened it.</p>
     </div>
-  </section>
 
-  <section id="s9">
-    <p class="sec-no">09</p>
-    <h3>Segments</h3>
-    <p class="sec-sub">Does it hold everywhere — and what does repeating the test cost?</p>
+    <div class="card">
+      <h4>Was one bad observation driving it?</h4>
+      <p class="small">Of the flagged outliers, <span class="hl-r">nearly all came from a single large market</span> — high sales because the market is large, not because the data is wrong. Deleting them would have deleted signal. One store had a single genuinely odd week; with no evidence of a data-entry error it was kept, and the analysis was re-run without it as a check. The conclusion did not move.</p>
+    </div>
+
+    <figure>
+      <img src="assets/outlier507.png" alt="Weekly sales for one store. Three weeks sit near the market average while one week drops sharply.">
+      <figcaption>The one genuinely unusual case: three normal weeks and a single sharp dip, with no digit-shift pattern to suggest a transcription error and no field recording closures or stockouts.</figcaption>
+    </figure>
+
+    <div class="card">
+      <h4>Does it hold in every segment — or did repeated testing manufacture it?</h4>
+      <p class="small">Promotion 2 was the weakest arm in small, medium and large markets alike. But testing each segment separately means running three tests, which inflates the chance of a false positive, so both Bonferroni and Benjamini-Hochberg corrections were applied. <span class="hl">All three segments stayed significant afterwards.</span> The one caveat: the small-market segment holds only about five stores per arm, so it carries less weight than the other two.</p>
+    </div>
+
     <figure>
       <img src="assets/segbar.png" alt="Mean sales by promotion within each market size. Promotion 2 is lowest in small, medium and large markets alike.">
-      <figcaption>Promotion 2 is the weakest arm in small, medium and large markets alike.</figcaption>
+      <figcaption>Promotion 2 is the weakest arm across every market size, which is why the ranking is treated as a pattern rather than a segment artifact.</figcaption>
     </figure>
-    <p class="takeaway">Splitting into segments means running three tests — which is exactly how false positives get manufactured.</p>
-    <p>At α = .05, three tests return at least one significant result about <span class="hl">14%</span> of the time even when nothing is there. Bonferroni correction was applied before reading anything into them.</p>
-    <div class="card">
-      <div class="table-wrap">
-      <table>
-        <thead><tr><th>Segment</th><th>n</th><th>Raw p</th><th>Bonferroni</th><th>Verdict</th></tr></thead>
-        <tbody>
-          <tr><td>Small</td><td class="num">15</td><td class="num">0.0032</td><td class="num">0.0096</td><td><span class="chip rej">significant</span></td></tr>
-          <tr><td>Medium</td><td class="num">80</td><td class="num">0.0001</td><td class="num">0.0003</td><td><span class="chip rej">significant</span></td></tr>
-          <tr><td>Large</td><td class="num">42</td><td class="num">0.0077</td><td class="num">0.0232</td><td><span class="chip rej">significant</span></td></tr>
-        </tbody>
-      </table>
-      </div>
-    </div>
-    <p>All three survive correction, and Benjamini-Hochberg agrees. Promotion 2's weakness is a consistent pattern, not one lucky segment. The caveat: small markets hold only <span class="hl-r">15 stores</span>, roughly five per arm, so that row carries less weight than the other two.</p>
   </section>
 
-  <section id="s10">
-    <p class="sec-no">10</p>
-    <h3>Business impact</h3>
-    <p class="sec-sub">Converting a p-value into dollars</p>
-    <p class="takeaway">Keeping Promotion 2 for four weeks across 47 stores costs roughly two million dollars in forgone revenue.</p>
+  <!-- 06 ---------------------------------------------------- -->
+  <section id="s6">
+    <p class="sec-no">06</p>
+    <h3>Results</h3>
+    <p class="sec-sub">What the analysis established</p>
+    <p class="takeaway">Promotion 2 loses to both alternatives. Promotions 1 and 3 cannot be separated on sales.</p>
+    <figure>
+      <img src="assets/box.png" alt="Box plot of mean weekly sales per store by promotion. Promotion 2 sits lowest.">
+      <figcaption>Four-week mean sales per store. The entire distribution for Promotion 2 sits below the other two.</figcaption>
+    </figure>
+    <div class="grid2">
+      <div class="card tight">
+        <h4>Promotion 2 underperformed <span class="chip rej">confirmed</span></h4>
+        <p class="small">Lower sales than both alternatives, holding across every market size and unchanged when the questionable observation is removed.</p>
+      </div>
+      <div class="card tight">
+        <h4>Promotions 1 and 3 are tied <span class="chip na">unresolved</span></h4>
+        <p class="small">No detectable gap overall, and splitting by market size flipped the direction rather than clarifying it.</p>
+      </div>
+    </div>
+    <h4 class="blk">How large is the effect?</h4>
+    <p>Promotion explains roughly <span class="hl">8%</span> of the variation in store sales — a medium effect by conventional standards. The remaining variation belongs mostly to market size and other store characteristics.</p>
+    <p>That number is worth stating plainly rather than burying. The promotion choice is a real lever, but it is not the dominant one, and a business planning around this result should size its expectations accordingly.</p>
+  </section>
+
+  <!-- 07 ---------------------------------------------------- -->
+  <section id="s7">
+    <p class="sec-no">07</p>
+    <h3>Business Insights</h3>
+    <p class="sec-sub">From a statistical result to a decision</p>
+    <p class="takeaway">Running Promotion 2 for four weeks across the stores that used it cost roughly two million dollars in forgone revenue.</p>
     <div class="grid2" style="margin-bottom:16px">
       <div class="callout">
         <p class="big">vs Promotion 1</p>
         <p class="money" style="color:var(--rose)">$2,024,700</p>
-        <p class="sub">47 stores × 4 weeks, estimated<br>$10,770 per store-week (−18.5%)</p>
+        <p class="sub">47 stores × 4 weeks, estimated<br>about $10,770 per store-week</p>
       </div>
       <div class="callout">
         <p class="big">vs Promotion 3</p>
         <p class="money" style="color:var(--amber)">$1,510,600</p>
-        <p class="sub">47 stores × 4 weeks, estimated<br>$8,035 per store-week (−14.5%)</p>
+        <p class="sub">47 stores × 4 weeks, estimated<br>about $8,035 per store-week</p>
       </div>
     </div>
     <div class="card">
-      <h4>How to read these numbers</h4>
-      <p class="small">The gap is <span class="hl">$10,770</span> per store-week — modest until it compounds across 47 stores and four weeks. Stated the other way: <span class="hl-r">$2M is not what one restaurant lost.</span> Without naming the scale, the figure reads as inflation.</p>
-      <p class="small">It is also a point estimate. Propagating the Tukey interval puts the total between <span class="hl">$0.55M and $3.5M</span>. Two million is the most plausible value in that range, not a settled amount — and since the outcome is revenue, the cost of running each promotion is not in these figures.</p>
+      <h4>How to read these figures</h4>
+      <p class="small">The per-store, per-week gap is about $10,770 — modest until it compounds across 47 stores and four weeks. Stated the other way: <span class="hl-r">$2M is not what one restaurant lost.</span> Without naming the scale, the number reads as inflation.</p>
+      <p class="small">It is also a point estimate. Carrying the confidence interval through the same arithmetic puts the total somewhere between <span class="hl">$0.55M and $3.5M</span>. Two million is the most plausible value in that range, not a settled amount — and since the outcome measured is revenue, the cost of running each promotion is not included.</p>
+    </div>
+
+    <h4 class="blk">Recommendation</h4>
+    <div class="card">
+      <h4><span class="chip rej">Do not continue</span> &nbsp;Promotion 2</h4>
+      <p class="small">It underperformed on every check that was run: a real and non-trivial gap against both alternatives, consistency across all market segments, no confounding by market size or store age, stability when the questionable observation is removed, and a revenue impact large enough to matter commercially.</p>
+    </div>
+    <div class="card">
+      <h4><span class="chip na">Undecided</span> &nbsp;Promotion 1 or Promotion 3</h4>
+      <p class="small">Sales data cannot separate them, so the choice has to be made on information this dataset does not contain — implementation and marketing cost, operational complexity, inventory and logistics burden, customer retention, and longer-term sales behaviour.</p>
+      <p class="small">Naming what is still missing is more useful than forcing a winner out of a tie. It tells the business exactly what to measure before committing.</p>
     </div>
   </section>
 
-  <section id="s11">
-    <p class="sec-no">11</p>
-    <h3>Recommendation</h3>
-    <p class="sec-sub">What the data settled, and what it left open</p>
-    <p class="takeaway">Drop one, and admit the other two are tied.</p>
-    <div class="card">
-      <h4><span class="chip rej">Drop</span> &nbsp;Do not roll out Promotion 2</h4>
-      <p class="small">It clears every check — significance (p = .004), a medium effect (d = 0.71), no confounding, consistency across all three segments, and stability when the one questionable observation is removed. The recommendation does not hang on any single test.</p>
-    </div>
-    <div class="card">
-      <h4><span class="chip na">Tied</span> &nbsp;Revenue cannot separate Promotions 1 and 3</h4>
-      <p class="small">Tukey found no significant gap (p = .686), and splitting by market size flipped the direction rather than clarifying it (Small −0.65 · Medium −2.20 · Large +1.97, in $ thousands).</p>
-      <p class="small">The choice has to be made outside this dataset — on execution cost, operational complexity, and inventory load. Naming what is missing is more honest than forcing a winner out of a tie, and it tells the business what to measure next.</p>
-    </div>
-  </section>
-
-  <section id="s12">
-    <p class="sec-no">12</p>
+  <!-- 08 ---------------------------------------------------- -->
+  <section id="s8">
+    <p class="sec-no">08</p>
     <h3>Limitations</h3>
     <p class="sec-sub">What this analysis cannot answer</p>
-    <p class="takeaway">Four weeks of revenue data cannot answer everything the decision needs.</p>
     <div class="grid2">
       <div class="card tight">
         <h4>A four-week window</h4>
-        <p class="small">Nothing here distinguishes a durable effect from a novelty effect. That requires sales beyond week four.</p>
+        <p class="small">Long-term effects cannot be evaluated, and a durable effect cannot be told apart from initial novelty. Whether the ranking survives once the promotion stops being new is unknown.</p>
       </div>
       <div class="card tight">
-        <h4>Information lost to aggregation</h4>
-        <p class="small">Collapsing to store-level means bought independence at the cost of any week-to-week pattern.</p>
+        <h4>Weekly detail was aggregated away</h4>
+        <p class="small">Averaging to the store level secured independence but removed any view of week-to-week dynamics.</p>
       </div>
       <div class="card tight">
-        <h4>No cost data</h4>
-        <p class="small">The comparison is on revenue. If the promotions differ in cost to run, the margin ranking could differ from this one.</p>
+        <h4>No cost or profit data</h4>
+        <p class="small">The dataset carries sales but not promotion, labour, marketing or operational cost. This evaluates revenue performance, not profitability.</p>
       </div>
       <div class="card tight">
         <h4>A thin segment</h4>
-        <p class="small">Small markets contribute about five stores per arm. The result survived correction but warrants re-testing with more data.</p>
+        <p class="small">The small-market group contributes only about five stores per arm. The result held after correction but deserves re-testing with more data.</p>
       </div>
     </div>
+    <h4 class="blk">Future improvements</h4>
+    <ul class="plain">
+      <li>Mixed-effects models to use the weekly observations directly instead of averaging them</li>
+      <li>A longer observation window to separate durable effects from novelty</li>
+      <li>Cost and margin data, so the comparison can be made on profit rather than revenue</li>
+      <li>Customer-level behaviour and retention metrics</li>
+      <li>Interaction effects between promotion and market characteristics on a larger sample</li>
+    </ul>
+  </section>
+
+  <!-- 09 ---------------------------------------------------- -->
+  <section id="s9">
+    <p class="sec-no">09</p>
+    <h3>My Contribution</h3>
+    <p class="sec-sub">End-to-end ownership of the analysis</p>
+    <ul class="plain">
+      <li>Framed the business question and translated it into testable hypotheses</li>
+      <li>Validated the experimental dataset, including assignment consistency and allocation balance</li>
+      <li>Decided the unit of analysis and justified the aggregation with evidence</li>
+      <li>Evaluated the statistical assumptions and selected methods accordingly</li>
+      <li>Ran the group comparison, a non-parametric robustness check, and pairwise post-hoc tests</li>
+      <li>Investigated confounding variables and interaction effects</li>
+      <li>Performed sensitivity and multiple-testing analyses to stress-test the finding</li>
+      <li>Converted the statistical result into an estimated revenue impact with its uncertainty</li>
+      <li>Wrote the final recommendation, including what the data could not decide</li>
+    </ul>
+  </section>
+
+  <!-- 10 ---------------------------------------------------- -->
+  <section id="s10">
+    <p class="sec-no">10</p>
+    <h3>Tools &amp; Skills</h3>
+    <p class="sec-sub">What was used, and for what</p>
     <div class="card tight">
-      <h4>What to collect next</h4>
-      <p class="small">Execution cost per promotion (labor, marketing spend, inventory load) &nbsp;·&nbsp; sales beyond week four &nbsp;·&nbsp; additional small-market locations</p>
+      <h4>Programming &amp; data handling</h4>
+      <div class="tags"><span>Python</span><span>pandas</span><span>NumPy</span></div>
     </div>
+    <div class="card tight">
+      <h4>Statistics &amp; experimentation</h4>
+      <div class="tags"><span>A/B Testing</span><span>Hypothesis Testing</span><span>One-Way ANOVA</span><span>Two-Way ANOVA</span><span>Kruskal-Wallis</span><span>Tukey's HSD</span><span>Levene's Test</span><span>Shapiro-Wilk</span><span>Effect Size</span><span>Multiple Testing Correction</span></div>
+    </div>
+    <div class="card tight">
+      <h4>Analytical methods</h4>
+      <div class="tags"><span>Exploratory Data Analysis</span><span>Outlier Analysis</span><span>Sensitivity Analysis</span><span>Confounding Analysis</span><span>Assignment Validation</span></div>
+    </div>
+    <div class="card tight">
+      <h4>Visualization</h4>
+      <div class="tags"><span>Matplotlib</span><span>Seaborn</span></div>
+    </div>
+  </section>
+
+  <!-- 11 ---------------------------------------------------- -->
+  <section id="s11">
+    <p class="sec-no">11</p>
+    <h3>Repository</h3>
+    <p class="sec-sub">Notebook, code, and full write-up</p>
+    <p><a class="repo" href="https://github.com/jiwoon-oh/ai-data-bootcamp/tree/main/Statistics/D016" target="_blank" rel="noopener">View the analysis notebook on GitHub <span>→</span></a></p>
+    <p class="note">The repository contains the complete Jupyter notebook with every test and figure reproducible from the raw dataset, along with the full README write-up.</p>
   </section>
 
   </main>
 </div>
 
 <footer class="wrap">
-  <p>Data · IBM Watson Analytics, “Fast Food Marketing Campaign A/B Test” (via Kaggle)</p>
+  <p>Data · IBM Watson Analytics, “Fast Food Marketing Campaign A/B Test” (via Kaggle) — used for educational portfolio purposes</p>
   <p>Tools · Python 3, pandas, SciPy, statsmodels, matplotlib</p>
-  <p>Code · <a href="https://github.com/jiwoon-oh/ai-data-bootcamp/tree/main/D016">Notebooks and outputs on GitHub</a></p>
 </footer>
 
 <script>
