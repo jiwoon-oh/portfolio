@@ -202,3 +202,26 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
   .wrap{padding:0 22px}
 }
 @media (prefers-reduced-motion:reduce){.pick{animation:none;opacity:1;transform:none}}
+
+/* ============================================================
+   skill pills + link button
+   Added for the tools/repository sections; reusable by any
+   case-study page linking this file.
+   ============================================================ */
+.skills{display:flex;flex-wrap:wrap;gap:9px;margin:0}
+.skill{display:inline-block;font-size:13.5px;color:var(--ink-2);
+  background:rgba(255,255,255,.72);border:1px solid var(--edge);
+  border-radius:10px;padding:7px 13px;line-height:1.25;white-space:nowrap}
+.card h4 + .skills{margin-top:14px}
+
+.btn{display:inline-flex;align-items:center;gap:12px;font-size:15.5px;font-weight:600;
+  color:var(--ink);background:var(--glass);border:1px solid var(--edge);
+  border-radius:13px;padding:15px 24px;text-decoration:none;margin:0 0 14px}
+.btn:hover{background:#fff;border-color:rgba(76,127,224,.45);color:var(--blue)}
+.btn .arw{font-family:var(--mono);font-size:14px;color:var(--ink-3)}
+.btn:hover .arw{color:var(--blue)}
+
+@media (max-width:920px){
+  .skill{white-space:normal}
+  .btn{width:100%;justify-content:space-between}
+}
