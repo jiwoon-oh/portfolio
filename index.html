@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jiwoon Oh — Data Analyst</title>
+<meta name="description" content="Data analyst working in causal inference, experimentation and machine learning. Four case studies in which the headline number did not survive the check.">
+<meta property="og:title" content="Jiwoon Oh — Data Analyst">
+<meta property="og:description" content="Causal inference, experimentation, machine learning. Four case studies — in each one, the headline number did not survive the check.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/case.css">
+<style>
+/* ============================================================
+   Landing page — reuses every token from case.css.
+   Only the dark hero band and the project grid live here.
+   ============================================================ */
+:root{ --wash-a:#EFEDFC; --wash-b:#E6F0FB; --wash-c:#EDF2FA;
+       --night:#14142A; --night-2:#1E1B3A; --night-3:#2A2350;
+       --on-night:#F2F1FA; --on-night-2:#B9B6D4; --on-night-3:#8A86AC; }
+
+body{padding-top:0}
+/* anchors must clear the fixed nav */
+section,header{scroll-margin-top:84px}
+
+/* ── nav ─────────────────────────────────────────────────── */
+.nav{position:fixed;top:0;left:0;right:0;z-index:50;
+  transition:background .3s ease,border-color .3s ease,backdrop-filter .3s ease;
+  border-bottom:1px solid transparent}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;
+  height:66px;gap:20px}
+.nav .brand{font-size:15px;font-weight:600;letter-spacing:-.015em;
+  color:var(--on-night);text-decoration:none;white-space:nowrap}
+.nav ul{display:flex;gap:4px;list-style:none;margin:0;padding:0}
+.nav ul a{font-size:13.5px;color:var(--on-night-2);text-decoration:none;
+  padding:8px 13px;border-radius:9px;display:block;transition:color .18s,background .18s}
+.nav ul a:hover{color:var(--on-night);background:rgba(255,255,255,.09)}
+.nav.solid{background:rgba(252,251,255,.86);backdrop-filter:blur(14px);
+  border-bottom-color:rgba(35,35,58,.09)}
+.nav.solid .brand{color:var(--ink)}
+.nav.solid ul a{color:var(--ink-2)}
+.nav.solid ul a:hover{color:var(--ink);background:rgba(35,35,58,.06)}
+
+/* ── dark hero band ──────────────────────────────────────── */
+.night{position:relative;overflow:hidden;background:var(--night);
+  padding:150px 0 108px}
+.night::before{content:"";position:absolute;inset:0;pointer-events:none;
+  background:
+    radial-gradient(760px 520px at 12% 4%,rgba(123,111,216,.42),transparent 62%),
+    radial-gradient(680px 480px at 88% 92%,rgba(76,127,224,.30),transparent 66%),
+    radial-gradient(520px 380px at 62% 26%,rgba(155,110,200,.16),transparent 70%),
+    linear-gradient(158deg,var(--night) 0%,var(--night-2) 52%,var(--night-3) 100%)}
+.night .wrap{position:relative;z-index:2}
+
+.greet{font-family:var(--mono);font-size:12px;letter-spacing:.17em;
+  text-transform:uppercase;color:var(--on-night-3);margin:0 0 22px}
+.night h1{font-size:clamp(38px,5.6vw,68px);line-height:1.1;letter-spacing:-.035em;
+  font-weight:600;color:var(--on-night);margin:0 0 26px;max-width:15ch}
+.night h1 em{font-style:normal;
+  background:linear-gradient(96deg,#A99BF0,#7FA8F2);
+  -webkit-background-clip:text;background-clip:text;color:transparent}
+.night .lede{font-size:clamp(16.5px,1.75vw,19.5px);color:var(--on-night-2);
+  max-width:56ch;margin:0 0 14px;line-height:1.65}
+.night .lede strong{color:var(--on-night);font-weight:500}
+.night .meta{font-family:var(--mono);font-size:12.5px;color:var(--on-night-3);
+  margin:0 0 38px;letter-spacing:.01em}
+
+.herolinks{display:flex;flex-wrap:wrap;gap:11px;margin:0}
+.hbtn{display:inline-flex;align-items:center;gap:10px;font-size:14.5px;font-weight:500;
+  text-decoration:none;border-radius:12px;padding:13px 21px;transition:all .2s ease;
+  border:1px solid rgba(255,255,255,.17);color:var(--on-night);
+  background:rgba(255,255,255,.07)}
+.hbtn:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.3)}
+.hbtn.primary{background:var(--on-night);color:var(--night);border-color:transparent;font-weight:600}
+.hbtn.primary:hover{background:#fff}
+.hbtn .arw{font-family:var(--mono);font-size:13px;opacity:.6}
+
+/* ── section headings on the light body ─────────────────── */
+.band{padding:88px 0 0}
+.band.last{padding-bottom:20px}
+.shead{margin:0 0 34px}
+.shead .k{font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;
+  text-transform:uppercase;color:var(--ink-3);margin:0 0 9px}
+.shead h2{font-size:clamp(25px,3vw,34px);letter-spacing:-.028em;font-weight:600;
+  margin:0 0 9px;line-height:1.22}
+.shead p{font-size:16px;color:var(--ink-2);max-width:64ch;margin:0}
+
+/* ── project grid ────────────────────────────────────────── */
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin:0}
+.pcard{display:flex;flex-direction:column;text-decoration:none;color:inherit;
+  background:var(--glass);border:1px solid var(--edge);border-radius:20px;
+  overflow:hidden;box-shadow:0 3px 16px -8px rgba(35,35,58,.22);
+  transition:transform .28s cubic-bezier(.2,.7,.3,1),
+    box-shadow .28s ease,border-color .28s ease;
+  opacity:0;transform:translateY(18px)}
+.pcard.in{opacity:1;transform:none}
+.pcard:hover{transform:translateY(-4px);border-color:rgba(76,127,224,.4);
+  box-shadow:0 18px 44px -18px rgba(35,35,58,.3)}
+.thumb{background:#fff;border-bottom:1px solid rgba(35,35,58,.07);
+  aspect-ratio:16/10;display:flex;align-items:center;justify-content:center;
+  padding:18px 20px;overflow:hidden}
+.thumb img{max-width:100%;max-height:100%;width:auto;height:auto;
+  object-fit:contain;display:block;transition:transform .4s cubic-bezier(.2,.7,.3,1)}
+.pcard:hover .thumb img{transform:scale(1.035)}
+.pbody{padding:22px 24px 24px;display:flex;flex-direction:column;flex:1}
+.ptype{font-family:var(--mono);font-size:10.5px;letter-spacing:.13em;
+  text-transform:uppercase;font-weight:600;margin:0 0 11px;
+  display:inline-block;align-self:flex-start;padding:5px 11px;border-radius:999px}
+.ptype.exp{background:rgba(47,158,136,.14);color:var(--mint)}
+.ptype.quasi{background:rgba(123,111,216,.14);color:var(--violet)}
+.ptype.panel{background:rgba(76,127,224,.13);color:var(--blue)}
+.ptype.pred{background:rgba(201,122,46,.14);color:var(--amber)}
+.pcard h3{font-size:20.5px;font-weight:600;letter-spacing:-.022em;
+  margin:0 0 8px;line-height:1.28}
+.pq{font-size:15.5px;color:var(--ink-2);line-height:1.56;margin:0 0 18px;max-width:40ch}
+.pcard .skills{margin:0 0 16px}
+.pcard .skill{font-size:12.5px;padding:5px 11px;border-radius:9px;
+  background:rgba(35,35,58,.05);border-color:transparent;color:var(--ink-2)}
+.pscale{font-family:var(--mono);font-size:11.5px;color:var(--ink-3);
+  margin:auto 0 0;padding-top:14px;border-top:1px solid rgba(35,35,58,.08);
+  display:flex;justify-content:space-between;align-items:center;gap:12px}
+.pscale .go{color:var(--blue);font-weight:600;opacity:0;transform:translateX(-5px);
+  transition:opacity .22s,transform .22s;white-space:nowrap}
+.pcard:hover .pscale .go{opacity:1;transform:none}
+
+/* ── about ───────────────────────────────────────────────── */
+.about{display:grid;grid-template-columns:1.35fr 1fr;gap:22px;align-items:start}
+.about .card{margin:0}
+.about .card p{font-size:16px;line-height:1.72}
+.stackgroup{margin:0 0 18px}
+.stackgroup:last-child{margin-bottom:0}
+.stackgroup .gk{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-3);margin:0 0 9px}
+
+/* ── contact ─────────────────────────────────────────────── */
+.contact{display:flex;flex-wrap:wrap;gap:12px;margin:0}
+.contact .btn{margin:0}
+
+@media (max-width:920px){
+  .nav ul{gap:0}
+  .nav ul a{padding:8px 9px;font-size:12.5px}
+  .nav .wrap{height:58px}
+  .night{padding:112px 0 78px}
+  .pgrid{grid-template-columns:1fr;gap:18px}
+  .about{grid-template-columns:1fr}
+  .band{padding-top:62px}
+  .herolinks .hbtn{flex:1 1 0;justify-content:center;padding:13px 14px}
+  .herolinks .hbtn.primary{flex:1 1 100%}
+}
+@media (max-width:520px){
+  .nav .brand{font-size:14px}
+  .nav ul a{padding:8px 7px;font-size:12px}
+}
+@media (prefers-reduced-motion:reduce){
+  .pcard{opacity:1;transform:none;transition:none}
+  .pcard:hover{transform:none}
+  .thumb img,.pcard:hover .thumb img{transition:none;transform:none}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="#top">Jiwoon&nbsp;Oh</a>
+    <ul>
+      <li><a href="#work">Work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<!-- ══ hero ═══════════════════════════════════════════════ -->
+<header class="night" id="top">
+  <div class="wrap">
+    <p class="greet" id="greet">Good evening</p>
+    <h1>I check whether the <em>effect</em> is real.</h1>
+    <p class="lede">Data analyst working in causal inference, experimentation and machine learning. Four case studies below — in <strong>every one of them</strong> the headline number did not survive the check.</p>
+    <p class="meta">Causal inference · Experimentation · Panel data · Machine learning</p>
+    <div class="herolinks">
+      <a class="hbtn primary" href="#work">See the work <span class="arw">↓</span></a>
+      <a class="hbtn" href="https://github.com/jiwoon-oh" target="_blank" rel="noopener">GitHub <span class="arw">↗</span></a>
+      <a class="hbtn" href="mailto:qwer06187@gmail.com">Email <span class="arw">↗</span></a>
+    </div>
+  </div>
+</header>
+
+<!-- ══ work ═══════════════════════════════════════════════ -->
+<section class="band wrap" id="work">
+  <div class="shead">
+    <p class="k">Selected work</p>
+    <h2>Four questions, four identification strategies</h2>
+    <p>Each study starts from a number someone already believed. The method is chosen by what the data will actually support — a randomised experiment where one exists, matching or fixed effects where it doesn't.</p>
+  </div>
+
+  <div class="pgrid">
+
+    <!-- A/B test -->
+    <a class="pcard" href="projects/ab-test-fastfood/index.html">
+      <div class="thumb">
+        <img src="projects/ab-test-fastfood/assets/tukey.png"
+             alt="Tukey HSD confidence intervals for three promotional strategies" loading="lazy">
+      </div>
+      <div class="pbody">
+        <p class="ptype exp">Experiment</p>
+        <h3>Fast-Food Promotion Experiment</h3>
+        <p class="pq">Three promotions ran side by side. Which one actually lifted sales?</p>
+        <div class="skills">
+          <span class="skill">ANOVA</span>
+          <span class="skill">Tukey HSD</span>
+          <span class="skill">Levene · Shapiro</span>
+          <span class="skill">Effect Size</span>
+        </div>
+        <p class="pscale"><span>548 obs · 137 stores · 4 weeks</span><span class="go">Read →</span></p>
+      </div>
+    </a>
+
+    <!-- Seoul -->
+    <a class="pcard" href="projects/seoul-closure-risk/index.html">
+      <div class="thumb">
+        <img src="projects/seoul-closure-risk/assets/strata-att.png"
+             alt="Stratified average treatment effect on the treated, by store-count stratum" loading="lazy">
+      </div>
+      <div class="pbody">
+        <p class="ptype quasi">Quasi-experiment</p>
+        <h3>Seoul Closure Risk</h3>
+        <p class="pq">Seoul funds support by a net-decline metric. Does it rank risk, or size?</p>
+        <div class="skills">
+          <span class="skill">Propensity Score Matching</span>
+          <span class="skill">Stratified ATT</span>
+          <span class="skill">Cluster Bootstrap</span>
+          <span class="skill">Gradient Boosting</span>
+        </div>
+        <p class="pscale"><span>67,475 cells · 13 quarters</span><span class="go">Read →</span></p>
+      </div>
+    </a>
+
+    <!-- Dunnhumby case 1 -->
+    <a class="pcard" href="projects/dunnhumby-customer/case1/index.html">
+      <div class="thumb">
+        <img src="projects/dunnhumby-customer/case1/assets/lorenz-curve.png"
+             alt="Lorenz curve of household revenue concentration" loading="lazy">
+      </div>
+      <div class="pbody">
+        <p class="ptype pred">Descriptive · Predictive</p>
+        <h3>Revenue Concentration</h3>
+        <p class="pq">Is revenue growth coming from the heavy spenders everyone watches?</p>
+        <div class="skills">
+          <span class="skill">Lorenz / Gini</span>
+          <span class="skill">Wilcoxon · Mann-Whitney</span>
+          <span class="skill">Bootstrap CI</span>
+          <span class="skill">Logistic vs RF · SHAP</span>
+        </div>
+        <p class="pscale"><span>2,500 households · 83 weeks</span><span class="go">Read →</span></p>
+      </div>
+    </a>
+
+    <!-- Dunnhumby case 2 -->
+    <a class="pcard" href="projects/dunnhumby-customer/case2/index.html">
+      <div class="thumb">
+        <img src="projects/dunnhumby-customer/case2/assets/forest-plot.png"
+             alt="Forest plot of campaign response coefficients by spending tier" loading="lazy">
+      </div>
+      <div class="pbody">
+        <p class="ptype panel">Panel · Natural experiment</p>
+        <h3>Campaign Response Heterogeneity</h3>
+        <p class="pq">Campaigns look four times more effective on low spenders. Is that the campaign, or who receives it?</p>
+        <div class="skills">
+          <span class="skill">Two-way Fixed Effects</span>
+          <span class="skill">Clustered SE</span>
+          <span class="skill">Placebo Test</span>
+          <span class="skill">BH-FDR</span>
+        </div>
+        <p class="pscale"><span>172,500 household-weeks · 30 campaigns</span><span class="go">Read →</span></p>
+      </div>
+    </a>
+
+  </div>
+</section>
+
+<!-- ══ about ══════════════════════════════════════════════ -->
+<section class="band wrap" id="about">
+  <div class="shead">
+    <p class="k">About</p>
+    <h2>How I work</h2>
+  </div>
+  <div class="about">
+    <div class="card">
+      <p>I spend most of my effort on the step between a correlation and a decision. A difference in means is easy to produce; establishing that it would survive being acted on is the part that takes the work — matching on the right covariates, holding a unit against itself, correcting for the tests you ran and didn't report.</p>
+      <p>Three of the four studies here end in a null or a reversal. That wasn't the plan in any of them, and it's the reason I keep them in the portfolio: the useful skill isn't producing an effect, it's knowing when the one you found isn't there.</p>
+      <p style="margin-bottom:0">Each case study documents its own limitations section — what the design cannot identify, and what I would need to close the gap.</p>
+    </div>
+    <div class="card">
+      <div class="stackgroup">
+        <p class="gk">Methods</p>
+        <div class="skills">
+          <span class="skill">Causal inference</span>
+          <span class="skill">Experiment design</span>
+          <span class="skill">Panel data</span>
+          <span class="skill">Hypothesis testing</span>
+          <span class="skill">Machine learning</span>
+        </div>
+      </div>
+      <div class="stackgroup">
+        <p class="gk">Tools</p>
+        <div class="skills">
+          <span class="skill">Python</span>
+          <span class="skill">pandas</span>
+          <span class="skill">statsmodels</span>
+          <span class="skill">linearmodels</span>
+          <span class="skill">scikit-learn</span>
+          <span class="skill">SciPy</span>
+          <span class="skill">SQL</span>
+        </div>
+      </div>
+      <div class="stackgroup">
+        <p class="gk">Reporting</p>
+        <div class="skills">
+          <span class="skill">matplotlib</span>
+          <span class="skill">Tableau</span>
+          <span class="skill">Jupyter</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══ contact ════════════════════════════════════════════ -->
+<section class="band last wrap" id="contact">
+  <div class="shead">
+    <p class="k">Contact</p>
+    <h2>Get in touch</h2>
+    <p>Open to data analyst and data scientist roles. The full code for every study is on GitHub.</p>
+  </div>
+  <div class="contact">
+    <a class="btn" href="mailto:qwer06187@gmail.com">qwer06187@gmail.com <span class="arw">↗</span></a>
+    <a class="btn" href="https://github.com/jiwoon-oh" target="_blank" rel="noopener">github.com/jiwoon-oh <span class="arw">↗</span></a>
+  </div>
+</section>
+
+<footer class="wrap">
+  <p>Jiwoon Oh · Data Analyst</p>
+  <p>Built with plain HTML and CSS. Every figure is generated by the analysis code in the linked repositories.</p>
+</footer>
+
+<script>
+/* time-based greeting */
+(function(){
+  var h = new Date().getHours(), t = "Good evening";
+  if (h < 5)       t = "Good night";
+  else if (h < 12) t = "Good morning";
+  else if (h < 18) t = "Good afternoon";
+  document.getElementById("greet").textContent = t;
+})();
+
+/* nav turns solid once the dark hero has scrolled past */
+(function(){
+  var nav = document.getElementById("nav"), hero = document.getElementById("top");
+  if (!("IntersectionObserver" in window)) { nav.classList.add("solid"); return; }
+  new IntersectionObserver(function(es){
+    nav.classList.toggle("solid", !es[0].isIntersecting);
+  }, { rootMargin: "-66px 0px 0px 0px", threshold: 0 }).observe(hero);
+})();
+
+/* project cards rise in on first view */
+(function(){
+  var cards = document.querySelectorAll(".pcard");
+  if (!("IntersectionObserver" in window) ||
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    cards.forEach(function(c){ c.classList.add("in"); });
+    return;
+  }
+  var io = new IntersectionObserver(function(es){
+    es.forEach(function(e){
+      if (!e.isIntersecting) return;
+      var i = [].indexOf.call(cards, e.target);
+      setTimeout(function(){ e.target.classList.add("in"); }, (i % 2) * 90);
+      io.unobserve(e.target);
+    });
+  }, { threshold: .12, rootMargin: "0px 0px -8% 0px" });
+  cards.forEach(function(c){ io.observe(c); });
+})();
+</script>
+
+</body>
+</html>
