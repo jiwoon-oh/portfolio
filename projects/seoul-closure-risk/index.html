@@ -18,6 +18,17 @@
 </head>
 <body>
 
+<nav class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="../../index.html">Jiwoon&nbsp;Oh</a>
+    <ul>
+      <li><a href="../../index.html#work">Work</a></li>
+      <li><a href="../../index.html#about">About</a></li>
+      <li><a href="../../index.html#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
 <header class="wrap hero">
   <p class="eyebrow">Case study · Causal inference &amp; forecasting</p>
   <h1>The metric was measuring <em>size</em>, not risk</h1>
@@ -767,5 +778,15 @@
   secs.forEach(function(s){ if(s) io.observe(s); });
 })();
 </script>
+<script>
+/* site nav: transparent at the top, solid once scrolled */
+(function(){
+  var n = document.getElementById("nav");
+  if (!n) return;
+  var f = function(){ n.classList.toggle("solid", window.scrollY > 10); };
+  f(); addEventListener("scroll", f, { passive: true });
+})();
+</script>
+
 </body>
 </html>

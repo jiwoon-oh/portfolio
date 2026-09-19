@@ -24,34 +24,28 @@ body{padding-top:0}
 /* anchors must clear the fixed nav */
 section,header{scroll-margin-top:84px}
 
-/* ── nav ─────────────────────────────────────────────────── */
-.nav{position:fixed;top:0;left:0;right:0;z-index:50;
-  transition:background .3s ease,border-color .3s ease,backdrop-filter .3s ease;
-  border-bottom:1px solid transparent}
-.nav .wrap{display:flex;align-items:center;justify-content:space-between;
-  height:66px;gap:20px}
-.nav .brand{font-size:15px;font-weight:600;letter-spacing:-.015em;
-  color:var(--on-night);text-decoration:none;white-space:nowrap}
-.nav ul{display:flex;gap:4px;list-style:none;margin:0;padding:0}
-.nav ul a{font-size:13.5px;color:var(--on-night-2);text-decoration:none;
-  padding:8px 13px;border-radius:9px;display:block;transition:color .18s,background .18s}
+/* ── nav ─────────────────────────────────────────────────────
+   Structure comes from case.css. Only the colours change here,
+   because this page's nav sits over a dark hero until scrolled. */
+.nav .brand{color:var(--on-night)}
+.nav ul a{color:var(--on-night-2)}
 .nav ul a:hover{color:var(--on-night);background:rgba(255,255,255,.09)}
-.nav.solid{background:rgba(252,251,255,.86);backdrop-filter:blur(14px);
-  border-bottom-color:rgba(35,35,58,.09)}
 .nav.solid .brand{color:var(--ink)}
 .nav.solid ul a{color:var(--ink-2)}
 .nav.solid ul a:hover{color:var(--ink);background:rgba(35,35,58,.06)}
 
-/* ── dark hero band ──────────────────────────────────────── */
+/* ── dark hero band — fills the first screen ─────────────── */
 .night{position:relative;overflow:hidden;background:var(--night);
-  padding:150px 0 108px}
+  min-height:100vh;min-height:100svh;
+  display:flex;align-items:center;
+  padding:120px 0 84px}
 .night::before{content:"";position:absolute;inset:0;pointer-events:none;
   background:
     radial-gradient(760px 520px at 12% 4%,rgba(123,111,216,.42),transparent 62%),
     radial-gradient(680px 480px at 88% 92%,rgba(76,127,224,.30),transparent 66%),
     radial-gradient(520px 380px at 62% 26%,rgba(155,110,200,.16),transparent 70%),
     linear-gradient(158deg,var(--night) 0%,var(--night-2) 52%,var(--night-3) 100%)}
-.night .wrap{position:relative;z-index:2}
+.night .wrap{position:relative;z-index:2;width:100%}
 
 .greet{font-family:var(--mono);font-size:12px;letter-spacing:.17em;
   text-transform:uppercase;color:var(--on-night-3);margin:0 0 22px}
@@ -138,10 +132,7 @@ section,header{scroll-margin-top:84px}
 .contact .btn{margin:0}
 
 @media (max-width:920px){
-  .nav ul{gap:0}
-  .nav ul a{padding:8px 9px;font-size:12.5px}
-  .nav .wrap{height:58px}
-  .night{padding:112px 0 78px}
+  .night{padding:100px 0 72px}
   .pgrid{grid-template-columns:1fr;gap:18px}
   .about{grid-template-columns:1fr}
   .band{padding-top:62px}
