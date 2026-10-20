@@ -82,7 +82,7 @@ section,header{scroll-margin-top:84px}
 
 /* ── project grid ────────────────────────────────────────── */
 .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin:0}
-.pcard{display:flex;flex-direction:column;text-decoration:none;color:inherit;
+.pcard{position:relative;display:flex;flex-direction:column;text-decoration:none;color:inherit;
   background:var(--glass);border:1px solid var(--edge);border-radius:20px;
   overflow:hidden;box-shadow:0 3px 16px -8px rgba(35,35,58,.22);
   transition:transform .28s cubic-bezier(.2,.7,.3,1),
@@ -113,7 +113,14 @@ section,header{scroll-margin-top:84px}
   background:rgba(35,35,58,.05);border-color:transparent;color:var(--ink-2)}
 .pscale{font-family:var(--mono);font-size:11.5px;color:var(--ink-3);
   margin:auto 0 0;padding-top:14px;border-top:1px solid rgba(35,35,58,.08);
-  display:flex;justify-content:space-between;align-items:center;gap:12px}
+  display:flex;justify-content:space-between;align-items:center;gap:10px 12px;flex-wrap:wrap}
+/* whole card stays clickable through the title link; the Code button sits above it */
+.pcard .stretch{color:inherit;text-decoration:none}
+.pcard .stretch::after{content:"";position:absolute;inset:0;z-index:1;border-radius:20px}
+.pcard .stretch:focus-visible::after{outline:2px solid var(--blue);outline-offset:-2px}
+.pfoot{display:flex;align-items:center;gap:12px}
+.btn.pcode{position:relative;z-index:2;font-size:12.5px;padding:6px 12px;gap:8px;border-radius:9px;background:#fff;border-color:rgba(35,35,58,.16);letter-spacing:0;white-space:nowrap}
+.btn.pcode .arw{font-size:12px}
 .pscale .go{color:var(--blue);font-weight:600;opacity:0;transform:translateX(-5px);
   transition:opacity .22s,transform .22s;white-space:nowrap}
 .pcard:hover .pscale .go{opacity:1;transform:none}
@@ -189,14 +196,14 @@ section,header{scroll-margin-top:84px}
   <div class="pgrid">
 
     <!-- A/B test -->
-    <a class="pcard" href="projects/ab-test-fastfood/index.html">
+    <article class="pcard">
       <div class="thumb">
         <img src="projects/ab-test-fastfood/assets/tukey.png"
              alt="Tukey HSD confidence intervals for three promotional strategies" loading="lazy">
       </div>
       <div class="pbody">
         <p class="ptype exp">Experiment</p>
-        <h3>Fast-Food Promotion Experiment</h3>
+        <h3><a class="stretch" href="projects/ab-test-fastfood/index.html">Fast-Food Promotion Experiment</a></h3>
         <p class="pq">Three promotions ran side by side. Which one actually lifted sales?</p>
         <div class="skills">
           <span class="skill">ANOVA</span>
@@ -204,19 +211,19 @@ section,header{scroll-margin-top:84px}
           <span class="skill">Levene · Shapiro</span>
           <span class="skill">Effect Size</span>
         </div>
-        <p class="pscale"><span>548 obs · 137 stores · 4 weeks</span><span class="go">Read →</span></p>
+        <p class="pscale"><span>548 obs · 137 stores · 4 weeks</span><span class="pfoot"><a class="btn pcode" href="https://github.com/jiwoon-oh/fastfood-promotion-ab-test" target="_blank" rel="noopener" aria-label="Code and data for Fast-Food Promotion Experiment on GitHub">Code <span class="arw">↗</span></a><span class="go">Read →</span></span></p>
       </div>
-    </a>
+    </article>
 
     <!-- Seoul -->
-    <a class="pcard" href="projects/seoul-closure-risk/index.html">
+    <article class="pcard">
       <div class="thumb">
         <img src="projects/seoul-closure-risk/assets/strata-att.png"
              alt="Stratified average treatment effect on the treated, by store-count stratum" loading="lazy">
       </div>
       <div class="pbody">
         <p class="ptype quasi">Quasi-experiment</p>
-        <h3>Seoul Closure Risk</h3>
+        <h3><a class="stretch" href="projects/seoul-closure-risk/index.html">Seoul Closure Risk</a></h3>
         <p class="pq">Seoul funds support by a net-decline metric. Does it rank risk, or size?</p>
         <div class="skills">
           <span class="skill">Propensity Score Matching</span>
@@ -224,19 +231,19 @@ section,header{scroll-margin-top:84px}
           <span class="skill">Cluster Bootstrap</span>
           <span class="skill">Gradient Boosting</span>
         </div>
-        <p class="pscale"><span>67,475 cells · 12 labeled quarters</span><span class="go">Read →</span></p>
+        <p class="pscale"><span>67,475 cells · 12 labeled quarters</span><span class="pfoot"><a class="btn pcode" href="https://github.com/jiwoon-oh/seoul-closure-risk" target="_blank" rel="noopener" aria-label="Code and data for Seoul Closure Risk on GitHub">Code <span class="arw">↗</span></a><span class="go">Read →</span></span></p>
       </div>
-    </a>
+    </article>
 
     <!-- Dunnhumby case 1 -->
-    <a class="pcard" href="projects/dunnhumby-customer/case1/index.html">
+    <article class="pcard">
       <div class="thumb">
         <img src="projects/dunnhumby-customer/case1/assets/lorenz-curve.png"
              alt="Lorenz curve of household revenue concentration" loading="lazy">
       </div>
       <div class="pbody">
         <p class="ptype pred">Descriptive · Predictive</p>
-        <h3>Revenue Concentration</h3>
+        <h3><a class="stretch" href="projects/dunnhumby-customer/case1/index.html">Revenue Concentration</a></h3>
         <p class="pq">Is revenue growth coming from the heavy spenders everyone watches?</p>
         <div class="skills">
           <span class="skill">Lorenz / Gini</span>
@@ -244,19 +251,19 @@ section,header{scroll-margin-top:84px}
           <span class="skill">Bootstrap CI</span>
           <span class="skill">Logistic vs RF · SHAP</span>
         </div>
-        <p class="pscale"><span>2,500 households · 83 weeks</span><span class="go">Read →</span></p>
+        <p class="pscale"><span>2,500 households · 83 weeks</span><span class="pfoot"><a class="btn pcode" href="https://github.com/jiwoon-oh/dunnhumby-revenue-concentration" target="_blank" rel="noopener" aria-label="Code and data for Revenue Concentration on GitHub">Code <span class="arw">↗</span></a><span class="go">Read →</span></span></p>
       </div>
-    </a>
+    </article>
 
     <!-- Dunnhumby case 2 -->
-    <a class="pcard" href="projects/dunnhumby-customer/case2/index.html">
+    <article class="pcard">
       <div class="thumb">
         <img src="projects/dunnhumby-customer/case2/assets/forest-plot.png"
              alt="Forest plot of campaign response coefficients by spending tier" loading="lazy">
       </div>
       <div class="pbody">
         <p class="ptype panel">Panel · Natural experiment</p>
-        <h3>Campaign Response Heterogeneity</h3>
+        <h3><a class="stretch" href="projects/dunnhumby-customer/case2/index.html">Campaign Response Heterogeneity</a></h3>
         <p class="pq">Campaigns look four times more effective on low spenders. Is that the campaign, or who receives it?</p>
         <div class="skills">
           <span class="skill">Two-way Fixed Effects</span>
@@ -264,9 +271,9 @@ section,header{scroll-margin-top:84px}
           <span class="skill">Placebo Test</span>
           <span class="skill">BH-FDR</span>
         </div>
-        <p class="pscale"><span>172,500 household-weeks · 30 campaigns</span><span class="go">Read →</span></p>
+        <p class="pscale"><span>172,500 household-weeks · 30 campaigns</span><span class="pfoot"><a class="btn pcode" href="https://github.com/jiwoon-oh/dunnhumby-campaign-response" target="_blank" rel="noopener" aria-label="Code and data for Campaign Response Heterogeneity on GitHub">Code <span class="arw">↗</span></a><span class="go">Read →</span></span></p>
       </div>
-    </a>
+    </article>
 
   </div>
 </section>
