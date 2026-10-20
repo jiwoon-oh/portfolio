@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>The initial top spenders were shrinking —Dunnhumby revenue concentration case study</title>
+<title>The initial top spenders spent less later —Dunnhumby revenue concentration case study</title>
 <meta name="description" content="The hypothesis was that revenue growth came from heavy spenders. Rank-based testing, bootstrap intervals and a contribution decomposition show the opposite: the initial top 20% spent less and held a smaller share of revenue.">
-<meta property="og:title" content="The initial top spenders were shrinking, not growing">
-<meta property="og:description" content="2,500 households in the data (2,095 compared across both windows) over 83 weeks — and where the spending growth actually came from.">
+<meta property="og:title" content="The initial top spenders spent less later, not more">
+<meta property="og:description" content="2,500 households in the data over an 83-week stable period; 2,095 compared across two 10-week windows (weeks 17–26 and 90–99) — and where the spending increase came from.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -31,9 +31,9 @@
 
 <header class="wrap hero">
   <p class="eyebrow">Case 01 · Customer analytics &amp; retention</p>
-  <h1>The initial top spenders were <em>shrinking</em>, not growing</h1>
-  <p class="lede">The hypothesis was that revenue growth came from a small group of heavy spenders spending more. Every test pointed the other way — and most of the increase came from existing households outside the top 20%.</p>
-  <p class="meta">2,500 households in the data · 83 weeks · Dunnhumby "The Complete Journey" · Python, pandas, SciPy, scikit-learn · <a href="https://github.com/jiwoon-oh/dunnhumby-revenue-concentration" target="_blank" rel="noopener">Code &amp; outputs on GitHub ↗</a></p>
+  <h1>The initial top spenders spent <em>less</em> later, not more</h1>
+  <p class="lede">The hypothesis was that revenue growth came from a small group of heavy spenders spending more. Every test pointed the other way — and among the households outside the top 20% (wide panel), most of the net spending increase came from existing households.</p>
+  <p class="meta">2,500 households in the data · 83-week stable period · Dunnhumby "The Complete Journey" · Python, pandas, SciPy, scikit-learn · <a href="https://github.com/jiwoon-oh/dunnhumby-revenue-concentration" target="_blank" rel="noopener">Code &amp; outputs on GitHub ↗</a></p>
   <div class="picks">
     <div class="pick drop">
       <p class="name">INITIAL TOP 20% · ABSOLUTE SPEND</p>
@@ -79,23 +79,23 @@
   <h3>Executive summary</h3>
   <p class="sec-sub">The whole case in one screen</p>
 
-  <p class="takeaway">The hypothesis was that revenue growth came from heavy spenders spending more. The data says the opposite — the gap between heavy and light spenders <em>narrowed</em>.</p>
+  <p class="takeaway">The hypothesis was that revenue growth came from heavy spenders spending more. The data says the opposite — the initial top 20% spent <em>less</em> in weeks 90–99 than in weeks 17–26. This compares two windows and does not rule out regression to the mean.</p>
 
   <p><strong>The claim under test.</strong> Revenue growth is concentrated in a small group of high-value households. If true, the top spenders should have grown in both absolute spend and share of revenue.</p>
 
   <div class="card">
-    <h4>Three tests, one direction</h4>
+    <h4>Three results, one direction</h4>
     <div class="table-wrap">
     <table>
       <thead><tr><th class="tl">Test</th><th>Result (median change; share change in pp)</th><th class="tl">What it means</th></tr></thead>
       <tbody>
         <tr class="mark"><td class="lead tl">Top 20% · absolute spend</td><td class="num lead" style="color:var(--rose)">−131.45</td><td class="tl">Heavy spenders <strong>shrank</strong>, not grew</td></tr>
-        <tr><td class="tl">Remaining 80% · absolute spend</td><td class="num lead" style="color:var(--mint)">+36.49</td><td class="tl">The growth came from everyone else</td></tr>
+        <tr><td class="tl">Remaining 80% · absolute spend</td><td class="num lead" style="color:var(--mint)">+36.49</td><td class="tl">The increase was among everyone else</td></tr>
         <tr><td class="tl">Top 20% · revenue share</td><td class="num lead" style="color:var(--rose)">−12.91&nbsp;pp</td><td class="tl">The top group's share of revenue fell</td></tr>
       </tbody>
     </table>
     </div>
-    <p class="small" style="margin-top:14px">Tests A and B are significant under Bonferroni correction (α = 0.05 / 3), and the 95% bootstrap interval for the share change excludes zero. The hypothesis is rejected in both framings — absolute spend and revenue share.</p>
+    <p class="small" style="margin-top:14px">Tests A and B (the first two rows) are two of the three household-level tests A–C that are corrected together with Bonferroni (α = 0.05 / 3 ≈ 0.0167; test C, the between-group Mann-Whitney U, appears in section 05). The last row is test D, whose 95% bootstrap interval for the share change excludes zero. All three rows use the H4-1 panel (2,095 households; 419 in the top 20%, 1,676 in the remaining 80%). The hypothesis is rejected in both framings — absolute spend and revenue share.</p>
   </div>
 
   <h4 style="margin-top:34px">Key findings</h4>
@@ -103,19 +103,19 @@
     <p class="small"><strong>The reversal does not depend on where the baseline was drawn.</strong> Re-running with 8-, 10- and 12-week baselines never flips the sign. This is a sensitivity check; it does not rule out regression to the mean.</p>
   </div>
   <div class="card tight">
-    <p class="small"><strong>New and reactivated households cluster in the growing group</strong> — 43.5% of the remaining 80%, against 13.6% of the top 20% (2,492 households with transactions in weeks 17–99). That association is clear (Cramér's V = 0.246).</p>
+    <p class="small"><strong>New and reactivated households cluster outside the top 20%</strong> — 43.5% of the remaining 80%, against 13.6% of the top 20% (wide panel: 2,492 households with transactions in weeks 17–99; top 20% = 499, remaining 80% = 1,993). That association is clear (Cramér's V = 0.246).</p>
   </div>
   <div class="card tight">
-    <p class="small"><strong>But association is not contribution.</strong> Those households are 43.5% of the remaining 80% by headcount and only <span class="hl">30.0%</span> of that group's net spending increase. Most of the increase came from <strong>existing households</strong>, not from new or reactivated ones.</p>
+    <p class="small"><strong>But association is not contribution.</strong> In the wide panel (households with no baseline transactions have their baseline spend set to 0), those households are 43.5% of the remaining 80% (1,993 households) by headcount and only <span class="hl">30.0%</span> of that group's net spending increase. Most of the increase came from <strong>existing households</strong>, not from new or reactivated ones.</p>
   </div>
   <div class="card tight">
-    <p class="small"><strong>Exploratory modelling looked at which baseline features are associated with falling out of the top tier.</strong> Survey participation shows the clearest association (OR 0.32, 95% CI 0.19–0.51); visit frequency shows no established association (OR 1.29, CI 0.91–1.87 includes 1).</p>
+    <p class="small"><strong>Exploratory modelling looked at which baseline features are associated with falling out of the top tier.</strong> Having a demographic record shows the clearest association (OR 0.32, 95% CI 0.19–0.51); visit frequency shows no established association (OR 1.29, CI 0.91–1.87 includes 1).</p>
   </div>
 
   <div class="callout" style="margin-top:30px">
     <p class="big">What this changes</p>
     <p class="money">Look beyond the top 20%</p>
-    <p class="sub">The spending increase in this data comes from households outside the initial top 20%, and mostly from existing customers. A retention strategy aimed only at the highest historical spenders ignores where most of the observed increase came from.</p>
+    <p class="sub">In this data the spending increase is among households outside the initial top 20%, and mostly among existing customers (wide panel, 2,492 households; remaining 80% = 1,993). A retention strategy aimed only at the highest historical spenders ignores where most of the observed increase was.</p>
   </div>
 
   <h4 style="margin-top:34px">At a glance</h4>
@@ -137,7 +137,7 @@
     </div>
     <div class="pair">
       <span class="lbl">Outcome</span>
-      <span class="txt">Original hypothesis rejected; convergence documented; most of the increase traced to existing households</span>
+      <span class="txt">Original hypothesis rejected; convergence documented; within the remaining 80% (wide panel), most of the increase traced to existing households</span>
       <span class="num">H4</span>
     </div>
   </div>
@@ -148,9 +148,9 @@
   <h3>Overview</h3>
   <p class="sec-sub">What was tested, and why the answer mattered</p>
 
-  <p>Retail analytics defaults to a familiar belief: a small group of heavy spenders carries the revenue, so growth must be coming from them. It is the assumption behind most loyalty programmes, and it is rarely checked directly.</p>
+  <p>A familiar assumption is that a small group of heavy spenders carries the revenue, so growth must be coming from them.</p>
 
-  <p>This case checks it. Using 83 weeks of household transaction data, it asks whether the households that were already heavy spenders at the start actually grew — in absolute spend and in share of total revenue — and if not, where the growth came from instead.</p>
+  <p>This case checks it. Using household transaction data from an 83-week stable period and comparing two 10-week windows (weeks 17–26 and 90–99), it asks whether the households that were already heavy spenders at the start actually grew — in absolute spend and in share of total revenue — and if not, where the growth came from instead.</p>
 
   <div class="grid2">
     <div class="card tight">
@@ -199,7 +199,7 @@
 
   <div class="card">
     <h4>Source</h4>
-    <p class="small"><strong>Dunnhumby "The Complete Journey"</strong> — household-level transaction records for 2,500 households, with demographic, campaign, coupon and product tables alongside. The analysis uses a <strong>stable 83-week period (weeks 17–99)</strong>, discarding the ramp-up at either end of the panel. Of the 2,500 households, 2,492 have transactions in weeks 17–99; the steps below use different subsets: 2,272 for the concentration measures, 2,095 for the H4-1 tests, 2,492 for the cross-table and the model.</p>
+    <p class="small"><strong>Dunnhumby "The Complete Journey"</strong> — household-level transaction records for 2,500 households, with demographic, campaign, coupon and product tables alongside. The analysis uses a <strong>stable 83-week period (weeks 17–99)</strong>. Of the 2,500 households, 2,492 have transactions in weeks 17–99; the steps below use different subsets: 2,272 for the concentration measures, 2,095 for the H4-1 tests, 2,492 for the cross-table and the model.</p>
     <p class="small" style="color:var(--ink-3)">The dataset was used for educational portfolio purposes. All analysis, statistical testing, interpretations, and recommendations were independently developed as part of this project.</p>
   </div>
 
@@ -213,7 +213,7 @@
       <div class="stat"><p class="k">Rank correlation</p><p class="v amber">ρ = 0.697</p></div>
       <div class="stat"><p class="k">Cap applied</p><p class="v ink">≤ 15% of period</p></div>
     </div>
-    <p class="small" style="margin-top:14px"><strong>Reported honestly: there was no sharp elbow.</strong> ρ = 0.697 is moderate, so the top-X% roster carries real noise. That is precisely why the sensitivity check in section 05 was planned from the outset — and why it matters for how far the result can be trusted.</p>
+    <p class="small" style="margin-top:14px"><strong>Reported honestly: there was no sharp elbow.</strong> ρ = 0.697 is moderate, so the top-X% roster carries real noise. That is why the sensitivity check in section 05 matters for how far the result can be trusted.</p>
   </div>
 
   <div class="card">
@@ -240,7 +240,7 @@
 
   <div class="card tight">
     <h4>One decision not to clean the data</h4>
-    <p class="small">An IQR rule flagged 7.34% of transaction values as outliers. That was read as <em>"IQR is the wrong tool for a right-skewed spending distribution"</em> rather than as a data problem — and more decisively, this hypothesis is <strong>about</strong> high-spending transactions. Removing them would delete the signal being tested. All observations were kept and rank-based tests used instead.</p>
+    <p class="small">An IQR rule flagged 7.34% of transaction values as outliers. That was read as <em>"IQR is the wrong tool for a right-skewed spending distribution"</em> rather than as a data problem — and more decisively, this hypothesis is <strong>about</strong> high-spending households. Removing them would delete the signal being tested. All observations were kept and rank-based tests used instead.</p>
   </div>
 </section>
 
@@ -267,7 +267,7 @@
       </tbody>
     </table>
     </div>
-    <p class="small" style="margin-top:14px">Three related tests means a <strong>Bonferroni correction</strong>: α = 0.05 / 3 ≈ 0.0167. All reported results clear that threshold, not the uncorrected 0.05.</p>
+    <p class="small" style="margin-top:14px">Three related household-level tests (A–C) mean a <strong>Bonferroni correction</strong>: α = 0.05 / 3 ≈ 0.0167. All three clear that threshold, not the uncorrected 0.05. The existing-versus-new comparison in section 05-C is judged against a stricter threshold of α = 0.05 / 4 = 0.0125 (the threshold used in that notebook).</p>
   </div>
 
   <div class="grid2">
@@ -276,8 +276,8 @@
       <p class="small">Revenue share is a group-level ratio, not a value per household, so rank-based tests do not apply. A <strong>bootstrap over 5,000 resamples</strong> was used to build the interval directly.</p>
     </div>
     <div class="card tight">
-      <h4>Why a sensitivity check came early</h4>
-      <p class="small">The first result ran opposite to the hypothesis. Before reporting that, the obvious alternative — <strong>regression to the mean</strong> — had to be examined, so the planned robustness check was pulled forward ahead of schedule.</p>
+      <h4>Why a sensitivity check was run</h4>
+      <p class="small">The first result ran opposite to the hypothesis. Before reporting that, the obvious alternative — <strong>regression to the mean</strong> — had to be examined, so a robustness check on the baseline length was run.</p>
     </div>
   </div>
 </section>
@@ -333,7 +333,7 @@
   </figure>
 
   <h4 style="margin-top:38px">C · Association is not contribution</h4>
-  <p>Since the growth came from the remaining 80%, the next question is whether it came from <strong>new and reactivated households arriving</strong> or from <strong>existing households spending more</strong>. A contingency table answers the first half.</p>
+  <p>Since the observed increase was among the remaining 80%, the next question is whether it was accounted for by <strong>new and reactivated households arriving</strong> or by <strong>existing households spending more</strong>. A contingency table answers the first half.</p>
 
   <div class="card">
     <div class="table-wrap">
@@ -346,12 +346,12 @@
     </table>
     </div>
     <p class="small" style="margin-top:14px">This table covers the 2,492 households with transactions in weeks 17–99 (499 in the top 20%, early spend ≥ 535.29), a different cut from the 419-household group above. The other eight of the 2,500 (seven existing, one reactivated) have no transactions in that period and are not in the table.</p>
-    <p class="small" style="margin-top:14px">Chi-square p = 1.5 × 10⁻³⁴, <strong>Cramér's V = 0.246</strong> — a moderate, clear association. New and reactivated households sit overwhelmingly in the group that grew.</p>
+    <p class="small" style="margin-top:14px">Chi-square p = 1.5 × 10⁻³⁴, <strong>Cramér's V = 0.246</strong> — a moderate, clear association. New and reactivated households sit overwhelmingly in the remaining 80% (866 of 934).</p>
   </div>
 
   <div class="card">
     <h4>But a contingency table is an association, not a contribution</h4>
-    <p class="small">Two readings remain compatible with that table: either these households genuinely generated the additional revenue, or they simply spend less on average and therefore cluster in the lower group. Separating them requires computing their <em>actual share of the net increase</em>.</p>
+    <p class="small">Two readings remain compatible with that table: either these households accounted for a large part of the additional revenue, or they simply spend less on average and therefore cluster in the lower group. Separating them requires computing their <em>actual share of the net increase</em>.</p>
     <div class="table-wrap">
     <table>
       <thead><tr><th class="tl">Cohort</th><th>Share of headcount (remaining 80%)</th><th>Share of net increase (remaining 80%)</th><th>Median change</th></tr></thead>
@@ -361,7 +361,7 @@
       </tbody>
     </table>
     </div>
-    <p class="small" style="margin-top:14px"><strong>Contribution comes in below headcount.</strong> New and reactivated households are 43.5% of the group but 30.0% of its net increase — the median existing household grew roughly <span class="hl">5×</span> more (+51.78 vs +10.26; means +119.96 vs +67.07).</p>
+    <p class="small" style="margin-top:14px"><strong>Contribution comes in below headcount.</strong> New and reactivated households are 43.5% of the group but 30.0% of its net increase — the median change for existing households is about <span class="hl">5 times</span> as large as for new and reactivated ones (+51.78 vs +10.26); the means are +119.96 vs +67.07.</p>
   </div>
 
   <figure>
@@ -371,7 +371,7 @@
 
   <div class="card tight">
     <h4>A case of significant ≠ important</h4>
-    <p class="small">Testing the two cohorts directly returns <strong>p = 0.000928</strong> — significant under Bonferroni. But the effect size is <strong>rank-biserial 0.086</strong>, with a common-language figure of 0.457 against a null of 0.5. With 1,993 households the test reaches significance on a difference with a small effect size. Reporting only the p-value here would have been misleading.</p>
+    <p class="small">Testing the two cohorts directly returns <strong>p = 0.000928</strong> — below the stricter threshold of α = 0.0125 used for this comparison. But the effect size is <strong>rank-biserial 0.086</strong>, with a common-language figure of 0.457 against a null of 0.5. With 1,993 households the test reaches significance on a difference with a small effect size. Reporting only the p-value here would have been misleading.</p>
   </div>
 </section>
 
@@ -383,11 +383,11 @@
   <div class="grid2">
     <div class="card">
       <h4>H4-1 <span class="chip rej">rejected</span></h4>
-      <p class="small">Both framings show the top 20% contracting — absolute spend down a median 131.45, revenue share down 12.91 points. What the data supports instead is a <strong>convergence pattern</strong>: the initial top 20% spent less and the remaining 80% spent more in the later window.</p>
+      <p class="small">Both framings show the top 20% contracting (H4-1 panel, 2,095 households; top 20% = 419) — absolute spend down a median 131.45, revenue share down 12.91 points. What the data supports instead is a <strong>convergence pattern</strong>: the initial top 20% spent less and the remaining 80% spent more in the later window.</p>
     </div>
     <div class="card">
       <h4>H4-2 <span class="chip warn">supported, but reframed</span></h4>
-      <p class="small">The association holds (Cramér's V = 0.246). The <em>contribution</em> does not follow from it — 70% of the net spending increase within the remaining 80% still came from existing households. <strong>Most of the observed increase came from existing households, not from new or reactivated ones.</strong></p>
+      <p class="small">The association holds (Cramér's V = 0.246). The <em>contribution</em> does not follow from it — in the wide panel (2,492 households), 70% of the net spending increase within the remaining 80% (1,993 households) still came from existing households. <strong>Within the remaining 80%, most of the observed increase came from existing households, not from new or reactivated ones.</strong></p>
     </div>
   </div>
 
@@ -415,19 +415,19 @@
   </div>
 
   <figure>
-    <img src="assets/odds-ratios.png" alt="Forest plot of odds ratios with 95% bootstrap intervals on a log scale: demographic survey present 0.32, baseline spend 0.64, income band 0.73 and category diversity 0.74 have intervals that exclude 1; visit frequency 1.29 and promotion exposure 0.96 do not.">
-    <figcaption>Bold markers are variables whose 95% bootstrap interval excludes 1 (survey participation, baseline spend, income band, category diversity); faint markers have intervals that include 1. Numeric variables are per 1 SD and binary ones are 0 vs 1, so sizes are not directly comparable.</figcaption>
+    <img src="assets/odds-ratios.png" alt="Forest plot of odds ratios with 95% bootstrap intervals on a log scale: demographic record present 0.32 (labelled “Demographic survey present” in the image), baseline spend 0.64 and income band 0.73 have intervals that exclude 1; category diversity 0.74 excludes 1 only borderline (upper bound 0.998); visit frequency 1.29 and promotion exposure 0.96 do not.">
+    <figcaption>Bold markers are variables whose 95% bootstrap interval excludes 1 (demographic record present, baseline spend, income band and, borderline, category diversity with upper bound 0.998); faint markers have intervals that include 1. The image labels the first variable "Demographic survey present"; it is the has_demo flag, i.e. whether a demographic record exists. Numeric variables are per 1 SD and binary ones are 0 vs 1, so sizes are not directly comparable.</figcaption>
   </figure>
 
   <div class="grid2">
     <div class="card tight">
       <h4>Two findings from the logistic model</h4>
-      <p class="small"><strong>Survey participation shows the clearest association with staying in the top tier</strong> (OR = 0.32, 95% CI 0.19–0.51). Responding to a demographic survey has no mechanical effect on spending; it may be standing in for engagement, but this does not show that completing a survey keeps a household in the top tier.</p>
-      <p class="small"><strong>Visit frequency shows no established association</strong> once spend is held constant (OR 1.29 per 1 SD, 95% CI 0.91–1.87, which includes 1). The point estimate leans toward higher risk, but it should not be read as a risk factor.</p>
+      <p class="small"><strong>Having a demographic record shows the clearest association with staying in the top tier</strong> (OR = 0.32, 95% CI 0.19–0.51). It may be standing in for engagement, but this does not show that having a record keeps a household in the top tier.</p>
+      <p class="small"><strong>Visit frequency shows no established association</strong> after accounting for the other variables in the model (OR 1.29 per 1 SD, 95% CI 0.91–1.87, which includes 1). The point estimate leans toward higher risk, but it should not be read as a risk factor.</p>
     </div>
     <div class="card tight">
-      <h4>Both model families agree</h4>
-      <p class="small">SHAP importance from the random forest overlaps considerably with the logistic results: four of its top five features (survey participation, baseline spend, category diversity, income band) are also the logistic variables whose interval excludes 1.</p>
+      <h4>The two model families overlap considerably</h4>
+      <p class="small">SHAP importance from the random forest overlaps considerably with the logistic results: four of its top five features (demographic record, baseline spend, category diversity, income band) are also logistic variables whose interval excludes 1 (category diversity only borderline, upper bound 0.998).</p>
       <p class="small">The forest can also show nonlinear patterns that a linear logistic model does not, such as a flattening at high baseline spend.</p>
     </div>
   </div>
@@ -439,8 +439,8 @@
 
   <div class="card tight">
     <h4>Is the model learning anything real?</h4>
-    <p class="figures">permutation test p = 0.001 (1,000 permutations, the smallest attainable value) &nbsp;·&nbsp; beats dummy baselines &nbsp;·&nbsp; no train/validation gap</p>
-    <p class="small">The permutation test suggests performance beyond randomly permuted outcomes, and there is no sign of a large train/validation gap. Validation PR-AUC is flat over the last five training sizes (0.680–0.687), so more households of the same kind are unlikely to change the picture; performance on a future period or another retailer is untested.</p>
+    <p class="figures">permutation test p = 0.001 (1,000 permutations, the smallest attainable value) &nbsp;·&nbsp; beats the stratified dummy baseline (PR-AUC 0.4325) &nbsp;·&nbsp; no sign of a large train/validation gap</p>
+    <p class="small">The permutation test suggests performance beyond randomly permuted outcomes, and there is no sign of a large train/validation gap. Validation PR-AUC is flat over the last five training sizes (0.680–0.687), which does not suggest that many more households would change the picture; performance on a future period or another retailer is untested.</p>
   </div>
 </section>
 
@@ -451,19 +451,19 @@
 
   <div class="card">
     <h4>① The growth is outside the top 20%</h4>
-    <p class="small">The observed spending increase is in the remaining 80%, and within it most of it (70.0%) came from existing households. A strategy built only on protecting initial heavy spenders targets a group whose median spending fell by 131.45.</p>
+    <p class="small">The observed spending increase is in the remaining 80%. In the wide panel (2,492 households; remaining 80% = 1,993), most of it (70.0%) came from existing households. A strategy built only on protecting initial heavy spenders targets a group whose median spending fell by 131.45 (H4-1 panel, 2,095 households; top 20% = 419).</p>
   </div>
   <div class="card">
     <h4>② New and reactivated households contributed less than their headcount</h4>
-    <p class="small">New and reactivated households are 43.5% of the remaining 80% but 30% of its net spending increase. This is an accounting decomposition; it does not show whether acquisition efforts worked or where budget should go.</p>
+    <p class="small">In the wide panel, new and reactivated households are 43.5% of the remaining 80% (1,993 households) but 30% of its net spending increase. This is an accounting decomposition; it does not show whether acquisition efforts worked or where budget should go.</p>
   </div>
   <div class="card">
-    <h4>③ Survey participation is associated with staying in the top tier</h4>
-    <p class="small">Survey participation shows the clearest association (OR 0.32); baseline spend is also associated (OR 0.64 per 1 SD), but the two are on different scales and are not ranked. It may be worth tracking as an early-warning signal; this data cannot show whether disengagement leads or follows a spending decline.</p>
+    <h4>③ Having a demographic record is associated with staying in the top tier</h4>
+    <p class="small">Having a demographic record shows the clearest association (OR 0.32); baseline spend is also associated (OR 0.64 per 1 SD), but the two are on different scales and are not ranked. It may be worth checking as a possible engagement marker; this data cannot show whether disengagement leads or follows a spending decline.</p>
   </div>
   <div class="card">
     <h4>④ The model's response to baseline spend flattens at the top</h4>
-    <p class="small">In the random forest, the effect of baseline spend on predicted risk flattens above roughly 1,250 in early spend. Category diversity does not flatten at the top. This describes the model's predictions; it does not show that retention effort near any threshold produces more.</p>
+    <p class="small">In the random forest, the association between baseline spend and predicted risk flattens above roughly 1,250 in early spend. Category diversity does not flatten at the top. This describes the model's predictions; it does not show that retention effort near any threshold produces more.</p>
   </div>
 
   <h4 style="margin-top:38px">Recommendations</h4>
@@ -473,18 +473,18 @@
     <dl>
       <div class="rrow"><dt>Who</dt><dd>CRM and loyalty programme owners</dd></div>
       <div class="rrow"><dt>What</dt><dd>Test shifting budget weighting away from a pure top-20% definition toward existing households outside the top 20% — a hypothesis to evaluate, not a result of this analysis</dd></div>
-      <div class="rrow"><dt>Why</dt><dd>The top 20% contracted by a median 131.45 while the remaining 80% grew by a median 36.49. A top-20% definition would not target the households where the observed increase was</dd></div>
+      <div class="rrow"><dt>Why</dt><dd>In the H4-1 panel (2,095 households), the top 20% contracted by a median 131.45 while the remaining 80% grew by a median 36.49. A top-20% definition would not target the households where the observed increase was</dd></div>
       <div class="rrow"><dt>How to verify</dt><dd>Hold out a matched portion of households outside the top 20% from the re-pointed programme and compare retention two periods later</dd></div>
     </dl>
   </div>
 
   <div class="rec">
-    <h4><span class="rn">02</span> Treat survey non-response as a signal of falling out of the top tier</h4>
+    <h4><span class="rn">02</span> Check whether lacking a demographic record signals falling out of the top tier</h4>
     <dl>
       <div class="rrow"><dt>Who</dt><dd>Retention analytics; customer insight teams</dd></div>
-      <div class="rrow"><dt>What</dt><dd>Track <strong>engagement with non-purchase touchpoints</strong> — surveys, profile completion, programme interactions — as a leading indicator alongside spending</dd></div>
-      <div class="rrow"><dt>Why</dt><dd>Survey participation showed the clearest association with staying in the top tier in the model (OR = 0.32, 95% CI 0.19–0.51). Numeric variables are per 1 SD and binary ones are 0 vs 1, so odds ratios are not ranked by size</dd></div>
-      <div class="rrow"><dt>Caveat</dt><dd>This is an association in a 499-household exploratory model. It justifies instrumenting the signal, not automating decisions on it</dd></div>
+      <div class="rrow"><dt>What</dt><dd>Track <strong>whether households have a demographic record and how they engage with non-purchase touchpoints</strong> — profile completion, programme interactions — alongside spending, to check whether these carry information about who falls out of the top tier</dd></div>
+      <div class="rrow"><dt>Why</dt><dd>Having a demographic record showed the clearest association with staying in the top tier in the model (OR = 0.32, 95% CI 0.19–0.51). Numeric variables are per 1 SD and binary ones are 0 vs 1, so odds ratios are not ranked by size</dd></div>
+      <div class="rrow"><dt>Caveat</dt><dd>This is an association in a 499-household exploratory model. It justifies instrumenting the signal, not automating decisions on it, and this data cannot show whether disengagement leads or follows a spending decline</dd></div>
     </dl>
   </div>
 
@@ -492,7 +492,7 @@
     <h4><span class="rn">03</span> Stop reporting revenue concentration without a trend</h4>
     <dl>
       <div class="rrow"><dt>Who</dt><dd>Commercial reporting</dd></div>
-      <div class="rrow"><dt>What</dt><dd>Report the top-20% revenue share <strong>as a series, not a snapshot</strong>. At baseline the top 20% held 55.4% of revenue (2,272 households); the same 419 households (initial top 20%) held 54.87% at baseline and 41.96% in weeks 90–99, a 12.91-point decline</dd></div>
+      <div class="rrow"><dt>What</dt><dd>Report the top-20% revenue share <strong>as a series, not a snapshot</strong>. In the concentration sample (2,272 households with transactions in weeks 17–26) the top 20% held 55.4% of revenue at baseline; the 419 initial top-20% households of the 2,095-household H4-1 panel held 54.87% at baseline and 41.96% in weeks 90–99, a 12.91-point decline</dd></div>
       <div class="rrow"><dt>Why</dt><dd>A single snapshot of concentration cannot show whether the baseline top group's share is rising or falling</dd></div>
     </dl>
   </div>

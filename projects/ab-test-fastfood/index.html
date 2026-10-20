@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Fast-Food Promotion Experiment — A/B test analysis</title>
-<meta name="description" content="Three promotional strategies tested across 137 restaurant locations over four weeks. Experimental validation, hypothesis testing, effect size, and a business recommendation.">
-<meta property="og:title" content="Fast-Food Promotion Experiment Analysis">
+<title>Fast-Food Promotion Comparison — A/B test analysis</title>
+<meta name="description" content="Three promotional strategies tested across 137 restaurant locations over four weeks. Comparative validation, hypothesis testing, effect size, and a business recommendation.">
+<meta property="og:title" content="Fast-Food Promotion Comparison Analysis">
 <meta property="og:description" content="Which of three promotions held up best on sales? A three-arm comparison across 137 locations — and why the answer was an elimination, not a winner.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -226,7 +226,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 </nav>
 
 <header class="wrap hero">
-  <p class="eyebrow">Case study · A/B testing &amp; experimental analysis</p>
+  <p class="eyebrow">Case study · A/B testing &amp; comparative analysis</p>
   <h1>How did the three promotions compare on <em>sales</em>?</h1>
   <p class="lede">A fast-food chain tested three promotional strategies for a new menu item across 137 stores. After four weeks the data would not crown a winner — but it showed one clear laggard, and a scenario estimate puts a figure on the gap.</p>
   <p class="meta">137 stores · 4 weeks · 548 observations · Python, pandas, SciPy, statsmodels · <a href="https://github.com/jiwoon-oh/fastfood-promotion-ab-test" target="_blank" rel="noopener">Code &amp; outputs on GitHub ↗</a></p>
@@ -340,7 +340,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
     <div class="dec">
       <p class="idx">01</p>
       <div>
-        <h4>Validate the experiment before testing anything</h4>
+        <h4>Validate the study design before testing anything</h4>
         <p class="why">A clean p-value computed on broken assignment is worthless. Duplicates, stores drifting between promotions, missing weeks and assignment balance were all checked first, <b>so that later results would not simply reflect a data defect.</b></p>
       </div>
     </div>
@@ -400,7 +400,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
     <h3>Analysis</h3>
     <p class="sec-sub">Where the judgement calls actually happened</p>
 
-    <h4 class="blk">Was the experiment sound?</h4>
+    <h4 class="blk">Was the study design sound?</h4>
     <p>Nothing in the structural checks was broken — no duplicate rows, no store split across promotions, no missing weeks, and every store observed for the full four weeks. The store-level allocation check (SRM) showed no mismatch (p = 0.8898) and market sizes were spread similarly across the three promotions (p = 0.8800), so the three groups can be compared with each other. This does not prove that assignment was random.</p>
     <div class="card tight">
       <p class="small"><span class="hl">548 rows in, 548 rows out.</span> Nothing was deleted, because the quality checks found nothing to remove. The outliers the IQR rule flagged were held over for a separate decision rather than quietly dropped here — removing rows silently is how a clean-looking result gets manufactured.</p>
@@ -621,7 +621,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
     <p class="sec-sub">End-to-end ownership of the analysis</p>
     <ul class="plain">
       <li>Framed the business question and translated it into testable hypotheses</li>
-      <li>Validated the experimental dataset, including assignment consistency and allocation balance</li>
+      <li>Validated the dataset, including assignment consistency and allocation balance</li>
       <li>Decided the unit of analysis and justified the aggregation with evidence</li>
       <li>Evaluated the statistical assumptions and selected methods accordingly</li>
       <li>Ran the group comparison, a non-parametric robustness check, and pairwise post-hoc tests</li>
@@ -642,7 +642,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
       <div class="tags"><span>Python</span><span>pandas</span><span>NumPy</span></div>
     </div>
     <div class="card tight">
-      <h4>Statistics &amp; experimentation</h4>
+      <h4>Statistics &amp; comparative testing</h4>
       <div class="tags"><span>A/B Testing</span><span>Hypothesis Testing</span><span>One-Way ANOVA</span><span>Two-Way ANOVA</span><span>Kruskal-Wallis</span><span>Tukey's HSD</span><span>Levene's Test</span><span>Shapiro-Wilk</span><span>Effect Size</span><span>Multiple Testing Correction</span></div>
     </div>
     <div class="card tight">

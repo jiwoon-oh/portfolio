@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Jiwoon Oh — Data Analyst</title>
-<meta name="description" content="Data analyst working in causal inference, experimentation and machine learning. Four case studies: in three the headline number did not survive the check; in the fourth the data ruled out a loser but could not name a winner.">
+<meta name="description" content="Data analyst working in causal inference, experimentation and machine learning. Four case studies: a sign that reversed after matching, a hypothesis that failed, a large pooled lift that household-level estimates did not reproduce, and a test that ruled out a loser but could not name a winner.">
 <meta property="og:title" content="Jiwoon Oh — Data Analyst">
-<meta property="og:description" content="Causal inference, experimentation, machine learning. Four case studies — in three the headline number did not survive the check; in the fourth the data ruled out a loser but could not name a winner.">
+<meta property="og:description" content="Causal inference, experimentation, machine learning. Four case studies — a sign that reversed after matching, a hypothesis that failed, a large pooled lift that household-level estimates did not reproduce, and a test that ruled out a loser but could not name a winner.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -175,7 +175,7 @@ section,header{scroll-margin-top:84px}
   <div class="wrap">
     <p class="greet" id="greet">Good evening</p>
     <h1>I check whether the <em>effect</em> is real.</h1>
-    <p class="lede">Data analyst working in causal inference, experimentation and machine learning. Four case studies below — in <strong>three of them</strong> the headline number did not survive the check; in the fourth, the data ruled out a loser but could not name a winner.</p>
+    <p class="lede">Data analyst working in causal inference, experimentation and machine learning. Four case studies below. In <strong>each one</strong> the first number changed once the right check was applied: a sign reversed, a hypothesis failed, a pooled lift was not reproduced at the household level, or the data could rule out a loser but not name a winner.</p>
     <p class="meta">Causal inference · Experimentation · Panel data · Machine learning</p>
     <div class="herolinks">
       <a class="hbtn primary" href="#work">See the work <span class="arw">↓</span></a>
@@ -189,8 +189,8 @@ section,header{scroll-margin-top:84px}
 <section class="band wrap" id="work">
   <div class="shead">
     <p class="k">Selected work</p>
-    <h2>Four questions, four identification strategies</h2>
-    <p>Each study starts from a number someone already believed. The method is chosen by what the data will actually support — a controlled comparison where one exists, matching or fixed effects where it doesn't.</p>
+    <h2>Four questions, four ways to check the number</h2>
+    <p>Each study starts from a number or comparison that looks decisive at first glance. The method is chosen by what the data will actually support — comparing groups directly where the design allows it, matching or fixed effects where it doesn't.</p>
   </div>
 
   <div class="pgrid">
@@ -203,7 +203,7 @@ section,header{scroll-margin-top:84px}
       </div>
       <div class="pbody">
         <p class="ptype exp">Group comparison</p>
-        <h3><a class="stretch" href="projects/ab-test-fastfood/index.html">Fast-Food Promotion Experiment</a></h3>
+        <h3><a class="stretch" href="projects/ab-test-fastfood/index.html">Fast-Food Promotion Comparison</a></h3>
         <p class="pq">Three promotions ran side by side. Can the data name a winner, or only a loser?</p>
         <div class="skills">
           <span class="skill">ANOVA</span>
@@ -211,7 +211,7 @@ section,header{scroll-margin-top:84px}
           <span class="skill">Levene · Shapiro</span>
           <span class="skill">Effect Size</span>
         </div>
-        <p class="pscale"><span>548 obs · 137 stores · 4 weeks</span><span class="pfoot"><a class="btn pcode" href="https://github.com/jiwoon-oh/fastfood-promotion-ab-test" target="_blank" rel="noopener" aria-label="Code and data for Fast-Food Promotion Experiment on GitHub">Code <span class="arw">↗</span></a><span class="go">Read →</span></span></p>
+        <p class="pscale"><span>548 obs · 137 stores · 4 weeks</span><span class="pfoot"><a class="btn pcode" href="https://github.com/jiwoon-oh/fastfood-promotion-ab-test" target="_blank" rel="noopener" aria-label="Code and outputs for Fast-Food Promotion Comparison on GitHub">Code <span class="arw">↗</span></a><span class="go">Read →</span></span></p>
       </div>
     </article>
 
@@ -224,14 +224,14 @@ section,header{scroll-margin-top:84px}
       <div class="pbody">
         <p class="ptype quasi">Observational · Matching</p>
         <h3><a class="stretch" href="projects/seoul-closure-risk/index.html">Seoul Closure Risk</a></h3>
-        <p class="pq">Seoul funds support by a net-decline metric. Does it rank risk, or size?</p>
+        <p class="pq">If support follows a net-decline ranking, does it rank risk, or size?</p>
         <div class="skills">
           <span class="skill">Propensity Score Matching</span>
           <span class="skill">Stratified ATT</span>
           <span class="skill">Cluster Bootstrap</span>
           <span class="skill">Gradient Boosting</span>
         </div>
-        <p class="pscale"><span>67,475 cells · 4 area types · 12 labeled quarters</span><span class="pfoot"><a class="btn pcode" href="https://github.com/jiwoon-oh/seoul-closure-risk" target="_blank" rel="noopener" aria-label="Code and data for Seoul Closure Risk on GitHub">Code <span class="arw">↗</span></a><span class="go">Read →</span></span></p>
+        <p class="pscale"><span>67,475 cells · 4 area types · 12 labeled quarters</span><span class="pfoot"><a class="btn pcode" href="https://github.com/jiwoon-oh/seoul-closure-risk" target="_blank" rel="noopener" aria-label="Code and outputs for Seoul Closure Risk on GitHub">Code <span class="arw">↗</span></a><span class="go">Read →</span></span></p>
       </div>
     </article>
 
@@ -251,7 +251,7 @@ section,header{scroll-margin-top:84px}
           <span class="skill">Bootstrap CI</span>
           <span class="skill">Logistic vs RF · SHAP</span>
         </div>
-        <p class="pscale"><span>2,500 households · 83 weeks</span><span class="pfoot"><a class="btn pcode" href="https://github.com/jiwoon-oh/dunnhumby-revenue-concentration" target="_blank" rel="noopener" aria-label="Code and data for Revenue Concentration on GitHub">Code <span class="arw">↗</span></a><span class="go">Read →</span></span></p>
+        <p class="pscale"><span>2,500 households · 83 weeks</span><span class="pfoot"><a class="btn pcode" href="https://github.com/jiwoon-oh/dunnhumby-revenue-concentration" target="_blank" rel="noopener" aria-label="Code and outputs for Revenue Concentration on GitHub">Code <span class="arw">↗</span></a><span class="go">Read →</span></span></p>
       </div>
     </article>
 
@@ -268,10 +268,10 @@ section,header{scroll-margin-top:84px}
         <div class="skills">
           <span class="skill">Two-way Fixed Effects</span>
           <span class="skill">Clustered SE</span>
-          <span class="skill">Placebo Test</span>
+          <span class="skill">Placebo Check</span>
           <span class="skill">BH-FDR</span>
         </div>
-        <p class="pscale"><span>172,500 household-weeks · 30 campaigns</span><span class="pfoot"><a class="btn pcode" href="https://github.com/jiwoon-oh/dunnhumby-campaign-response" target="_blank" rel="noopener" aria-label="Code and data for Campaign Response Heterogeneity on GitHub">Code <span class="arw">↗</span></a><span class="go">Read →</span></span></p>
+        <p class="pscale"><span>172,500 household-weeks · 30 campaigns</span><span class="pfoot"><a class="btn pcode" href="https://github.com/jiwoon-oh/dunnhumby-campaign-response" target="_blank" rel="noopener" aria-label="Code and outputs for Campaign Response Heterogeneity on GitHub">Code <span class="arw">↗</span></a><span class="go">Read →</span></span></p>
       </div>
     </article>
 
@@ -287,7 +287,7 @@ section,header{scroll-margin-top:84px}
   <div class="about">
     <div class="card">
       <p>I spend most of my effort on the step between a correlation and a decision. A difference in means is easy to produce; establishing that it would survive being acted on is the part that takes the work — matching on the right covariates, holding a unit against itself, correcting for the tests you ran and didn't report.</p>
-      <p>Three of the four studies here end in a null or a reversal. That wasn't the plan in any of them, and it's the reason I keep them in the portfolio: the useful skill isn't producing an effect, it's knowing when the one you found isn't there.</p>
+      <p>These studies end in a reversal, a rejected hypothesis, an estimate that the household-level analysis did not reproduce, or a loser without a winner. I keep them in the portfolio because the useful skill isn't producing an effect, it's knowing when the one you found isn't there.</p>
       <p style="margin-bottom:0">Each case study documents its own limitations section — what the design cannot identify, and what I would need to close the gap.</p>
     </div>
     <div class="card">
@@ -295,7 +295,7 @@ section,header{scroll-margin-top:84px}
         <p class="gk">Methods</p>
         <div class="skills">
           <span class="skill">Causal inference</span>
-          <span class="skill">Experiment design</span>
+          <span class="skill">Study design</span>
           <span class="skill">Panel data</span>
           <span class="skill">Hypothesis testing</span>
           <span class="skill">Machine learning</span>

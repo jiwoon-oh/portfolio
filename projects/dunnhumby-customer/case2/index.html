@@ -42,7 +42,7 @@
     </div>
     <div class="pick keep">
       <p class="name">FIXED EFFECTS · LOW TIER, ALL THREE TYPES</p>
-      <p class="val">p ≥ 0.163<span class="unit"></span></p>
+      <p class="val">raw p ≥ 0.163<span class="unit"></span></p>
       <span class="tag">None distinguishable from zero</span>
     </div>
     <div class="pick split">
@@ -95,7 +95,7 @@
     </table>
     </div>
     <p class="small" style="margin-top:14px">The two tables answer different questions: the first pools every campaign type, the second compares one type against the household's own other weeks. The second is not the first one adjusted.</p>
-    <p class="small"><strong>Household and week fixed effects</strong> — one campaign type at a time vs the same household's other weeks:</p>
+    <p class="small"><strong>Household and week fixed effects</strong> — all nine type × tier indicators estimated together in one regression, each read against the same household's own other weeks, with the other campaign types' activity controlled:</p>
     <div class="table-wrap">
     <table>
       <thead><tr><th class="tl">Combination</th><th>β ($/week)</th><th>Raw p</th><th>Households</th><th class="tl">Reading</th></tr></thead>
@@ -115,19 +115,19 @@
     <p class="small"><strong>Exactly one of nine tier × type combinations survives correction for multiple comparisons.</strong> TypeC × high-spending, β = −6.25, BH-adjusted p = 0.0033, n = 295 households.</p>
   </div>
   <div class="card tight">
-    <p class="small"><strong>The surviving signal points downward.</strong> Spending in TypeC weeks runs about $6.25 (≈ 8.6% of the high tier's $72.75 pre-campaign weekly mean) <em>below</em> the same households' other weeks, an association rather than an effect.</p>
+    <p class="small"><strong>The surviving signal points downward.</strong> For the 295 high-spending households that received TypeC, spending in TypeC weeks runs about $6.25 (≈ 8.6% of the high tier's $72.75 pre-campaign weekly mean) <em>below</em> the same households' other weeks, an association rather than an effect.</p>
   </div>
   <div class="card tight">
     <p class="small"><strong>Clustering the standard errors mattered.</strong> The model F-statistic reads 11.544 without clustering and 2.313 with it, so unclustered errors would have overstated significance.</p>
   </div>
   <div class="card tight">
-    <p class="small"><strong>Spending was already lower just before exposure.</strong> In the four weeks before a household's first TypeC week it was $9.02 lower per week than in its other weeks (95% CI −13.46 to −4.58); weeks five to eight showed no detectable difference.</p>
+    <p class="small"><strong>Spending was already lower just before exposure.</strong> For the 295 high-spending households that received TypeC, spending in the four weeks before a household's first TypeC week was $9.02 lower per week than in its other weeks (95% CI −13.46 to −4.58); weeks five to eight showed no detectable difference.</p>
   </div>
 
   <div class="callout" style="margin-top:30px">
     <p class="big">How this is reported</p>
     <p class="money">A stable association, not an effect</p>
-    <p class="sub">The TypeC × high-spending result is robust to multiple-comparison correction and to exposure-history splitting. Whether it reflects a campaign response or a targeting decision could not be separated, and spending was already lower in the four weeks before exposure — so it is reported as an association only.</p>
+    <p class="sub">The TypeC × high-spending result survives multiple-comparison correction, and its raw (unadjusted) p-values stay significant in both the first- and repeat-exposure splits (those two tests are not part of the BH set). Whether it reflects a campaign response or a targeting decision could not be separated, and for these 295 households spending was already lower in the four weeks before exposure — so it is reported as an association only.</p>
   </div>
 
   <h4 style="margin-top:34px">At a glance</h4>
@@ -160,7 +160,7 @@
   <h3>Overview</h3>
   <p class="sec-sub">What was measured, and why the obvious answer is wrong</p>
 
-  <p>A retailer runs 30 campaigns over roughly 70 weeks and wants to know which customers respond. The natural analysis is to compare spending in weeks when a campaign was running against weeks when none was — and broken out by customer tier, that comparison produces a striking result.</p>
+  <p>A retailer runs 30 campaigns over roughly 70 weeks (weeks 33–102) and wants to know which customers respond. The natural analysis is to compare spending in weeks when a campaign was running against weeks when none was — and broken out by customer tier, that comparison produces a striking result.</p>
 
   <p>It also produces the wrong one. <strong>Targeting was strongly related to spending.</strong> Campaigns reached 94.1% of heavy spenders and 25.2% of light ones, so the comparison between tiers is contaminated by who received campaigns before any behavioural response enters it.</p>
 
@@ -175,7 +175,7 @@
     </div>
   </div>
 
-  <p class="takeaway">The most useful output here is a negative one: a pooled active-versus-quiet comparison reports gains in every tier, while the household-level estimates show no significant gain for any campaign type in any tier.</p>
+  <p class="takeaway">The most useful output here is a negative one: a pooled any-campaign comparison reports gains in every tier, and the household-level estimates, which answer a different question (one campaign type × tier against the household's own other weeks), show no significant gain for any campaign type in any tier.</p>
 </section>
 
 <section id="s2">
@@ -209,7 +209,7 @@
 
   <div class="card">
     <h4>Source</h4>
-    <p class="small"><strong>Dunnhumby "The Complete Journey"</strong> — household transactions plus campaign delivery records. Reshaped into a balanced <strong>household × week panel</strong> covering weeks 33–101, the period from the first campaign launch onward. Week 102 is left out: the data end on day 711, so that week holds only 6 days of transactions.</p>
+    <p class="small"><strong>Dunnhumby "The Complete Journey"</strong> — household transactions plus campaign delivery records. Reshaped into a balanced <strong>household × week panel</strong> covering weeks 33–101, the period from the first campaign launch onward. Week 102 is left out; the data end on day 711, so that week holds only 6 days of transactions.</p>
     <p class="small" style="color:var(--ink-3)">The dataset was used for educational portfolio purposes. All analysis, statistical testing, interpretations, and recommendations were independently developed as part of this project.</p>
   </div>
 
@@ -225,14 +225,14 @@
       </tbody>
     </table>
     </div>
-    <p class="small" style="margin-top:14px"><strong>Three tiers, not five.</strong> Quintiles were tested as a secondary specification and abandoned — the smallest campaign type left cells of 16 and 25 households, too few to estimate stably. Cell sizes were checked <em>before</em> the model ran, not after it misbehaved.</p>
+    <p class="small" style="margin-top:14px"><strong>Three tiers, not five.</strong> Quintiles were not estimated — for the smallest campaign type the two lowest quintiles would have held only 16 and 25 households, too few to estimate stably. Cell sizes were checked <em>before</em> the model ran, not after it misbehaved.</p>
     <p class="small" style="color:var(--ink-3)">142 households (5.7%) had no transactions at all in the tier window and were assigned $0, placing them in the low tier — a floor-effect risk tracked through the rest of the analysis.</p>
   </div>
 
   <div class="card tight">
     <h4>One structural risk, checked rather than assumed <span class="chip hold">passed</span></h4>
-    <p class="small">Of the 1,008 households receiving more than one campaign type, <strong>86.2% received them in the same week</strong> — enough simultaneous exposure to threaten the interaction terms with multicollinearity.</p>
-    <p class="small">VIF came back at <span class="hl">1.02–1.12</span> across all nine interaction dummies. The reason: simultaneously-active rows are only 4.1% of the 172,500-row panel, and the remaining 95.9% dilute the correlation. The risk was real, and the diagnostic cleared it.</p>
+    <p class="small">Of the 1,008 households receiving more than one campaign type, <strong>86.2% had at least one week in which two or more campaign types were active at the same time</strong> — enough simultaneous exposure to threaten the interaction terms with multicollinearity.</p>
+    <p class="small">VIF came back at <span class="hl">1.02–1.12</span> across all nine interaction dummies. This helps explain it: simultaneously-active rows are only 4.1% of the 172,500-row panel, and the remaining 95.9% dilute the correlation. The risk was real, and the diagnostic cleared it.</p>
   </div>
 </section>
 
@@ -312,7 +312,7 @@
     </table>
     </div>
     <p class="small" style="margin-top:14px">Relative size = coefficient ÷ the high tier's mean weekly spend in weeks 17–32 ($72.75).</p>
-    <p class="small"><strong>The two comparisons answer different questions.</strong> The pooled comparison uses any campaign type; the fixed-effects model compares a household's weeks with one campaign type active against its own other weeks, one type at a time. Under fixed effects the high tier shows negative TypeB and TypeC estimates, and none of the three low-tier estimates is distinguishable from zero (<span class="hl-r">smallest raw p = 0.163</span>, TypeC × low, 28 households). Showing what fixed effects change for one group would need a model with a single any-campaign indicator per tier, which was not estimated.</p>
+    <p class="small"><strong>The two comparisons answer different questions.</strong> The pooled comparison uses any campaign type; the fixed-effects model compares a household's weeks with a given campaign type active against its own other weeks; all nine type × tier indicators are estimated together in one regression, so the other types' activity is controlled. Under fixed effects the high tier shows negative TypeB and TypeC estimates, and none of the three low-tier estimates is distinguishable from zero (<span class="hl-r">smallest raw p = 0.163</span>, TypeC × low, 28 households). Showing what fixed effects change for one group would need a model with a single any-campaign indicator per tier, which was not estimated.</p>
     <p class="small">A within-model R² of 0.0004 is expected and not a problem: campaigns explain a sliver of weekly spending variance, and with 172,500 observations a small signal is still detectable. The F-test for poolability (38.138, p &lt; 0.0001) supports accounting for fixed effects.</p>
   </div>
 
@@ -343,20 +343,20 @@
   </figure>
 
   <h4 style="margin-top:38px">D · Is the result an artifact of repeat exposure?</h4>
-  <p>With 30 campaigns rolling out over 70 weeks, campaigns switch on and off at different times, so weeks of households already exposed to earlier campaigns can serve as comparison weeks for later ones, a known source of bias in two-way fixed effects designs with <strong>staggered timing</strong>. This panel is not the textbook staggered-adoption case.</p>
+  <p>With 30 campaigns rolling out over 70 weeks (weeks 33–102; the analysis panel covers weeks 33–101), campaigns switch on and off at different times, so weeks of households already exposed to earlier campaigns can serve as comparison weeks for later ones, a known source of bias in two-way fixed effects designs with <strong>staggered timing</strong>. This panel is not the textbook staggered-adoption case.</p>
 
   <div class="card">
     <div class="table-wrap">
     <table>
-      <thead><tr><th class="tl">Exposure history</th><th>Households</th><th>β</th><th>p</th></tr></thead>
+      <thead><tr><th class="tl">Exposure history</th><th>Households</th><th>β</th><th>Raw p</th></tr></thead>
       <tbody>
         <tr><td class="tl">First exposure</td><td class="num">295</td><td class="num">−4.89</td><td class="num">0.009</td></tr>
         <tr><td class="tl">Repeat exposure</td><td class="num">131</td><td class="num">−9.09</td><td class="num">0.003</td></tr>
       </tbody>
     </table>
     </div>
-    <p class="small" style="margin-top:14px"><strong>These counts are nested, not additive.</strong> 295 is every high-tier TypeC recipient; 131 of them received TypeC more than once, and the other 164 exactly once. The split is applied to week-level observations of the same households, so adding the two would double-count.</p>
-    <p class="small">Both splits stay significant, so the headline result is not driven by repeat-exposure households dominating the estimate. Whether the larger repeat effect reflects reinforced discount-waiting or repeated targeting of already-declining households <strong>cannot be separated here</strong>.</p>
+    <p class="small" style="margin-top:14px"><strong>These counts are nested, not additive.</strong> 295 is every high-tier TypeC recipient; 131 of them received TypeC in more than one separate spell (a spell is a run of consecutive active weeks), and the other 164 in exactly one. The split is applied to week-level observations of the same households, so adding the two would double-count.</p>
+    <p class="small">Both splits stay significant on raw (unadjusted) p-values; these two tests are not part of the nine-test BH set. The headline result is therefore not driven by repeat-exposure households dominating the estimate. Whether the larger repeat effect reflects reinforced discount-waiting or repeated targeting of already-declining households <strong>cannot be separated here</strong>.</p>
   </div>
 </section>
 
@@ -377,7 +377,7 @@
   </div>
 
   <h4 style="margin-top:38px">Can we call it causal?</h4>
-  <p class="takeaway">No. Spending was already lower before the first Type C week, and the data cannot say why.</p>
+  <p class="takeaway">No. For the 295 high-spending households that received Type C, spending was already lower before the first Type C week, and the data cannot say why.</p>
 
   <p>A placebo-style check was run on the <strong>916 households that received no campaigns at all</strong>. I compared early and later spending among those households, in a regression measured against the low tier. It is not a test of the Type C estimate.</p>
 
@@ -391,7 +391,7 @@
       </tbody>
     </table>
     </div>
-    <p class="small" style="margin-top:14px">These coefficients are measured against the low tier, and week fixed effects absorb the change common to everyone (later period = weeks 67–101). Low-spending non-recipients rose by 165.5% between weeks 33–42 and 92–101, so much of the High × later period coefficient can come from low-tier growth rather than a high-tier decline. It is not the same quantity as the Type C estimate, which compares a household's Type C weeks with its own other weeks, so the two numbers are not compared.</p>
+    <p class="small" style="margin-top:14px">These coefficients are measured against the low tier, and week fixed effects absorb the change common to everyone (later period = weeks 67–101 versus the earlier weeks). Low-spending non-recipients rose by 165.5% between weeks 33–42 and 92–101, a different window from the regression's, while high-spending non-recipients changed by −1.0% over those same weeks, so much of the High × later period coefficient can come from low-tier growth rather than a high-tier decline. It is not the same quantity as the Type C estimate, which compares a household's Type C weeks with its own other weeks, so the two numbers are not compared.</p>
   </div>
 
   <h4 style="margin-top:38px">Lead-effect check</h4>
@@ -408,11 +408,11 @@
       </tbody>
     </table>
     </div>
-    <p class="small" style="margin-top:14px">The two lead coefficients together differ from zero (joint Wald test p = 0.0003). Type A or B campaigns were active in 260 of the 295 households' Lead4 weeks (82% of those household-weeks), so a dip before Type C cannot be separated from anticipation or from the effect of those campaigns. For 9 households the lead windows begin before week 33, outside the panel. Two tests were run, with no multiple-comparison adjustment.</p>
+    <p class="small" style="margin-top:14px">The two lead coefficients together differ from zero (joint Wald test p = 0.0003). For 260 of the 295 households, at least one Lead4 week had a Type A or B campaign active; across all 1,162 Lead4 household-weeks it was 82%. So a dip before Type C cannot be separated from anticipation or from the effect of those campaigns. For 9 households the lead windows begin before week 33, outside the panel. Two tests were run, with no multiple-comparison adjustment.</p>
   </div>
 
   <figure>
-    <img src="assets/lead-effect.png" alt="Coefficients with 95% intervals around the first Type C week for high-spending households: −1.69 for weeks 5 to 8 before (interval includes zero), −9.02 for weeks 1 to 4 before (interval excludes zero), and −7.12 for Type C weeks with the lead weeks included. Type A or B campaigns were active in 82 percent of the weeks one to four before.">
+    <img src="assets/lead-effect.png" alt="Coefficients with 95% intervals around the first Type C week for high-spending households: −1.69 for weeks 5 to 8 before (interval includes zero), −9.02 for weeks 1 to 4 before (interval excludes zero), and −7.12 for Type C weeks with the lead weeks included. Type A or B campaigns were active in 82 percent of the household-weeks one to four weeks before.">
     <figcaption>Lead-effect check for Type C × high-spending households. Spending was already lower in the four weeks before the first Type C week (−9.02, 95% interval −13.46 to −4.58); weeks five to eight show no detectable difference (−1.69, 95% interval −5.82 to 2.44). The data cannot separate targeting, anticipation and the Type A and B campaigns active in 82% of the household-weeks one to four weeks before.</figcaption>
   </figure>
 
@@ -434,7 +434,7 @@
   <div class="callout" style="margin-top:26px">
     <p class="big">Reported as</p>
     <p class="money">Association, not effect</p>
-    <p class="sub">Survives multiple-comparison correction and holds in both first and repeat exposure — but spending was already lower in the four weeks before exposure, so it is not established as causal and not presented as such.</p>
+    <p class="sub">Survives multiple-comparison correction, and the raw (unadjusted) p-values hold in both first and repeat exposure (those two tests are not part of the BH set) — but among these 295 households spending was already lower in the four weeks before exposure, so it is not established as causal and not presented as such.</p>
   </div>
 </section>
 
@@ -445,7 +445,7 @@
 
   <div class="card">
     <h4>① A pooled campaign report would not have measured lift here</h4>
-    <p class="small">On this data a pooled active/quiet comparison says every tier gains, with light spenders gaining most (+242%, +60%, +23%). Comparing each household with itself shows no significant gain for any campaign type in the low and mid tiers and a negative Type C association in the high tier. <strong>A campaign evaluation built on the pooled comparison could misdirect budget.</strong></p>
+    <p class="small">On this data a pooled active/quiet comparison says every tier gains, with light spenders gaining most (+242%, +60%, +23%). The household-level estimates answer a different question (one campaign type × tier against the household's own other weeks, not the pooled any-campaign average) and show no significant gain for any campaign type in the low and mid tiers and a negative Type C association in the high tier. <strong>A campaign evaluation built on the pooled comparison could misdirect budget.</strong></p>
   </div>
   <div class="card">
     <h4>② Campaign targeting is so skewed that it breaks measurement</h4>
@@ -473,7 +473,7 @@
     <dl>
       <div class="rrow"><dt>Who</dt><dd>Marketing reporting</dd></div>
       <div class="rrow"><dt>What</dt><dd>Replace pooled active/quiet comparisons with <strong>within-household comparison</strong> as the default reporting method, and publish reach rate alongside any tier breakdown</dd></div>
-      <div class="rrow"><dt>Why</dt><dd>The +242% figure is what a pooled active-versus-quiet comparison produces for the low tier on this data (2,924 active vs 54,622 quiet household-weeks). Under household fixed effects none of the three low-tier campaign-type estimates is distinguishable from zero (smallest raw p = 0.163)</dd></div>
+      <div class="rrow"><dt>Why</dt><dd>The +242% figure is what a pooled active-versus-quiet comparison produces for the low tier on this data (2,924 active vs 54,622 quiet household-weeks). The fixed-effects estimates are a different quantity, not an adjustment of that figure: each compares one campaign type with the household's own other weeks, and none of the three low-tier campaign-type estimates is distinguishable from zero (smallest raw p = 0.163)</dd></div>
     </dl>
   </div>
 
@@ -494,10 +494,10 @@
 
   <div class="card">
     <h4>Parallel trends are not cleanly satisfied</h4>
-    <p class="small">A pre-campaign test on weeks 17–32, checking whether future recipients and non-recipients were already diverging:</p>
+    <p class="small">A pre-campaign test on weeks 17–32, checking whether future recipients and non-recipients were already diverging. It is a regression on 32 aggregate points (average weekly spend per household for each of the two groups in each of 16 weeks), and the coefficient is the future-recipient × week interaction, the difference in weekly slope, in dollars per household per week, per week:</p>
     <div class="table-wrap">
     <table>
-      <thead><tr><th class="tl">Sample</th><th>Interaction coef.</th><th>p</th><th class="tl">Verdict</th></tr></thead>
+      <thead><tr><th class="tl">Sample</th><th>Interaction coef. ($ per household per week, per week)</th><th>p</th><th class="tl">Verdict</th></tr></thead>
       <tbody>
         <tr><td class="tl">Full sample</td><td class="num">0.296</td><td class="num">0.087</td><td class="tl">Not significant at 5%, borderline at 10%</td></tr>
         <tr><td class="tl">Low tier</td><td class="num">0.025</td><td class="num">0.764</td><td class="tl"><span class="chip hold">no difference detected</span></td></tr>
@@ -589,7 +589,7 @@
 
   <a class="btn" href="https://github.com/jiwoon-oh/dunnhumby-campaign-response" target="_blank" rel="noopener">Code &amp; outputs on GitHub <span class="arw">&rarr;</span></a>
 
-  <p class="small" style="color:var(--ink-3);max-width:76ch">The repository contains the Jupyter notebooks, result CSVs and figure code, reproducible from the raw dataset (kept out of the repo), along with the full README write-up covering the eight analysis stages compressed on this page.</p>
+  <p class="small" style="color:var(--ink-3);max-width:76ch">The repository contains the Jupyter notebooks, result CSVs and figure code, reproducible from the raw dataset (kept out of the repo), along with the full README write-up covering the eight numbered analysis steps compressed on this page.</p>
 
   <div class="card tight" style="margin-top:24px">
     <h4>The other half of this project</h4>

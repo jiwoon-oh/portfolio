@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The metric was measuring size — Seoul closure-risk case study</title>
-<meta name="description" content="Seoul allocates small-business support using a net-decline metric. Propensity matching, permutation testing and a decomposition of the metric itself suggest it tracks store count more than risk.">
+<meta name="description" content="If small-business support follows a net-decline ranking, which this page treats as an assumption, propensity matching, permutation testing and a decomposition of the metric itself suggest the ranking tracks store count more than risk.">
 <meta property="og:title" content="The metric was measuring size, not risk">
-<meta property="og:description" content="67,475 commercial-district cells (all four area types) across 12 labeled quarters — and why the category that tops Seoul's risk ranking overall turns out safer than the other nine on average once you match on store count, but not at every size.">
+<meta property="og:description" content="67,475 commercial-district cells (all four area types) across 12 labeled quarters — and why the category with the highest pooled net-decline rate among neighborhood commercial areas (34,647 of those cells) turns out safer than comparable matched cells once you match on store count, but not at every size.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -32,8 +32,8 @@
 <header class="wrap hero">
   <p class="eyebrow">Case study · Causal inference &amp; forecasting</p>
   <h1>The metric was measuring <em>size</em>, not risk</h1>
-  <p class="lede">Seoul publishes a quarterly net-decline indicator that decides which restaurant categories get support money. Korean restaurants top it overall — though in only 3 of the 12 quarters taken one by one. Matching on store count reverses the ranking — and then the reversal turns out not to hold at every size.</p>
-  <p class="meta">67,475 cells (all four area types) · 12 labeled quarters · 10 food categories · Python, pandas, statsmodels, scikit-learn · <a href="https://github.com/jiwoon-oh/seoul-closure-risk" target="_blank" rel="noopener">Code &amp; outputs on GitHub ↗</a></p>
+  <p class="lede">Seoul's commercial-district data lets anyone rank food categories by a net-decline rate, and a ranking like that could steer small-business support money. Korean restaurants top it overall in neighborhood commercial areas — though in only 3 of the 12 quarters taken one by one. Matching on store count reverses the ranking — and then the reversal turns out not to hold at every size.</p>
+  <p class="meta">67,475 cells (all four area types; the matching analysis uses the 34,647 neighborhood cells) · 12 labeled quarters · 10 food categories · Python, pandas, statsmodels, scikit-learn · <a href="https://github.com/jiwoon-oh/seoul-closure-risk" target="_blank" rel="noopener">Code &amp; outputs on GitHub ↗</a></p>
   <div class="picks">
     <div class="pick drop">
       <p class="name">RAW COMPARISON</p>
@@ -51,7 +51,7 @@
       <span class="tag">Not one number</span>
     </div>
   </div>
-  <p class="picks-note">Gap in next-quarter net-decline rate, Korean restaurants vs other food categories · 34,647 neighborhood commercial-district cells (7,043 matched pairs)</p>
+  <p class="picks-note">Gap in next-quarter net-decline rate · 34,647 neighborhood commercial-district cells. The +2.38 pp raw gap is Korean restaurants vs the other nine categories; −5.57 pp is vs matched control cells (7,043 pairs), which are mostly coffee/beverage (52.7%) and pub/bar (21.4%)</p>
 </header>
 
 <div class="wrap main">
@@ -62,7 +62,7 @@
     <li><a href="#s1">01 · Overview</a></li>
     <li><a href="#s2">02 · Business question</a></li>
     <li><a href="#s3">03 · Data<span class="p">995,377 → 67,475</span></a></li>
-    <li><a href="#s4">04 · Methodology<span class="p">5 doubts · 2 discarded</span></a></li>
+    <li><a href="#s4">04 · Methodology<span class="p">5 doubts · 1 discarded</span></a></li>
     <li><a href="#s5">05 · Analysis</a></li>
     <li><a href="#s6">06 · Results<span class="p">ATT −5.57 pp</span></a></li>
     <li><a href="#s7">07 · Business insights</a></li>
@@ -79,9 +79,9 @@
   <h3>Executive summary</h3>
   <p class="sec-sub">The whole project in one screen</p>
 
-  <p class="takeaway">Seoul allocates small-business support using a metric that ranks district <em>size</em>, not business risk. The category it flags first overall turns out to be safer than the other nine on average once cells are matched on size — though not at every size.</p>
+  <p class="takeaway">If support follows a net-decline ranking, that ranking tracks district <em>size</em> more than business risk. The category it puts first overall in neighborhood commercial areas turns out to be safer than comparable matched cells once cells are matched on size — though not at every size.</p>
 
-  <p><strong>The headline that started it.</strong> Korean restaurants top Seoul's net-decline ranking overall — <span class="hl">25.3%</span> against <span class="hl">22.9%</span> for the other nine food categories, pooled over 12 quarters in neighborhood commercial areas (first in only 3 of the 12 quarters taken individually). That gap decides who receives consulting and emergency loans.</p>
+  <p><strong>The headline that started it.</strong> Korean restaurants top the net-decline ranking — <span class="hl">25.3%</span> against <span class="hl">22.9%</span> for the other nine food categories, pooled over 12 quarters in neighborhood commercial areas (first in only 3 of the 12 quarters taken individually). If support is allocated by a ranking like this, a gap like that could steer who receives consulting and emergency loans.</p>
 
   <div class="card">
     <h4>Two tests dismantled it</h4>
@@ -104,25 +104,25 @@
 
   <h4 style="margin-top:34px">Key findings</h4>
   <div class="card tight">
-    <p class="small"><strong>Store count alone accounts for almost all of the modeled reversal</strong> (−5.84 pp vs −6.01 pp with all four covariates held fixed). Foot traffic shows no significant association with net decline — it raises openings <em>and</em> closures alike, so it largely cancels in the subtraction. A busy district is not a safe one; it is a fast-turnover one.</p>
+    <p class="small"><strong>Store count alone accounts for almost all of the modeled reversal</strong> (−5.84 pp vs −6.01 pp with all four covariates held fixed). Foot traffic shows no significant association with net decline once store count and the other covariates are held fixed (AME +0.72 pp, p = 0.078; without store count it is strongly significant: AME +3.97 pp with foot traffic alone, +2.66 pp with area size and attracting facilities added, both p &lt; 0.0001). It raises openings <em>and</em> closures alike, so it largely cancels in the subtraction. A busy district is not a safe one; it is a fast-turnover one.</p>
   </div>
   <div class="card tight">
     <p class="small"><strong>The indicator decomposes exactly.</strong> Net decline = an event occurred × that event netting negative. Store count drives the first term and barely touches the second — so the metric measures <em>how often something happens</em>, not <em>how badly it goes</em>.</p>
   </div>
   <div class="card tight">
-    <p class="small"><strong>Seoul's change-indicator HL ("contraction") group has lift 0.937</strong> for next-quarter net decline in the validation quarter — below 1, worse than an average pick. Both tools currently in use are broken, in different ways.</p>
+    <p class="small"><strong>Seoul's change-indicator HL ("contraction") group has lift 0.937</strong> for next-quarter net decline in the validation quarter — below 1, worse than an average pick. That says nothing about the indicator's other uses.</p>
   </div>
   <div class="card tight">
     <p class="small"><strong>The model earns its place at the operating point, not on the leaderboard.</strong> Top-50 precision <span class="hl">0.780</span> against <span class="hl">0.380</span> for a store-count rule in the validation quarter — and the two lists overlap by only 4%, so 48 of the 50 flagged cells are ones the store-count rule does not list.</p>
   </div>
   <div class="card tight">
-    <p class="small"><strong>Two results were measured and thrown out.</strong></p>
+    <p class="small"><strong>One result was measured and set aside:</strong> a 0.915 category rank correlation for predicted closures, not used as performance evidence; single-quarter rankings of the net-decline label turned out to be noisy (see the log).</p>
   </div>
 
   <div class="callout" style="margin-top:30px">
     <p class="big">Recommendation</p>
     <p class="money">Rank cells, not categories</p>
-    <p class="sub">Stop using net decline as a standalone measure of vulnerability. Publish closures per store beside it, and allocate at the level of one neighborhood commercial district × one food category — not by industry rank.</p>
+    <p class="sub">Do not use net decline as a standalone measure of vulnerability. Show closures per store beside it, and if support is allocated, do so at the level of one neighborhood commercial district × one food category — not by industry rank.</p>
   </div>
 
   <h4 style="margin-top:34px">At a glance</h4>
@@ -155,9 +155,9 @@
   <h3>Overview</h3>
   <p class="sec-sub">What was audited, and why it was worth auditing</p>
 
-  <p>Seoul's Commercial District Analysis Service publishes a <strong>net decline</strong> flag for every commercial district × food category, every quarter — true when closures outnumber openings. District officers rank food categories by that flag and send consulting and emergency loans to the top of the list.</p>
+  <p>Seoul's Commercial District Analysis Service publishes store openings and closures for every commercial district × food category in its quarterly tables. This project defines a cell's next-quarter <strong>net decline</strong> as closures outnumbering openings. If a district officer ranked food categories by that flag when deciding where consulting and emergency loans go, the ranking would have the properties tested below.</p>
 
-  <p>Nobody had checked whether the ranking means what it appears to mean. This project is that check: <span class="hl">13 quarters of Seoul commercial-district data (12 labeled), 67,475 cells across all four area types, ten food categories</span>, run through causal inference and forecasting to ask whether the metric identifies risk or merely identifies size.</p>
+  <p>This project checks whether such a ranking means what it appears to mean: <span class="hl">13 quarters of Seoul commercial-district data (12 labeled), 67,475 cells across all four area types, ten food categories</span>, run through causal inference and forecasting to ask whether the metric identifies risk or merely identifies size.</p>
 
   <div class="grid2">
     <div class="card tight">
@@ -166,11 +166,11 @@
     </div>
     <div class="card tight">
       <h4>Two similar words</h4>
-      <p class="small"><strong>Commercial district</strong> is a micro trade area of a few blocks (~2,800 of them). <strong>City district</strong> is one of Seoul's 25 boroughs. They are not interchangeable, and the difference matters for the recommendation.</p>
+      <p class="small"><strong>Commercial district</strong> is one trade area in the commercial-district boundary table (1,650 of them). <strong>City district</strong> is one of Seoul's 25 boroughs. They are not interchangeable, and the difference matters for the recommendation.</p>
     </div>
   </div>
 
-  <p class="takeaway">The answer changes an action. If the gap comes from size confounding, category-level allocation has to be replaced by cell-level allocation conditioned on size. If it does not, the current process stands.</p>
+  <p class="takeaway">The answer changes an action. If the gap comes from size confounding, any category-level allocation would have to be replaced by cell-level allocation conditioned on size. If it does not, a category-level ranking stands.</p>
 </section>
 
 <section id="s2">
@@ -178,7 +178,7 @@
   <h3>Business question</h3>
   <p class="sec-sub">Who decides what with this number</p>
 
-  <p>Korean restaurants sit at #1 on the pooled net-decline ranking (first in 3 of the 12 quarters taken one by one). They are also the largest category in neighborhood districts, averaging <span class="hl">21.3 stores per cell</span> against <span class="hl">10.3</span> for the other nine. More stores means more open/close events, and more events means more chances to land on the wrong side of a subtraction.</p>
+  <p>Korean restaurants sit at #1 on the pooled net-decline ranking in neighborhood commercial areas (first in 3 of the 12 quarters taken one by one). They are also the largest category in neighborhood districts, averaging <span class="hl">21.3 stores per cell</span> against <span class="hl">10.3</span> for the other nine. More stores means more open/close events, and more events means more chances to land on the wrong side of a subtraction.</p>
 
   <div class="grid2">
     <div class="card">
@@ -189,7 +189,7 @@
     <div class="card">
       <h4>Sub-question</h4>
       <p class="small">Among sales, foot traffic and store density, <strong>which commercial characteristics actually relate</strong> to next-quarter net decline?</p>
-      <p class="small" style="color:var(--ink-3)">This one turned out to have a more interesting answer than expected — one of the two named variables shows no significant association with net decline (AME +0.72 pp, p = 0.078).</p>
+      <p class="small" style="color:var(--ink-3)">This one turned out to have a more interesting answer than expected — foot traffic shows no significant association with net decline once store count and the other covariates are controlled (AME +0.72 pp, p = 0.078), though it is significant without that control.</p>
     </div>
   </div>
 
@@ -208,7 +208,7 @@
 
   <div class="card">
     <h4>Source</h4>
-    <p class="small">Seoul Open Data Plaza · <strong>Commercial District Analysis Service</strong> tables (provider: Seoul Credit Guarantee Foundation; copyright holder: Seoul Metropolitan Government), 2023 Q1 – 2026 Q1. Five datasets were merged into one panel, plus a sixth used only as an external benchmark:</p>
+    <p class="small">Seoul Open Data Plaza · <strong>Commercial District Analysis Service</strong> tables (provider: Seoul Credit Guarantee Foundation; license: KOGL Type 1, attribution; copyright holder: Seoul Metropolitan Government), 2023 Q1 – 2026 Q1. Five datasets were merged into one panel, plus a sixth used only as an external benchmark:</p>
     <div class="table-wrap">
     <table>
       <thead><tr><th class="tl">Dataset</th><th class="tl">What it contributes</th></tr></thead>
@@ -216,7 +216,7 @@
         <tr><td class="lead tl">Stores by Commercial District</td><td class="tl">Store counts, openings and closures, franchise split — the source of the label</td></tr>
         <tr><td class="lead tl">Street-Level Population by Commercial District</td><td class="tl">Foot traffic by hour, weekday and age band</td></tr>
         <tr><td class="lead tl">Commercial District Boundaries</td><td class="tl">Polygon area, coordinates, district type</td></tr>
-        <tr><td class="lead tl">Attraction Facilities by Commercial District</td><td class="tl">Schools, stations, public offices and other footfall generators</td></tr>
+        <tr><td class="lead tl">Attraction Facilities by Commercial District</td><td class="tl">Attracting-facility count and subway-station count per commercial district</td></tr>
         <tr><td class="lead tl">Estimated Sales by Commercial District</td><td class="tl">Estimated sales value and transaction counts</td></tr>
         <tr><td class="lead tl">Commercial District Change Indicator</td><td class="tl">The city's own HH/HL/LH/LL classification — used <strong>only as a baseline</strong>, never as a feature</td></tr>
       </tbody>
@@ -244,7 +244,7 @@
 
   <div class="card">
     <h4>A five-store floor <span class="chip warn">−54.1% of rows</span></h4>
-    <p class="small"><strong>The reason is the label, not the sales data.</strong> A three-store cell swings to −33% net decline when one shop closes. That is sample size, not district decline — and left in, those rows teach any model to find small cells rather than risky ones.</p>
+    <p class="small"><strong>The reason is the label, not the sales data.</strong> Arithmetic illustration: in a three-store cell one closure is a third of all stores, against about 3% in a 30-store cell. That is sample size, not district decline — and left in, those rows teach any model to find small cells rather than risky ones.</p>
     <p class="small">Sales missingness points the same way: 45.4% overall, 7.1% at five stores or more, <span class="hl">100%</span> at two or fewer. A rate of exactly 100% is a rule rather than attrition, but <strong>what that rule is could not be confirmed</strong> — no published suppression threshold was located. It is reported as an observation, not a cause.</p>
     <p class="small">Note the filter is on <em>store count</em>, a covariate — not on missingness. The label is observed for every cell either way, so this narrows the population rather than selecting on the outcome. The cost is 54.1% of rows, which is why every conclusion carries the scope note <strong>“cells with five or more stores.”</strong></p>
   </div>
@@ -279,7 +279,7 @@
       <thead><tr><th>#</th><th class="tl">Step</th><th class="tl">Decision that mattered</th></tr></thead>
       <tbody>
         <tr><td class="num">1</td><td class="lead tl">Define the label</td><td class="tl">Net decline in quarter <em>t+1</em>, built inside each (district, category) group so no cell borrows another's future</td></tr>
-        <tr><td class="num">2</td><td class="lead tl">Let the distribution pick the test</td><td class="tl">Normality failed in all 39 group comparisons, so Kruskal-Wallis was used rather than ANOVA — chosen from the data, not from preference</td></tr>
+        <tr><td class="num">2</td><td class="lead tl">Let the distribution pick the test</td><td class="tl">Normality failed in all 39 groups across three comparisons (commercial-area type 4/4, service category 10/10, city district 25/25), so Kruskal-Wallis was used rather than ANOVA — chosen from the data, not from preference</td></tr>
         <tr><td class="num">3</td><td class="lead tl">Test whether the gap is real</td><td class="tl">Permutation test, because the treated category was selected as the maximum of ten</td></tr>
         <tr><td class="num">4</td><td class="lead tl">Make the groups comparable</td><td class="tl">1:1 propensity matching inside a caliper, exact-matched on quarter, without replacement</td></tr>
         <tr><td class="num">5</td><td class="lead tl">Attack the result</td><td class="tl">Doubly robust estimation, counterfactual simulation, an alternative outcome label, and a split by size</td></tr>
@@ -297,11 +297,11 @@
     </div>
     <div class="card">
       <h4>Why gradient boosting <span class="chip na">margin within noise</span></h4>
-      <p class="small">Six candidates were compared. The gap between rule-based baselines and any model is large; the gap <em>between</em> the models is not — across six rolling quarters, boosting beats logistic regression by 0.001 AUC on average across the six rolling quarters (0.666 vs 0.665; logistic is higher in 2 of the 6, including the validation quarter), while the quarter-to-quarter standard deviation is 0.011.</p>
+      <p class="small">Six candidates were compared. The gap between the naive baselines (always-average, previous-quarter status, category average; PR-AUC 0.26–0.29) and any model is large; the gap <em>between</em> the models is not, and neither is the gap between the best of them and the store-count rule (PR-AUC 0.418 against 0.388) — across six rolling quarters, boosting beats logistic regression by 0.001 AUC on average across the six rolling quarters (0.666 vs 0.665; logistic is higher in 2 of the 6, including the validation quarter), while the quarter-to-quarter standard deviation is 0.011.</p>
     </div>
   </div>
 
-  <p class="takeaway" style="margin-top:26px">The strength of this project is not the difficulty of the methods. It is the number of times a result was doubted — <span class="hl">five times, and twice the result was thrown out.</span></p>
+  <p class="takeaway" style="margin-top:26px">The strength of this project is not the difficulty of the methods. It is the number of times a result was doubted — <span class="hl">five times, and once the result was set aside.</span></p>
 
   <div class="card">
     <h4>Verification log</h4>
@@ -313,11 +313,11 @@
         <tr><td class="num">V&#8209;02</td><td class="tl">Saying “we matched on store count” is not the same as the groups being comparable</td><td class="tl">Store count <strong>1.00 → 0.044</strong>; all four covariates clear |SMD| &lt; 0.1</td><td><span class="chip hold">balance passed</span></td></tr>
         <tr><td class="num">V&#8209;03</td><td class="tl">A mean can hide effects that differ across size bands</td><td class="tl">Woolf <strong>p &lt; .0001</strong> — clearly negative in three bands, zero-inclusive in two</td><td><span class="chip warn">not summarisable</span></td></tr>
         <tr><td class="num">V&#8209;04</td><td class="tl">“Bigger cells are riskier” might only mean “bigger cells have events more often”</td><td class="tl">Decomposed the label; the size dependence sits almost entirely in event frequency</td><td><span class="chip warn">label defect</span></td></tr>
-        <tr><td class="num">V&#8209;05</td><td class="tl">A category rank correlation of 0.915 appeared — but store count alone reproduced it</td><td class="tl">Measured the <em>target's</em> reliability</td><td><span class="chip rej">result discarded</span></td></tr>
+        <tr><td class="num">V&#8209;05</td><td class="tl">An early analysis showed a category rank correlation of 0.915 for predicted closures</td><td class="tl">Set aside as performance evidence. Separately, the net-decline label's single-quarter rankings are noisy (split-half 0.212 service category, 0.086 district, 0.035 district × category)</td><td><span class="chip rej">result discarded</span></td></tr>
       </tbody>
     </table>
     </div>
-    <p class="small" style="margin-top:14px">Two of the five ended with a number being removed rather than reported. <strong>Declining to answer is part of the result.</strong></p>
+    <p class="small" style="margin-top:14px">One of the five ended with a number being set aside rather than used as evidence. <strong>Declining to answer is part of the result.</strong></p>
   </div>
 </section>
 
@@ -337,7 +337,7 @@
   <p><span class="hl-r">p = .344.</span> Ranking first is not statistically distinguishable from chance. This strengthens rather than weakens what follows — the evidence does not support a firm claim that Korean restaurants are intrinsically the riskiest. The matched estimate does not rest on the ranking, but Korean restaurants were still chosen as the top-ranked category, so it describes top-ranked cells rather than every category.</p>
 
   <h4 style="margin-top:38px">B · Conditioning reverses it</h4>
-  <p>Each Korean cell was paired 1:1 with the nearest comparable non-Korean cell, exact-matched on quarter. Balance is checked <em>before</em> the outcome is read, so the design can be judged on its own terms:</p>
+  <p>Korean cells were paired 1:1 with the nearest comparable non-Korean cell, exact-matched on quarter; 70.7% of Korean cells found a partner. The matched controls are not an average of the other nine categories: 52.7% are coffee/beverage cells and 21.4% pub/bar cells. Balance is checked <em>before</em> the outcome is read, so the design can be judged on its own terms:</p>
   <div class="card">
     <div class="table-wrap">
     <table>
@@ -365,12 +365,12 @@
   </figure>
   <div class="card">
     <h4>Why the effect fades with size</h4>
-    <p class="small">“Korean cells are bigger” cannot be the answer — matching balanced store count on average (post-match SMD 0.044), so the means are close on both sides in the top band.</p>
+    <p class="small">“Korean cells are bigger” cannot be the answer — matching balanced store count across all pairs (post-match SMD 0.044). That is an average over every pair; it does not guarantee the two sides are equal inside each size band, where the top band is wide (mean Korean cell 38.5 stores).</p>
     <p class="small">Korean restaurants carry a median of <span class="hl">16 stores per cell</span> against 6–10 for every other category. Matching on the <em>absolute</em> count therefore pairs a cell that is small <em>for a Korean cell</em> with one that is large <em>for its own category</em> — and that mismatch inverts as the bands climb.</p>
     <p class="small">The reading is uncomfortable and worth stating plainly: part of −5.57 pp may not be “Korean is safer” but <strong>“a cell far below its own category's norm is safer than one sitting at or above its own.”</strong></p>
     <p class="small" style="color:var(--ink-3)"><strong>Stated as a hypothesis, not a result.</strong> Five bands give five points. Confirming it means re-matching on within-category percentile rather than absolute count — listed as follow-up work, not something this analysis settled.</p>
   </div>
-  <p class="takeaway">The statement that survives: Korean restaurants are markedly safer in small cells, the advantage fades with size — past roughly twenty stores the interval includes zero. Quoting −5.57 pp on its own hides that gradient.</p>
+  <p class="takeaway">The statement that survives: Korean restaurants are markedly safer in small cells, the advantage fades with size — in the fourth band (Korean cells with about 16–24 stores, mean 19.6) and the fifth (24–142 stores, mean 38.5) the interval includes zero. Quoting −5.57 pp on its own hides that gradient.</p>
 
   <h4 style="margin-top:38px">D · Only one thing moves the gap</h4>
   <p>Setting one covariate at a time to its median in every neighborhood cell (31,875 cells) and re-predicting with the fitted model shows where the modeled reversal comes from:</p>
@@ -379,7 +379,7 @@
     <table>
       <thead><tr><th class="tl">Held fixed</th><th>Predicted gap</th></tr></thead>
       <tbody>
-        <tr><td class="tl">Nothing — as observed</td><td class="num">+3.06 pp</td></tr>
+        <tr><td class="tl">Nothing held fixed (model's predicted gap; observed +2.27 pp on the same cells)</td><td class="num">+3.06 pp</td></tr>
         <tr class="mark"><td class="lead tl">Store count only</td><td class="num lead">−5.84 pp</td></tr>
         <tr><td class="tl">Foot traffic only</td><td class="num">+3.53 pp</td></tr>
         <tr><td class="tl">Area only</td><td class="num">+3.20 pp</td></tr>
@@ -387,18 +387,18 @@
       </tbody>
     </table>
     </div>
-    <p class="small" style="margin-top:14px"><strong>Store count alone accounts for almost all of the modeled reversal.</strong> Adding the other three changes it by 0.17 pp. In the regression the same pattern holds — store count dominates every other variable, while foot traffic is not significant.</p>
+    <p class="small" style="margin-top:14px"><strong>Store count alone accounts for almost all of the modeled reversal.</strong> Adding the other three changes it by 0.17 pp. In the regression store count has the largest marginal effect (+14.28 pp, similar in size to the fast-food category dummy at +13.89 pp), while foot traffic is not significant once store count is in the model.</p>
   </div>
 
-  <p class="takeaway" style="margin-top:26px">Foot traffic showing no net-decline association is the interesting part, and there are two possible reasons for it.</p>
+  <p class="takeaway" style="margin-top:26px">Foot traffic showing no net-decline association once store count is controlled (AME +0.72 pp, p = 0.078; +2.66 pp, p &lt; 0.0001 when store count is left out) is the interesting part, and there are two possible reasons for it.</p>
   <figure>
     <img src="assets/openclose.png" alt="Paired negative-binomial coefficients for openings (green) and closures (rose). Foot traffic pushes both up (+0.098, +0.053); store count and food-service share push them in opposite directions.">
-    <figcaption>Openings and closures modelled separately. When both bars point the same way, the difference between them — which is what net decline measures — largely cancels (about 70% for foot traffic: +0.098 for openings, +0.053 for closures). (Negative binomial, 31,875 neighborhood cells.)</figcaption>
+    <figcaption>Openings and closures modelled separately. When both bars point the same way, the difference between them — which is what net decline measures — largely cancels (for foot traffic: +0.098 for openings, +0.053 for closures; an offset share of 1 − |0.098 − 0.053| / (|0.098| + |0.053|) gives about 70%). (Negative binomial, 31,875 neighborhood cells.)</figcaption>
   </figure>
   <div class="grid2">
     <div class="card tight">
       <h4>Reason 1 · It cancels in the subtraction</h4>
-      <p class="small">Foot traffic raises openings <em>and</em> closures, and roughly 70% of the effect disappears in the difference. Busy districts are not shown to be more dangerous — they show <strong>higher turnover</strong>, and net decline cannot see the distinction.</p>
+      <p class="small">Foot traffic raises openings <em>and</em> closures, and roughly 70% of the combined coefficient size cancels in the difference (offset share = 1 − |opening − closure| / (|opening| + |closure|)). Busy districts are not shown to be more dangerous — they show <strong>higher turnover</strong>, and net decline cannot see the distinction.</p>
     </div>
     <div class="card tight">
       <h4>Reason 2 · It is a proxy for location</h4>
@@ -411,7 +411,7 @@
   <p class="figures">P(net decline) = P(an event occurs) × P(it nets negative | an event occurs)</p>
   <figure>
     <img src="assets/label-arithmetic.png" alt="Grouped bars by store-count band. Event rate rises steeply from 29% to 98%; the overall net-decline rate rises with it; the net-decline rate conditional on an event falls from 50% to 38%.">
-    <figcaption>Blue climbs from 29% to 98% as cells get larger — that is the chance anything happens at all. Red, the published metric, follows it. Green — the decline rate among cells where something actually happened — moves in the <em>opposite</em> direction. The published series is tracking the blue one, not risk. (31,875 neighborhood cells.)</figcaption>
+    <figcaption>Blue climbs from 29% to 98% as cells get larger — that is the chance anything happens at all. Red, the overall net-decline rate, follows it. Green — the decline rate among cells where something actually happened — moves in the <em>opposite</em> direction. The net-decline rate tracks the blue series (how often anything happens), not how badly it goes. (31,875 neighborhood cells.)</figcaption>
   </figure>
   <div class="card">
     <p class="small"><strong>48.5% of these cells (15,451 of 31,875) recorded a zero because nothing happened at all</strong> — not because nothing bad happened (43.7% in the full 67,475-cell panel). A five-store cell has a 71% chance of no event in a quarter; a cell with 51 or more stores has a 98% chance of one.</p>
@@ -419,7 +419,7 @@
   </div>
 
   <h4 style="margin-top:38px">F · Not every category depends on where it is</h4>
-  <p>Applying the test selected earlier — each category fixed, district types compared within it — the effect sizes span almost three orders of magnitude:</p>
+  <p>Applying the test selected earlier — each category fixed, district types compared within it — the effect sizes range from 0.1202 down to 0.0002:</p>
   <div class="card">
     <div class="table-wrap">
     <table>
@@ -433,7 +433,7 @@
       </tbody>
     </table>
     </div>
-    <p class="small" style="margin-top:14px">The spread between the two ends is roughly <span class="hl-r">580×</span> (ε² 0.1202 vs 0.0002). Area type explains almost none of the variation in chicken shops' net-decline frequency (ε² = 0.0002), so <strong>district-level intervention is less likely to be the lever</strong> — only the area-type classification was tested. A plausible read is high delivery share reducing location dependence, though nothing in this dataset measures delivery.</p>
+    <p class="small" style="margin-top:14px">The two ends are ε² 0.1202 (pub/bar) and 0.0002 (chicken); the chicken value is statistically indistinguishable from zero (p = 0.355), so no ratio between them is quoted. Area type explains almost none of the variation in chicken shops' net-decline frequency (ε² = 0.0002), so <strong>district-level intervention is less likely to be the lever</strong> — only the area-type classification was tested. A plausible read is high delivery share reducing location dependence, though nothing in this dataset measures delivery.</p>
   </div>
 </section>
 
@@ -449,14 +449,14 @@
     <div class="stat"><p class="k">Pairs</p><p class="v violet">7,043</p></div>
     <div class="stat"><p class="k">Doubly robust</p><p class="v mint">−6.00 pp</p></div>
   </div>
-  <p>The interval comes from a <strong>city-district-level cluster bootstrap</strong> — cells inside one borough are not independent, and resampling them individually would fake a narrower interval. Across nine designs varying caliper width, replacement, exact-matching on quarter/district and seed, the estimate stays between <span class="hl">−5.82 and −4.10 pp</span>.</p>
+  <p>The interval comes from a <strong>commercial-area-level cluster bootstrap</strong> (853 commercial areas, 500 resamples) — cells from the same commercial area recur across quarters and are not independent, and resampling them individually would fake a narrower interval. Across nine designs varying caliper width, replacement, exact-matching on quarter/district and seed, the estimate stays between <span class="hl">−5.82 and −4.10 pp</span>. A tenth setting that adds sales, which limits the sample to cells with observed sales (about 90%, 5,312 pairs), gives −3.65 pp; the sign is the same in all ten.</p>
   <div class="card tight">
     <h4>What −5.57 pp is an estimate of</h4>
-    <p class="small">An <strong>ATT</strong>, not an ATE: the effect on the treated cells that actually exist, which is the right question because the decision it informs concerns the cells currently topping the ranking. It is also restricted to the <strong>region of common support</strong> — 70.7% of treated cells were matched, and the unmatched 29.3%, mostly very large Korean cells, are excluded rather than extrapolated over.</p>
+    <p class="small">An <strong>ATT</strong>, not an ATE: the effect on the treated cells that actually exist, which is the right question because the decision it informs concerns the cells currently topping the ranking. It is also restricted to the <strong>region of common support</strong> — 70.7% of treated cells were matched, and the unmatched 29.3%, which disproportionately include very large Korean cells, are excluded rather than extrapolated over.</p>
   </div>
 
   <h4 style="margin-top:38px">What the model is actually worth</h4>
-  <p class="takeaway">Aggregate ranking ability is only slightly better than store count alone (PR-AUC 0.418 against 0.388). That reads as failure until you look at where the flags actually go.</p>
+  <p class="takeaway">Aggregate ranking ability is only slightly better than store count alone (PR-AUC 0.418 against 0.388; AUC 0.669 against 0.654). That reads as failure until you look at where the flags actually go.</p>
   <div class="stats">
     <div class="stat"><p class="k">Top 50 · model precision</p><p class="v violet">0.780</p></div>
     <div class="stat"><p class="k">Top 50 · store-count rule</p><p class="v ink">0.380</p></div>
@@ -489,16 +489,16 @@
   </div>
   <p><span class="hl">4% overlap at the top of the list</span> answers the obvious objection. If the model were quietly re-deriving store count, the two lists would agree; instead <strong>48 of the 50 cells it names are cells the store-count rule does not list.</strong></p>
   <figure>
-    <img src="assets/size-strata-lift.png" alt="Lift within store-count quintiles. The model's lift is above the store-count rule's 95% range in all five bands, with the widest margins in the three smallest bands (single validation quarter).">
-    <figcaption>Within a size band, store count can no longer discriminate — every cell is roughly the same size — and the model keeps working. That is exactly where early warning is needed.</figcaption>
+    <img src="assets/size-strata-lift.png" alt="Lift within store-count quintiles. The model's lift is above the store-count rule's 95% range in all five bands, and its average advantage over the rule is largest in the three smallest bands (0.53, 0.27, 0.29) and about 0.09 in the two largest (single validation quarter).">
+    <figcaption>Within a size band, store count discriminates much less — the rule's lift is 1.02 to 1.19 in every band, against 1.17 to 1.55 for the model — and the model's lift stays above it. The margin is widest in the smallest bands.</figcaption>
   </figure>
   <div class="card tight">
     <h4>Performance, without the flattering framing</h4>
-    <p class="figures">net-decline model: rolling AUC 0.666 ± 0.011 over 6 quarters &nbsp;·&nbsp; closure-count model (2,772 neighborhood cells, 2025 Q4 → 2026 Q1): top-decile lift 2.25×, AUC 0.711 vs 0.705 for store count (+0.006)</p>
+    <p class="figures">net-decline model: rolling AUC 0.666 ± 0.011 over 6 quarters &nbsp;·&nbsp; closure-count model (2,772 neighborhood cells, 2025 Q4 → 2026 Q1): top-decile lift 2.25× (store-count rule 2.18×), AUC 0.711 vs 0.705 for store count (+0.006)</p>
     <p class="small">The single-quarter validation figure is slightly higher, but the model was <em>selected</em> on that quarter, so it is optimistic by construction. The rolling number is the one reported — and the two agree to 0.003 (0.669 vs 0.666), though the rolling figure includes the validation quarter, so this is not an independent check.</p>
   </div>
 
-  <h4 style="margin-top:38px">Against the tool currently in use</h4>
+  <h4 style="margin-top:38px">Against Seoul's published change indicator</h4>
   <div class="card">
     <p class="small">Validation quarter, 5,479 cells, all four area types.</p>
     <div class="table-wrap">
@@ -517,10 +517,10 @@
 
   <h4 style="margin-top:38px">The deliverable</h4>
   <figure>
-    <img src="assets/forecast.png" alt="Predicted closure rate per 100 stores for 2026 Q2 by category, with 95% intervals. Fast food highest at 5.55%, Korean restaurants lowest at 3.98% (tenth of ten) but first by the net-decline metric.">
+    <img src="assets/forecast.png" alt="Predicted closure rate per 100 stores for 2026 Q2 by category, with 95% intervals. Fast food highest at 5.55%, Korean restaurants lowest at 3.98% (tenth of ten) but first by predicted net-decline probability.">
     <figcaption>2,737 scored neighborhood-commercial-area cells for 2026 Q2. Intervals come from a commercial-area bootstrap (500 resamples of 874 areas) of the scored cells' predicted rates. The fitted model is not refit, so model error and misspecification are not included and true uncertainty is wider.</figcaption>
   </figure>
-  <p>The forecast also states the project's whole problem in one number. Rank correlation between the two predicted metrics — predicted closure rate and predicted net-decline probability, across the ten categories — is <span class="hl-r">−0.370</span>. <strong>The category Seoul's current metric ranks most at risk finishes last (tenth of ten) on predicted closure rate.</strong> The choice of metric, not the analysis behind it, decides who gets support.</p>
+  <p>The forecast also shows the project's problem in one comparison. Rank correlation between the two predicted metrics — predicted closure rate and predicted net-decline probability, across the ten categories — is <span class="hl-r">−0.370</span> (with only ten categories that is not distinguishable from zero, p ≈ 0.29). <strong>The category with the highest predicted net-decline probability finishes tenth of ten on predicted closure rate</strong> (point estimate; its interval, 3.94–4.01, overlaps pub/bar's 3.97–4.07). If support follows a net-decline ranking, the choice of metric could change who gets support.</p>
 </section>
 
 <section id="s7">
@@ -529,8 +529,8 @@
   <p class="sec-sub">What the numbers mean for the people using them — and what to do about it</p>
 
   <div class="card">
-    <h4>① The published metric ranks size, not risk</h4>
-    <p class="small">The definition itself — closures minus openings — promotes cells where events are frequent. Korean restaurants top it because their cells are large, not because they are fragile. The city's other instrument, the change indicator, does not work either. <strong>Both current decision tools are broken, in different ways.</strong></p>
+    <h4>① A net-decline ranking tracks size, not risk</h4>
+    <p class="small">The definition itself — closures minus openings — promotes cells where events are frequent. Korean restaurants' cells are large (21.3 stores per cell against 10.3 for the other nine), and holding store count fixed removes the modelled gap (+3.06 pp to −5.84 pp). The page does not split the top rank into a size part and a selection part: the 88% selection figure is measured against the all-ten average, the matched estimate against matched controls. In the validation quarter the city's change indicator did not work as a next-quarter screen either (HL lift 0.937); that should not be generalized to its other purposes.</p>
   </div>
   <div class="card">
     <h4>② “Open where the foot traffic is” is half of a sentence</h4>
@@ -538,15 +538,15 @@
   </div>
   <div class="card">
     <h4>③ Neither “Korean is safe” nor “Korean is risky” is a true sentence</h4>
-    <p class="small">Conditioned on measured circumstances, Korean restaurants have a lower net-decline rate in the three smallest size bands (−13.6 to −4.9 pp). Above roughly twenty stores the difference is indistinguishable from zero. <strong>The signal lives in the category-by-size combination</strong>, which is precisely what a category ranking cannot express.</p>
+    <p class="small">Conditioned on measured circumstances, Korean restaurants have a lower net-decline rate than their matched controls in the three smallest size bands (−13.6 to −4.9 pp). In the two largest bands (Korean cells with about 16–24 stores, mean 19.6, and 24–142, mean 38.5) the difference is indistinguishable from zero. <strong>The signal lives in the category-by-size combination</strong>, which is precisely what a category ranking cannot express.</p>
   </div>
   <div class="card">
-    <h4>④ City district × category rankings are not stable; the model was evaluated at the cell level</h4>
-    <p class="small">Ranked at city district × category, the answer key reshuffles when you re-measure it — the ranking is not a stable property of the world at that unit. Cell-level scores are stored so the aggregation is possible, but publishing that ranking would be publishing noise. <strong>Declining to answer is part of the answer.</strong></p>
+    <h4>④ Single-quarter city district × category rankings are not stable; the model was evaluated at the cell level</h4>
+    <p class="small">Ranked at city district × category from a single quarter (neighborhood cells, 2025 Q4 features, 2026 Q1 outcome), the answer key reshuffles when you re-measure it (split-half reliability 0.035 across 240 district × category cells). With six quarters pooled and only cells of at least 60 rows kept (97 cells) it is 0.259 — a different set of cells, so the two numbers are not a like-for-like gain. Cell-level scores are stored so the aggregation is possible, but a single-quarter ranking at that unit would mostly be noise. <strong>Declining to answer is part of the answer.</strong></p>
   </div>
   <div class="card">
     <h4>⑤ The model earns its place on small districts, not on the leaderboard</h4>
-    <p class="small">On aggregate ranking it adds little over store count. Hold size constant and store count stops discriminating entirely while the model keeps working — and small districts are exactly where early warning matters. <strong>Reading the aggregate number alone would lead to scrapping the model for the wrong reason.</strong></p>
+    <p class="small">On aggregate ranking it adds little over store count. Hold size constant and the store-count rule's lift falls to 1.02–1.19 while the model's stays at 1.17–1.55, with the widest margin in the smallest bands. <strong>Reading the aggregate number alone would lead to scrapping the model for the wrong reason.</strong></p>
   </div>
 
   <h4 style="margin-top:38px">Recommendations</h4>
@@ -554,20 +554,20 @@
   <div class="rec">
     <h4><span class="rn">01</span> Allocate by cell risk score, not by category rank</h4>
     <dl>
-      <div class="rrow"><dt>Who</dt><dd>District small-business offices allocating consulting and emergency loans</dd></div>
+      <div class="rrow"><dt>Who</dt><dd>District small-business offices, if they allocate consulting and emergency loans by a category net-decline ranking</dd></div>
       <div class="rrow"><dt>What</dt><dd>Replace the category net-decline ranking with the <strong>top-K cell risk scores</strong>. Set K from the caseload an officer can actually contact — precision falls as K grows.</dd></div>
       <div class="rrow"><dt>Evidence</dt><dd>In the validation quarter, <strong>39 of the model's top 50 cells had a net decline, against 19</strong> for the store-count rule. The lists overlap by only 4%, so <strong>48 of those 50 cells are not on the store-count list.</strong></dd></div>
-      <div class="rrow"><dt>Caveat</dt><dd>This means the <strong>micro commercial district</strong>, not the city district. City district × category rankings were unstable in single-quarter data (split-half reliability 0.035), so they are not shown.</dd></div>
+      <div class="rrow"><dt>Caveat</dt><dd>This means the <strong>micro commercial district</strong>, not the city district. City district × category rankings were unstable in single-quarter data (split-half reliability 0.035 in one quarter; 0.259 for six pooled quarters among cells with at least 60 rows), so they are not shown.</dd></div>
       <div class="rrow"><dt>How to verify</dt><dd>Two quarters later, compare supported cells against unsupported cells with similar risk scores — a natural control group</dd></div>
     </dl>
   </div>
 
   <div class="rec">
-    <h4><span class="rn">02</span> Stop publishing net decline on its own</h4>
+    <h4><span class="rn">02</span> Do not present net decline on its own</h4>
     <dl>
-      <div class="rrow"><dt>Who</dt><dd>Commercial District Analysis Service, publication team</dd></div>
-      <div class="rrow"><dt>What</dt><dd>Show <strong>closures per store</strong> beside the net-decline rate. The two rank the ten categories at <strong>−0.370</strong> correlation (2026 Q2 forecast), so they point in different directions. Also stop presenting the HL contraction flag as a risk signal.</dd></div>
-      <div class="rrow"><dt>Expected effect</dt><dd>Prevents the misreading the data itself produces — Korean restaurants currently rank <strong>#1 on net decline and #10 on closure rate</strong>, and the published figure only supports the first</dd></div>
+      <div class="rrow"><dt>Who</dt><dd>Anyone building or quoting a net-decline ranking from open commercial-district data (net decline is this project's own flag, not a published indicator)</dd></div>
+      <div class="rrow"><dt>What</dt><dd>Show <strong>closures per store</strong> beside the net-decline rate. The two rank the ten categories at <strong>−0.370</strong> correlation (2026 Q2 forecast, from two different models; with ten categories not distinguishable from zero, p ≈ 0.29), so they do not agree on which categories are riskiest. Also do not use the HL contraction flag as a risk signal.</dd></div>
+      <div class="rrow"><dt>Expected effect</dt><dd>In the 2026 Q2 forecast Korean restaurants rank <strong>#1 on predicted net decline and #10 on predicted closure rate</strong> (model estimates, not observed outcomes)</dd></div>
       <div class="rrow"><dt>How to verify</dt><dd>Ask dashboard users which categories are risky, before and after; or track how the figures get quoted in press coverage</dd></div>
     </dl>
   </div>
@@ -586,8 +586,8 @@
     <h4><span class="rn">04</span> Match the instrument to the category's location sensitivity</h4>
     <dl>
       <div class="rrow"><dt>Who</dt><dd>Programme designers choosing between district-level and business-level instruments</dd></div>
-      <div class="rrow"><dt>What</dt><dd><strong>Location-sensitive categories</strong> (pub/bar, cafe, Korean) get location diagnostics and district consulting. <strong>Location-indifferent categories</strong> (chicken, fast food) get cost-structure measures instead — delivery commissions, franchise terms, operating efficiency.</dd></div>
-      <div class="rrow"><dt>Expected effect</dt><dd>Avoids assuming district-level support will move categories whose net-decline frequency barely varies by area type (not tested as an intervention). The gap in area-type sensitivity between the two ends is roughly <strong>580×</strong> (ε² 0.1202 vs 0.0002).</dd></div>
+      <div class="rrow"><dt>What</dt><dd><strong>Location-sensitive categories</strong> (pub/bar, cafe, Korean) get location diagnostics and district consulting. <strong>Categories with little location dependence</strong> (chicken, ε² 0.0002; fast food, ε² 0.0161, not significant after Bonferroni correction) get cost-structure measures instead — delivery commissions, franchise terms, operating efficiency.</dd></div>
+      <div class="rrow"><dt>Expected effect</dt><dd>Avoids assuming district-level support will move categories whose net-decline frequency barely varies by area type (not tested as an intervention). The gap in area-type sensitivity between the two ends is large (ε² 0.1202 for pub/bar against 0.0002 for chicken, which is statistically indistinguishable from zero, p = 0.355).</dd></div>
       <div class="rrow"><dt>How to verify</dt><dd>Compare outcomes of district-level support for high- and low-sensitivity categories over four quarters</dd></div>
     </dl>
   </div>
@@ -607,7 +607,7 @@
     </div>
     <div class="card tight">
       <h4>Scope</h4>
-      <p class="small">Causal estimates: neighborhood commercial districts, cells with five or more stores, ten food categories. The prediction models were fitted and validated on all four area types. Developed districts and traditional markets need refitting. Treated match rate 70.7% — very large Korean cells fall outside.</p>
+      <p class="small">Causal estimates: neighborhood commercial districts, cells with five or more stores, ten food categories. The prediction models were fitted and validated on all four area types. Developed districts and traditional markets need refitting. Treated match rate 70.7% — very large Korean cells are disproportionately among those left outside.</p>
     </div>
     <div class="card tight">
       <h4>Unobserved confounding</h4>
@@ -631,7 +631,7 @@
     </div>
     <div class="card tight">
       <h4>Reproducibility</h4>
-      <p class="small">Matching is now deterministic: one shared seed (42), stable tie-breaking and a single matching routine, and two full runs of the pipeline produce byte-identical output files.</p>
+      <p class="small">Matching is now deterministic: one shared seed (42), stable tie-breaking and a single matching routine, and the pipeline's CSV outputs are byte-identical across two full runs; the figures were regenerated from those CSVs.</p>
     </div>
   </div>
 
@@ -750,7 +750,7 @@
   <h3>Repository</h3>
   <p class="sec-sub">Notebooks, code, and full write-up</p>
   <a class="btn" href="https://github.com/jiwoon-oh/seoul-closure-risk" target="_blank" rel="noopener">Code &amp; outputs on GitHub <span class="arw">&rarr;</span></a>
-  <p class="small" style="color:var(--ink-3);max-width:76ch">The repository contains twelve numbered Jupyter notebooks running end to end from the raw CSVs to the 2026 Q2 forecast and the figures — every test and figure on this page reproducible from source — along with the configuration module, the output tables and the full README write-up.</p>
+  <p class="small" style="color:var(--ink-3);max-width:76ch">The repository contains twelve numbered Jupyter notebooks running end to end from the raw CSVs to the 2026 Q2 forecast and the figures (the pipeline's CSV outputs are byte-identical across two full runs, and the figures were regenerated from them) — along with the configuration module, the output tables and the full README write-up.</p>
 </section>
 
 
@@ -758,7 +758,7 @@
 </div>
 
 <footer class="wrap">
-  <p>Data · “Commercial District Analysis Service” tables on the Seoul Open Data Plaza (provider: Seoul Credit Guarantee Foundation; copyright holder: Seoul Metropolitan Government) — stores, estimated sales, boundaries, street-level population, attraction facilities, change indicator · 2023 Q1 – 2026 Q1</p>
+  <p>Data · “Commercial District Analysis Service” tables on the Seoul Open Data Plaza (provider: Seoul Credit Guarantee Foundation; license: KOGL Type 1, attribution; copyright holder: Seoul Metropolitan Government) — stores, estimated sales, boundaries, street-level population, attraction facilities, change indicator · 2023 Q1 – 2026 Q1</p>
   <p>Tools · Python 3, pandas, NumPy, statsmodels, scikit-learn, SciPy, matplotlib</p>
   <p>Scope · This page covers hypothesis H2, the second sub-question and the connected forecasting and operational evaluation. The core question and H1 were handled by other team members.</p>
   <p>Code · <a href="https://github.com/jiwoon-oh/seoul-closure-risk" target="_blank" rel="noopener">Code &amp; outputs on GitHub</a></p>
