@@ -267,7 +267,7 @@
       </tbody>
     </table>
     </div>
-    <p class="small" style="margin-top:14px">Three related household-level tests (A–C) mean a <strong>Bonferroni correction</strong>: α = 0.05 / 3 ≈ 0.0167. All three clear that threshold, not the uncorrected 0.05. The existing-versus-new comparison in section 05-C is judged against a stricter threshold of α = 0.05 / 4 = 0.0125 (the threshold used in that notebook).</p>
+    <p class="small" style="margin-top:14px">Three related household-level tests (A–C) mean a <strong>Bonferroni correction</strong>: α = 0.05 / 3 ≈ 0.0167. All three clear that threshold, not the uncorrected 0.05. The existing-versus-new comparison in section 05-C is a separate test, reported below with its own p-value.</p>
   </div>
 
   <div class="grid2">
@@ -371,7 +371,7 @@
 
   <div class="card tight">
     <h4>A case of significant ≠ important</h4>
-    <p class="small">Testing the two cohorts directly returns <strong>p = 0.000928</strong> — below the stricter threshold of α = 0.0125 used for this comparison. But the effect size is <strong>rank-biserial 0.086</strong>, with a common-language figure of 0.457 against a null of 0.5. With 1,993 households the test reaches significance on a difference with a small effect size. Reporting only the p-value here would have been misleading.</p>
+    <p class="small">Testing the two cohorts directly returns <strong>p = 0.000928</strong> — significant at the 0.01 level (a separate test, not part of the A–C set). But the effect size is <strong>rank-biserial 0.086</strong>, with a common-language figure of 0.457 against a null of 0.5. With 1,993 households the test reaches significance on a difference with a small effect size. Reporting only the p-value here would have been misleading.</p>
   </div>
 </section>
 
@@ -415,8 +415,8 @@
   </div>
 
   <figure>
-    <img src="assets/odds-ratios.png" alt="Forest plot of odds ratios with 95% bootstrap intervals on a log scale: demographic record present 0.32 (labelled “Demographic survey present” in the image), baseline spend 0.64 and income band 0.73 have intervals that exclude 1; category diversity 0.74 excludes 1 only borderline (upper bound 0.998); visit frequency 1.29 and promotion exposure 0.96 do not.">
-    <figcaption>Bold markers are variables whose 95% bootstrap interval excludes 1 (demographic record present, baseline spend, income band and, borderline, category diversity with upper bound 0.998); faint markers have intervals that include 1. The image labels the first variable "Demographic survey present"; it is the has_demo flag, i.e. whether a demographic record exists. Numeric variables are per 1 SD and binary ones are 0 vs 1, so sizes are not directly comparable.</figcaption>
+    <img src="assets/odds-ratios.png" alt="Forest plot of odds ratios with 95% bootstrap intervals on a log scale: demographic record present 0.32, baseline spend 0.64 and income band 0.73 have intervals that exclude 1; category diversity 0.74 excludes 1 only borderline (upper bound 0.998); visit frequency 1.29 and promotion exposure 0.96 do not.">
+    <figcaption>Bold markers are variables whose 95% bootstrap interval excludes 1 (demographic record present, baseline spend, income band and, borderline, category diversity with upper bound 0.998); faint markers have intervals that include 1. The first variable is the has_demo flag: whether a demographic record exists. Numeric variables are per 1 SD and binary ones are 0 vs 1, so sizes are not directly comparable.</figcaption>
   </figure>
 
   <div class="grid2">

@@ -116,7 +116,7 @@
     <p class="small"><strong>The model earns its place at the operating point, not on the leaderboard.</strong> Top-50 precision <span class="hl">0.780</span> against <span class="hl">0.380</span> for a store-count rule in the validation quarter — and the two lists overlap by only 4%, so 48 of the 50 flagged cells are ones the store-count rule does not list.</p>
   </div>
   <div class="card tight">
-    <p class="small"><strong>One result was measured and set aside:</strong> a 0.915 category rank correlation for predicted closures, not used as performance evidence; single-quarter rankings of the net-decline label turned out to be noisy (see the log).</p>
+    <p class="small"><strong>One result was measured and set aside:</strong> the closure-count model's 0.915 category rank correlation (10 categories, one validation quarter), not reported as performance evidence; single-quarter rankings of the net-decline label turned out to be noisy (see the log).</p>
   </div>
 
   <div class="callout" style="margin-top:30px">
@@ -313,7 +313,7 @@
         <tr><td class="num">V&#8209;02</td><td class="tl">Saying “we matched on store count” is not the same as the groups being comparable</td><td class="tl">Store count <strong>1.00 → 0.044</strong>; all four covariates clear |SMD| &lt; 0.1</td><td><span class="chip hold">balance passed</span></td></tr>
         <tr><td class="num">V&#8209;03</td><td class="tl">A mean can hide effects that differ across size bands</td><td class="tl">Woolf <strong>p &lt; .0001</strong> — clearly negative in three bands, zero-inclusive in two</td><td><span class="chip warn">not summarisable</span></td></tr>
         <tr><td class="num">V&#8209;04</td><td class="tl">“Bigger cells are riskier” might only mean “bigger cells have events more often”</td><td class="tl">Decomposed the label; the size dependence sits almost entirely in event frequency</td><td><span class="chip warn">label defect</span></td></tr>
-        <tr><td class="num">V&#8209;05</td><td class="tl">An early analysis showed a category rank correlation of 0.915 for predicted closures</td><td class="tl">Set aside as performance evidence. Separately, the net-decline label's single-quarter rankings are noisy (split-half 0.212 service category, 0.086 district, 0.035 district × category)</td><td><span class="chip rej">result discarded</span></td></tr>
+        <tr><td class="num">V&#8209;05</td><td class="tl">The closure-count model's category rank correlation was 0.915 (10 categories, one validation quarter, neighborhood cells)</td><td class="tl">Not reported as performance evidence: it rests on ten categories in a single quarter. Separately, the net-decline label's single-quarter rankings are noisy (split-half 0.212 service category, 0.086 district, 0.035 district × category)</td><td><span class="chip rej">result discarded</span></td></tr>
       </tbody>
     </table>
     </div>
