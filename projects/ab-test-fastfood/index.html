@@ -197,8 +197,8 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
   .nav .wrap{height:58px}
   .nav ul{gap:0}
   .nav ul a{padding:8px 9px;font-size:12.5px}
-  .main{grid-template-columns:1fr;gap:0;padding:48px 22px 32px}
-  .rail{position:static;margin-bottom:40px}
+  .main{grid-template-columns:minmax(0,1fr);gap:0;padding:48px 22px 32px}
+  .rail{position:static;margin-bottom:40px;min-width:0}
   .rail ol{display:flex;gap:7px;overflow-x:auto;padding-bottom:6px}
   .rail li{flex:0 0 auto}
   .rail a{white-space:nowrap;background:rgba(255,255,255,.55)}
