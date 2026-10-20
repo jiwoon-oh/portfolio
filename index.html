@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Jiwoon Oh — Data Analyst</title>
-<meta name="description" content="Data analyst working in causal inference, experimentation and machine learning. Four case studies in which the headline number did not survive the check.">
+<meta name="description" content="Data analyst working in causal inference, experimentation and machine learning. Four case studies: in three the headline number did not survive the check; in the fourth the data ruled out a loser but could not name a winner.">
 <meta property="og:title" content="Jiwoon Oh — Data Analyst">
-<meta property="og:description" content="Causal inference, experimentation, machine learning. Four case studies — in each one, the headline number did not survive the check.">
+<meta property="og:description" content="Causal inference, experimentation, machine learning. Four case studies — in three the headline number did not survive the check; in the fourth the data ruled out a loser but could not name a winner.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -175,7 +175,7 @@ section,header{scroll-margin-top:84px}
   <div class="wrap">
     <p class="greet" id="greet">Good evening</p>
     <h1>I check whether the <em>effect</em> is real.</h1>
-    <p class="lede">Data analyst working in causal inference, experimentation and machine learning. Four case studies below — in <strong>every one of them</strong> the headline number did not survive the check.</p>
+    <p class="lede">Data analyst working in causal inference, experimentation and machine learning. Four case studies below — in <strong>three of them</strong> the headline number did not survive the check; in the fourth, the data ruled out a loser but could not name a winner.</p>
     <p class="meta">Causal inference · Experimentation · Panel data · Machine learning</p>
     <div class="herolinks">
       <a class="hbtn primary" href="#work">See the work <span class="arw">↓</span></a>
@@ -190,7 +190,7 @@ section,header{scroll-margin-top:84px}
   <div class="shead">
     <p class="k">Selected work</p>
     <h2>Four questions, four identification strategies</h2>
-    <p>Each study starts from a number someone already believed. The method is chosen by what the data will actually support — a randomised experiment where one exists, matching or fixed effects where it doesn't.</p>
+    <p>Each study starts from a number someone already believed. The method is chosen by what the data will actually support — a controlled comparison where one exists, matching or fixed effects where it doesn't.</p>
   </div>
 
   <div class="pgrid">
@@ -202,9 +202,9 @@ section,header{scroll-margin-top:84px}
              alt="Tukey HSD confidence intervals for three promotional strategies" loading="lazy">
       </div>
       <div class="pbody">
-        <p class="ptype exp">Experiment</p>
+        <p class="ptype exp">Group comparison</p>
         <h3><a class="stretch" href="projects/ab-test-fastfood/index.html">Fast-Food Promotion Experiment</a></h3>
-        <p class="pq">Three promotions ran side by side. Which one actually lifted sales?</p>
+        <p class="pq">Three promotions ran side by side. Can the data name a winner, or only a loser?</p>
         <div class="skills">
           <span class="skill">ANOVA</span>
           <span class="skill">Tukey HSD</span>
@@ -222,7 +222,7 @@ section,header{scroll-margin-top:84px}
              alt="Stratified average treatment effect on the treated, by store-count stratum" loading="lazy">
       </div>
       <div class="pbody">
-        <p class="ptype quasi">Quasi-experiment</p>
+        <p class="ptype quasi">Observational · Matching</p>
         <h3><a class="stretch" href="projects/seoul-closure-risk/index.html">Seoul Closure Risk</a></h3>
         <p class="pq">Seoul funds support by a net-decline metric. Does it rank risk, or size?</p>
         <div class="skills">
@@ -231,7 +231,7 @@ section,header{scroll-margin-top:84px}
           <span class="skill">Cluster Bootstrap</span>
           <span class="skill">Gradient Boosting</span>
         </div>
-        <p class="pscale"><span>67,475 cells · 12 labeled quarters</span><span class="pfoot"><a class="btn pcode" href="https://github.com/jiwoon-oh/seoul-closure-risk" target="_blank" rel="noopener" aria-label="Code and data for Seoul Closure Risk on GitHub">Code <span class="arw">↗</span></a><span class="go">Read →</span></span></p>
+        <p class="pscale"><span>67,475 cells · 4 area types · 12 labeled quarters</span><span class="pfoot"><a class="btn pcode" href="https://github.com/jiwoon-oh/seoul-closure-risk" target="_blank" rel="noopener" aria-label="Code and data for Seoul Closure Risk on GitHub">Code <span class="arw">↗</span></a><span class="go">Read →</span></span></p>
       </div>
     </article>
 
@@ -262,9 +262,9 @@ section,header{scroll-margin-top:84px}
              alt="Forest plot of campaign response coefficients by spending tier" loading="lazy">
       </div>
       <div class="pbody">
-        <p class="ptype panel">Panel · Natural experiment</p>
+        <p class="ptype panel">Panel · Fixed effects</p>
         <h3><a class="stretch" href="projects/dunnhumby-customer/case2/index.html">Campaign Response Heterogeneity</a></h3>
-        <p class="pq">Campaigns look four times more effective on low spenders. Is that the campaign, or who receives it?</p>
+        <p class="pq">Campaigns look far more effective on low spenders. Is that the campaign, or who receives it?</p>
         <div class="skills">
           <span class="skill">Two-way Fixed Effects</span>
           <span class="skill">Clustered SE</span>
