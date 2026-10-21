@@ -1,6 +1,6 @@
 # Jiwoon Oh — Data Analyst
 
-I use statistical analysis and machine learning to investigate business questions and evaluate results. Data analyst working with hypothesis testing, observational and panel data, and machine learning.
+Data analyst. I work with promotion comparison, observational, and customer transaction data, using statistical analysis and machine learning to evaluate patterns and support business decisions.
 
 **Site:** https://jiwoon-oh.github.io/portfolio/ · **GitHub:** [jiwoon-oh](https://github.com/jiwoon-oh) · **Email:** [qwer06187@gmail.com](mailto:qwer06187@gmail.com)
 

@@ -228,7 +228,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 <header class="wrap hero">
   <p class="eyebrow">Case study · A/B testing &amp; comparative analysis</p>
   <h1>How did the three promotions compare on <em>sales</em>?</h1>
-  <p class="lede">A fast-food chain ran three promotional strategies for a new menu item across 137 stores. Over four weeks, one promotion had lower sales than the other two, while those two could not be separated statistically. A scenario estimate converts the observed gap into dollars.</p>
+  <p class="lede">According to the dataset description, a fast-food chain ran three promotional strategies for a new menu item across 137 stores. Over four weeks, one promotion had lower sales than the other two, while those two could not be separated statistically. A scenario estimate converts the observed gap into dollars.</p>
   <p class="meta">137 stores · 4 weeks · 548 observations · Python, pandas, SciPy, statsmodels · <a href="https://github.com/jiwoon-oh/fastfood-promotion-ab-test" target="_blank" rel="noopener">Code &amp; outputs on GitHub ↗</a></p>
 
   <div class="picks">
@@ -277,8 +277,8 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
     <p class="sec-no">01</p>
     <h3>Overview</h3>
     <p class="sec-sub">Context and scope of the comparison</p>
-    <p class="takeaway">A chain preparing to launch a new menu item had three candidate promotions and wanted to compare their sales performance.</p>
-    <p>Each of 137 stores was assigned a single promotion and its weekly sales were recorded for four weeks. The assignment procedure could not be verified from the data, and there was no no-promotion control group, so the comparison shows how the three promotions differ from each other, not how much any of them added over doing nothing.</p>
+    <p class="takeaway">The dataset describes a chain preparing to launch a new menu item with three candidate promotions, and the question is how their sales performance compares.</p>
+    <p>Each of the 137 stores appears under a single promotion, with weekly sales recorded for four weeks. How promotions were assigned could not be verified from the data, and there was no no-promotion control group, so the comparison shows how the three promotions differ from each other, not how much any of them added over doing nothing.</p>
     <p>This project evaluates whether the three strategies differed in sales performance, and turns the result into a recommendation for the business.</p>
   </section>
 
@@ -317,8 +317,8 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
         <tbody>
           <tr><td class="num">MarketID</td><td>Geographic market containing the stores</td></tr>
           <tr><td class="num">LocationID</td><td>Individual store identifier</td></tr>
-          <tr><td class="num">MarketSize</td><td>Market size category — Small, Medium, Large</td></tr>
-          <tr><td class="num">Promotion</td><td>Promotional strategy assigned to the store (1, 2, 3)</td></tr>
+          <tr><td class="num">MarketSize</td><td>Market size category: Small, Medium, Large</td></tr>
+          <tr><td class="num">Promotion</td><td>Promotional strategy recorded for the store (1, 2, 3)</td></tr>
           <tr><td class="num">Week</td><td>Observation week</td></tr>
           <tr><td class="num">SalesInThousands</td><td>Weekly sales revenue, in thousands of dollars</td></tr>
           <tr><td class="num">AgeOfStore</td><td>Store age in years</td></tr>
@@ -327,7 +327,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
       </div>
     </div>
     <p><span class="hl">Promotion</span> is stored numerically as 1, 2 and 3, but the values are labels rather than quantities. It was converted to a categorical type before any grouping or modelling, so no step could accidentally treat promotion 3 as “three times promotion 1”.</p>
-    <p class="note"><strong>Source ·</strong> IBM Watson Analytics, “Fast Food Marketing Campaign A/B Test”, distributed via Kaggle. The dataset was used for educational portfolio purposes. All analysis, statistical testing, interpretations, and recommendations were independently developed as part of this project.</p>
+    <p class="note"><strong>Source ·</strong> IBM Watson Analytics, “Fast Food Marketing Campaign A/B Test”, distributed via Kaggle. The dataset was used for educational portfolio purposes. This page documents the analysis of this dataset.</p>
   </section>
 
   <!-- 04 ---------------------------------------------------- -->
@@ -335,7 +335,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
     <p class="sec-no">04</p>
     <h3>Methodology</h3>
     <p class="sec-sub">Analytical steps and the reasoning behind each</p>
-    <p class="takeaway">Most of the work in this project went into choosing appropriate comparisons and checks; running the tests themselves was the shorter part.</p>
+    <p class="takeaway">The steps below follow the order of the analysis, with the reason for each choice.</p>
 
     <div class="dec">
       <p class="idx">01</p>
@@ -348,8 +348,8 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
     <div class="dec">
       <p class="idx">02</p>
       <div>
-        <h4>Match the analysis unit to the assignment unit</h4>
-        <p class="why">Promotions were assigned per store, but the file stores each location as four weekly rows. Treating those as independent would inflate the sample fourfold. Each store was therefore reduced to its four-week average, <b>because the design provides 137 independent observations, not 548.</b></p>
+        <h4>Match the analysis unit to the unit that carries the promotion</h4>
+        <p class="why">Each store appears under a single promotion, but the file stores each location as four weekly rows. Treating those as independent would inflate the sample fourfold. Each store was therefore reduced to its four-week average, <b>because each store carries one promotion, so the 137 stores, not the 548 weekly rows, are the units compared (independence between stores, including stores in the same market, is assumed, not verified).</b></p>
       </div>
     </div>
 
@@ -381,7 +381,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
       <p class="idx">06</p>
       <div>
         <h4>Robustness and sensitivity checks</h4>
-        <p class="why">Three separate checks were run: balance on market size and store age together with an adjustment for market size, a re-run without the one questionable observation, and a correction for the false positives that repeated segment testing can produce. <b>A result that holds across these checks is less likely to reflect confounding, a single observation or chance.</b></p>
+        <p class="why">Three separate checks were run: balance on market size and store age together with an adjustment for market size, a re-run without the one questionable observation, and Bonferroni and Benjamini-Hochberg corrections applied to the three market-size segment tests. <b>A result that holds across these checks is less likely to reflect confounding, a single observation or chance.</b></p>
       </div>
     </div>
 
@@ -443,7 +443,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
     <h4 class="blk">Pairwise comparisons (Tukey HSD)</h4>
     <figure>
       <img src="assets/tukey.png" alt="Tukey HSD 95% intervals before market-size adjustment: Promotion 1 minus 2 is +10.77 [2.94, 18.60], Promotion 3 minus 2 is +8.04 [0.39, 15.68], Promotion 1 minus 3 is +2.73 [−5.09, 10.56]">
-      <figcaption>Pairwise comparisons with 95% confidence intervals. An interval that excludes the zero line is statistically significant at the 95% level.</figcaption>
+      <figcaption>Tukey HSD pairwise comparisons with 95% confidence intervals, adjusted by Tukey's method for the three pairs (adjusted p = 0.0040 for 1 vs 2, 0.6862 for 1 vs 3, 0.0371 for 2 vs 3). An interval that excludes the zero line is statistically significant at the 5% level.</figcaption>
     </figure>
     <div class="card">
       <div class="pair">
@@ -464,7 +464,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
     </div>
 
     <h4 class="blk">Robustness checks</h4>
-    <p>Three checks tested whether Promotion 2's lower sales could be explained by market size, by a single unusual observation, or by repeated testing. None of them removed the difference.</p>
+    <p>Three checks asked whether Promotion 2's lower sales could be explained by market size or by a single unusual observation, and whether the segment-level tests stay significant after multiple-testing correction. None of them removed the difference.</p>
 
     <div class="card">
       <h4>Market size and store age as alternative explanations</h4>
@@ -503,7 +503,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 
     <div class="card">
       <h4>Consistency across market segments and multiple-testing correction</h4>
-      <p class="small">Promotion 2 had the lowest mean in small, medium and large markets alike. Testing each segment separately means running three tests, which increases the chance of a false positive, so both Bonferroni and Benjamini-Hochberg corrections were applied. <span class="hl">All three segments stayed significant afterwards.</span> The one caveat: the small-market segment holds only about five stores per arm, so it carries less weight than the other two. A test of the promotion × market-size interaction was not significant (p = 0.2659), but with only 15 Small-market stores its power is low.</p>
+      <p class="small">Promotion 2 had the lowest mean in small, medium and large markets alike. Testing each segment separately means running three tests (a one-way ANOVA of promotion within each market size; n = 15, 80 and 42 stores), which increases the chance of a false positive, so both Bonferroni and Benjamini-Hochberg corrections were applied to those three p-values. <span class="hl">All three segments stayed significant afterwards</span> (each segment's three-group ANOVA; pairwise differences within segments were not tested). Raw p-values were 0.003183 (Small), 0.000104 (Medium) and 0.007732 (Large); Bonferroni-adjusted 0.009550, 0.000313 and 0.023195; Benjamini-Hochberg-adjusted 0.004775, 0.000313 and 0.007732. The segment means are descriptive. No other correction was applied: the omnibus tests (Levene, ANOVA, Kruskal-Wallis) are parallel tests of the same null hypothesis and were not corrected against each other, and the Tukey results carry Tukey's own adjustment. The small-market segment holds only 15 stores (about five per arm), so its result rests on a small sample and carries less weight than the other two. A test of the promotion × market-size interaction was not significant (p = 0.2659), but with only 15 Small-market stores its power is low.</p>
     </div>
 
     <figure>
@@ -557,7 +557,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
     </div>
     <div class="card">
       <h4>How to read these figures</h4>
-      <p class="small">The per-store, per-week gap is about $10,770 (Tukey difference before market-size adjustment). Applying it to 47 stores over four weeks gives the scenario figures above; <span class="hl-r">The $2M figure is not an amount that any one restaurant lost.</span></p>
+      <p class="small">The per-store, per-week gap is about $10,770 (Tukey difference before market-size adjustment). Applying it to 47 stores over four weeks gives the scenario figures above. <span class="hl-r">The $2M figure is a scenario estimate, not an amount that any restaurant was measured to have lost.</span></p>
       <p class="small">It is also a point estimate, and it does not account for implementation costs, differing store responses, seasonality or profit margins; the outcome measured is revenue, so the cost of running each promotion is not included.</p>
     </div>
 
@@ -569,7 +569,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
     <div class="card">
       <h4><span class="chip na">Undecided</span> &nbsp;Promotion 1 or Promotion 3</h4>
       <p class="small">Sales data cannot separate them, so the choice has to be made on information this dataset does not contain: implementation and marketing cost, operational complexity, inventory and logistics burden, customer retention, and longer-term sales behaviour.</p>
-      <p class="small">Because the sales data do not separate the two, the information listed above would need to be collected before the business commits to either one.</p>
+      <p class="small">That information would need to be collected before the business commits to either one.</p>
     </div>
   </section>
 
@@ -593,7 +593,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
       </div>
       <div class="card tight">
         <h4>Incomplete allocation documentation</h4>
-        <p class="small">A passing store-level allocation check (p = 0.8898) does not prove that assignment was random.</p>
+        <p class="small">The assignment procedure is not documented, and a passing store-level allocation check (p = 0.8898) does not prove that assignment was random.</p>
       </div>
       <div class="card tight">
         <h4>No cost or profit data</h4>
@@ -601,7 +601,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
       </div>
       <div class="card tight">
         <h4>A thin segment</h4>
-        <p class="small">The small-market group contributes only about five stores per arm. The result held after correction but deserves re-testing with more data.</p>
+        <p class="small">The small-market group contributes only about five stores per arm. The segment result stayed significant after correction, but it rests on a small sample and deserves re-testing with more data.</p>
       </div>
     </div>
     <h4 class="blk">Future improvements</h4>
@@ -668,7 +668,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 </div>
 
 <footer class="wrap">
-  <p>Data · IBM Watson Analytics, “Fast Food Marketing Campaign A/B Test” (via Kaggle) — used for educational portfolio purposes</p>
+  <p>Data · IBM Watson Analytics, “Fast Food Marketing Campaign A/B Test” (via Kaggle), used for educational portfolio purposes</p>
   <p>Tools · Python 3, pandas, SciPy, statsmodels, matplotlib</p>
   <p>Code · <a href="https://github.com/jiwoon-oh/fastfood-promotion-ab-test" target="_blank" rel="noopener">Code &amp; outputs on GitHub</a></p>
 </footer>

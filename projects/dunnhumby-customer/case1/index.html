@@ -38,7 +38,7 @@
     <div class="pick drop">
       <p class="name">INITIAL TOP 20% · ABSOLUTE SPEND</p>
       <p class="val">−131<span class="unit">median</span></p>
-      <span class="tag">Hypothesis rejected</span>
+      <span class="tag">Hypothesis not supported</span>
     </div>
     <div class="pick keep">
       <p class="name">REMAINING 80%</p>
@@ -64,7 +64,7 @@
     <li><a href="#s3">03 · Data<span class="p">2,500 households in the data</span></a></li>
     <li><a href="#s4">04 · Methodology<span class="p">baseline-only definition</span></a></li>
     <li><a href="#s5">05 · Analysis</a></li>
-    <li><a href="#s6">06 · Results<span class="p">hypothesis rejected</span></a></li>
+    <li><a href="#s6">06 · Results<span class="p">hypothesis not supported</span></a></li>
     <li><a href="#s7">07 · Business insights</a></li>
     <li><a href="#s8">08 · Limitations</a></li>
     <li><a href="#s9">09 · Tools &amp; skills</a></li>
@@ -95,7 +95,7 @@
       </tbody>
     </table>
     </div>
-    <p class="small" style="margin-top:14px">Tests A and B (the first two rows) are two of the three household-level tests A–C that are corrected together with Bonferroni (α = 0.05 / 3 ≈ 0.0167; test C, the between-group Mann-Whitney U, appears in section 05). The last row is test D, whose 95% bootstrap interval for the share change excludes zero. All three rows use the H4-1 panel (2,095 households; 419 in the top 20%, 1,676 in the remaining 80%). The hypothesis is rejected in both framings: absolute spend and revenue share.</p>
+    <p class="small" style="margin-top:14px">Tests A and B (the first two rows) are two of the three household-level tests A–C. These were first corrected together with Bonferroni (α = 0.05 / 3 ≈ 0.0167; test C, the between-group Mann-Whitney U, appears in section 05). After test D was added, the final family was four tests (α = 0.05 / 4 = 0.0125), and every decision is the same under both thresholds. The last row is test D, judged by whether its unadjusted 95% bootstrap interval for the share change excludes zero. All three rows use the H4-1 panel (2,095 households; 419 in the top 20%, 1,676 in the remaining 80%). The hypothesis is not supported in either framing: absolute spend or revenue share.</p>
   </div>
 
   <h4 style="margin-top:34px">Key findings</h4>
@@ -122,7 +122,7 @@
   <div class="card">
     <div class="pair">
       <span class="lbl">Data</span>
-      <span class="txt">Dunnhumby "The Complete Journey" — 83-week stable period, weeks 17–99</span>
+      <span class="txt">Dunnhumby "The Complete Journey", 83-week stable period (weeks 17–99)</span>
       <span class="num">2,500 hh in data</span>
     </div>
     <div class="pair">
@@ -132,12 +132,12 @@
     </div>
     <div class="pair">
       <span class="lbl">Modelling</span>
-      <span class="txt">Exploratory retention-risk model — logistic regression and random forest with SHAP, 5-fold stratified CV</span>
+      <span class="txt">Exploratory retention-risk model: logistic regression and random forest with SHAP, 5-fold stratified CV</span>
       <span class="num">499 hh</span>
     </div>
     <div class="pair">
       <span class="lbl">Outcome</span>
-      <span class="txt">Original hypothesis rejected; convergence of spending levels observed; within the remaining 80% (wide panel), most of the increase came from existing households (contribution decomposition)</span>
+      <span class="txt">Original hypothesis not supported; convergence of spending levels observed; within the remaining 80% (wide panel), most of the increase came from existing households (contribution decomposition)</span>
       <span class="num">H4</span>
     </div>
   </div>
@@ -155,7 +155,7 @@
   <div class="grid2">
     <div class="card tight">
       <h4>Scope</h4>
-      <p class="small">This was a team project covering several hypotheses. <strong>H4 was mine</strong>, from methodology design through statistical testing to the exploratory model. Everything on this page is that work.</p>
+      <p class="small">This was a team project covering several hypotheses. This page documents <strong>H4, the part of the project that I analysed</strong>.</p>
     </div>
     <div class="card tight">
       <h4>Why the top-spender definition matters</h4>
@@ -172,7 +172,7 @@
   <p class="sec-sub">Hypothesis H4 and its two testable claims</p>
 
   <div class="card">
-    <h4>H4 — Revenue growth is concentrated in a small group of high-spending households</h4>
+    <h4>H4: Revenue growth is concentrated in a small group of high-spending households</h4>
     <div class="table-wrap">
     <table>
       <thead><tr><th>#</th><th class="tl">Claim</th><th class="tl">How it would be falsified</th></tr></thead>
@@ -199,15 +199,15 @@
 
   <div class="card">
     <h4>Source</h4>
-    <p class="small"><strong>Dunnhumby "The Complete Journey"</strong> — household-level transaction records for 2,500 households, with demographic, campaign, coupon and product tables alongside. The analysis uses a <strong>stable 83-week period (weeks 17–99)</strong>. Of the 2,500 households, 2,492 have transactions in weeks 17–99; the steps below use different subsets: 2,272 for the concentration measures, 2,095 for the H4-1 tests, 2,492 for the cross-table and the model.</p>
-    <p class="small" style="color:var(--ink-3)">The dataset was used for educational portfolio purposes. All analysis, statistical testing, interpretations, and recommendations were independently developed as part of this project.</p>
+    <p class="small"><strong>Dunnhumby "The Complete Journey"</strong>: household-level transaction records for 2,500 households, with demographic, campaign, coupon and product tables alongside. The analysis uses a <strong>stable 83-week period (weeks 17–99)</strong>. Of the 2,500 households, 2,492 have transactions in weeks 17–99; the steps below use different subsets: 2,272 for the concentration measures, 2,095 for the H4-1 tests, 2,492 for the cross-table and the model.</p>
+    <p class="small" style="color:var(--ink-3)">The dataset was used for educational portfolio purposes. This page documents the part of a team project that I analysed (hypothesis H4).</p>
   </div>
 
   <p class="takeaway" style="margin-top:26px">Two parameters in this analysis are analyst choices rather than properties of the data: the length of the baseline window and the cutoff for "top X%". Both were checked against the data before being fixed.</p>
 
   <div class="card">
     <h4>Choice 1 · Baseline window length</h4>
-    <p class="small">A short window ranks households on noise; a long window uses up the period being measured. For each candidate length, the window was split into odd and even weeks, households ranked independently in each half, and the two rankings correlated — a direct measure of how reproducible the ranking is at that length.</p>
+    <p class="small">A short window ranks households on noise; a long window uses up the period being measured. For each candidate length, the window was split into odd and even weeks, households ranked independently in each half, and the two rankings correlated. This is a direct measure of how reproducible the ranking is at that length.</p>
     <div class="stats" style="margin-bottom:0">
       <div class="stat"><p class="k">Elbow</p><p class="v blue">10 weeks</p></div>
       <div class="stat"><p class="k">Rank correlation</p><p class="v amber">ρ = 0.697</p></div>
@@ -262,12 +262,12 @@
       <thead><tr><th class="tl">Check</th><th class="tl">Result</th><th class="tl">Consequence</th></tr></thead>
       <tbody>
         <tr><td class="tl">Normality (Shapiro-Wilk)</td><td class="tl">Rejected in both groups</td><td class="tl">No parametric mean tests</td></tr>
-        <tr><td class="tl">Equal variance (Levene)</td><td class="tl">Rejected — top-20% variance over 3× the rest</td><td class="tl">No pooled-variance t-test</td></tr>
+        <tr><td class="tl">Equal variance (Levene)</td><td class="tl">Rejected; top-20% variance over 3× the rest</td><td class="tl">No pooled-variance t-test</td></tr>
         <tr class="mark"><td class="lead tl">Decision</td><td class="tl" colspan="2">Wilcoxon signed-rank for within-group change, Mann-Whitney U between groups, bootstrap for the share metric</td></tr>
       </tbody>
     </table>
     </div>
-    <p class="small" style="margin-top:14px">Three related household-level tests (A–C) mean a <strong>Bonferroni correction</strong>: α = 0.05 / 3 ≈ 0.0167. All three are significant at that corrected threshold. The existing-versus-new comparison in section 05-C is a separate test, reported below with its own p-value.</p>
+    <p class="small" style="margin-top:14px">The three related household-level tests (A–C) were first corrected together with a <strong>Bonferroni correction</strong>: α = 0.05 / 3 ≈ 0.0167. After the bootstrap test D was added, the final family was four tests (α = 0.05 / 4 = 0.0125). Tests A–C are significant under both thresholds, so the decisions do not change. Test D is judged by whether its unadjusted 95% bootstrap interval excludes zero; no multiplicity-adjusted interval was computed. The existing-versus-new comparison in section 05-C is a separate H4-2 test, reported below with its own p-value.</p>
   </div>
 
   <div class="grid2">
@@ -309,7 +309,7 @@
     <figcaption>The sign is the same at every baseline length, and the gap grows slightly (189.6 → 214.2 → 238.1). This is a sensitivity check and does not rule out regression to the mean.</figcaption>
   </figure>
 
-  <p class="takeaway">The sign of the result is stable across the 8-, 10- and 12-week baselines; regression to the mean cannot be ruled out. The pattern is a <strong>convergence of spending levels</strong>.</p>
+  <p class="takeaway">The sign of the result is stable across the 8-, 10- and 12-week baselines; regression to the mean cannot be ruled out. The pattern is described here as a <strong>convergence of spending levels</strong>.</p>
 
   <h4 style="margin-top:38px">B · Tests on spending change and revenue share</h4>
   <div class="card">
@@ -319,7 +319,7 @@
       <tbody>
         <tr><td class="tl">Top 20% changed (Wilcoxon)</td><td class="num">p = 0.00002</td><td class="num">r = −0.209</td><td><span class="chip rej">decreased</span></td></tr>
         <tr><td class="tl">Remaining 80% changed (Wilcoxon)</td><td class="num">p = 8.8 × 10⁻³¹</td><td class="num">—</td><td><span class="chip hold">increased</span></td></tr>
-        <tr class="mark"><td class="lead tl">Groups differ (Mann-Whitney U)</td><td class="num lead">p = 3.3 × 10⁻²⁰</td><td class="num lead">r = 0.290</td><td><span class="chip rej">confirmed</span></td></tr>
+        <tr class="mark"><td class="lead tl">Groups differ (Mann-Whitney U)</td><td class="num lead">p = 3.3 × 10⁻²⁰</td><td class="num lead">r = 0.290</td><td><span class="chip rej">differs</span></td></tr>
         <tr><td class="tl">Share of top 20% (bootstrap)</td><td class="num">−12.91 pp</td><td class="num">CI excludes 0</td><td><span class="chip rej">fell</span></td></tr>
       </tbody>
     </table>
@@ -346,7 +346,7 @@
     </table>
     </div>
     <p class="small" style="margin-top:14px">This table covers the 2,492 households with transactions in weeks 17–99 (499 in the top 20%, early spend ≥ 535.29), a different cut from the 419-household group above. The other eight of the 2,500 (seven existing, one reactivated) have no transactions in that period and are not in the table.</p>
-    <p class="small" style="margin-top:14px">Chi-square p = 1.5 × 10⁻³⁴, <strong>Cramér's V = 0.246</strong> — a moderate, clear association. New and reactivated households sit overwhelmingly in the remaining 80% (866 of 934).</p>
+    <p class="small" style="margin-top:14px">Chi-square p = 1.5 × 10⁻³⁴, <strong>Cramér's V = 0.246</strong>, a moderate association. New and reactivated households sit overwhelmingly in the remaining 80% (866 of 934).</p>
   </div>
 
   <div class="card">
@@ -371,7 +371,7 @@
 
   <div class="card tight">
     <h4>Statistical significance and effect size</h4>
-    <p class="small">Testing the two cohorts directly returns <strong>p = 0.000928</strong> — significant at the 0.01 level (a separate test, not part of the A–C set). But the effect size is <strong>rank-biserial 0.086</strong>, with a common-language figure of 0.457 against a null of 0.5. With 1,993 households the test reaches significance on a difference with a small effect size, so the effect size is reported alongside the p-value.</p>
+    <p class="small">Testing the two cohorts directly returns <strong>p = 0.000928</strong>, a small p-value. This is a separate H4-2 test, outside the four-test H4-1 family, and the notebook set no multiplicity correction or decision threshold for it. The effect size is <strong>rank-biserial 0.086</strong>, with a common-language figure of 0.457 against a null of 0.5. With 1,993 households (866 new or reactivated, 1,127 existing) a small p-value can accompany a difference with a small effect size, so the effect size is reported alongside the p-value.</p>
   </div>
 </section>
 
@@ -382,7 +382,7 @@
 
   <div class="grid2">
     <div class="card">
-      <h4>H4-1 <span class="chip rej">rejected</span></h4>
+      <h4>H4-1 <span class="chip rej">not supported</span></h4>
       <p class="small">Both framings show lower values for the top 20% in the later window (H4-1 panel, 2,095 households; top 20% = 419): absolute spend down a median 131.45, revenue share down 12.91 points. The data instead show a <strong>convergence pattern</strong>: the initial top 20% spent less and the remaining 80% spent more in the later window.</p>
     </div>
     <div class="card">
@@ -406,7 +406,7 @@
       <thead><tr><th class="tl">Model</th><th>PR-AUC</th><th class="tl">Verdict</th></tr></thead>
       <tbody>
         <tr><td class="tl">Random baseline</td><td class="num">0.447</td><td class="tl">Equal to the positive rate</td></tr>
-        <tr class="mark"><td class="lead tl">Logistic regression</td><td class="num lead">0.685</td><td class="tl"><strong>Selected</strong> — higher recall (0.601 vs 0.529) and interpretable</td></tr>
+        <tr class="mark"><td class="lead tl">Logistic regression</td><td class="num lead">0.685</td><td class="tl"><strong>Selected</strong>: higher recall (0.601 vs 0.529) and interpretable</td></tr>
         <tr><td class="tl">Random forest</td><td class="num">0.657</td><td class="tl">Lower recall (0.529 vs 0.601); a sample of 499 may be too small for a tree model</td></tr>
       </tbody>
     </table>
@@ -472,7 +472,7 @@
     <h4><span class="rn">01</span> Test extending the retention programme beyond the top 20%</h4>
     <dl>
       <div class="rrow"><dt>Who</dt><dd>CRM and loyalty programme owners</dd></div>
-      <div class="rrow"><dt>What</dt><dd>Test shifting budget weighting away from a pure top-20% definition toward existing households outside the top 20% — a hypothesis to evaluate, not a result of this analysis</dd></div>
+      <div class="rrow"><dt>What</dt><dd>Test shifting budget weighting away from a pure top-20% definition toward existing households outside the top 20%. This is a hypothesis to evaluate, not a result of this analysis</dd></div>
       <div class="rrow"><dt>Why</dt><dd>In the H4-1 panel (2,095 households), the top 20% contracted by a median 131.45 while the remaining 80% grew by a median 36.49. A top-20% definition would not target the households where the observed increase was</dd></div>
       <div class="rrow"><dt>How to verify</dt><dd>Hold out a matched portion of households outside the top 20% from the re-pointed programme and compare retention two periods later</dd></div>
     </dl>
@@ -482,7 +482,7 @@
     <h4><span class="rn">02</span> Check whether lacking a demographic record signals falling out of the top tier</h4>
     <dl>
       <div class="rrow"><dt>Who</dt><dd>Retention analytics; customer insight teams</dd></div>
-      <div class="rrow"><dt>What</dt><dd>Track <strong>whether households have a demographic record and how they engage with non-purchase touchpoints</strong> — profile completion, programme interactions — alongside spending, to check whether these carry information about who falls out of the top tier</dd></div>
+      <div class="rrow"><dt>What</dt><dd>Track <strong>whether households have a demographic record and how they engage with non-purchase touchpoints</strong> (profile completion, programme interactions) alongside spending, to check whether these carry information about who falls out of the top tier</dd></div>
       <div class="rrow"><dt>Why</dt><dd>Having a demographic record showed the clearest association with staying in the top tier in the model (OR = 0.32, 95% CI 0.19–0.51). Numeric variables are per 1 SD and binary ones are 0 vs 1, so odds ratios are not ranked by size</dd></div>
       <div class="rrow"><dt>Caveat</dt><dd>This is an association in a 499-household exploratory model. It justifies instrumenting the signal, not automating decisions on it, and this data cannot show whether disengagement leads or follows a spending decline</dd></div>
     </dl>
@@ -508,7 +508,7 @@
   <div class="grid2">
     <div class="card tight">
       <h4>Contribution analysis is not causal inference</h4>
-      <p class="small">Section 05-C decomposes where the increase came from. It establishes no counterfactual — nothing here says what <em>would</em> have happened without new and reactivated households.</p>
+      <p class="small">Section 05-C decomposes where the increase came from. It establishes no counterfactual: nothing here says what <em>would</em> have happened without new and reactivated households.</p>
     </div>
     <div class="card tight">
       <h4>Moderate baseline reliability</h4>
@@ -625,7 +625,7 @@
 
   <div class="card tight" style="margin-top:24px">
     <h4>Related analysis: Case 02</h4>
-    <p class="small">Case 02 asks a different question of the same dataset — whether campaign response varies by customer spending tier, using two-way fixed effects. <a href="../case2/">Read Case 02 &rarr;</a></p>
+    <p class="small">Case 02 asks a different question of the same dataset: whether campaign response varies by customer spending tier, using two-way fixed effects. <a href="../case2/">Read Case 02 &rarr;</a></p>
   </div>
 </section>
 
@@ -633,7 +633,7 @@
 </div>
 
 <footer class="wrap">
-  <p>Data · Dunnhumby “The Complete Journey” — 2,500 households in the data; 83-week stable period (weeks 17–99). Used for educational portfolio purposes.</p>
+  <p>Data · Dunnhumby “The Complete Journey”, 2,500 households in the data; 83-week stable period (weeks 17–99). Used for educational portfolio purposes.</p>
   <p>Tools · Python 3, pandas, NumPy, SciPy, scikit-learn, SHAP, matplotlib</p>
   <p>Scope · This page covers hypothesis H4 of a team project. Other hypotheses were handled by other team members.</p>
   <p>Code · <a href="https://github.com/jiwoon-oh/dunnhumby-revenue-concentration" target="_blank" rel="noopener">Code &amp; outputs on GitHub</a></p>
