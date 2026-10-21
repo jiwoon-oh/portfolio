@@ -171,7 +171,7 @@
     </div>
     <div class="card tight">
       <h4>Scope</h4>
-      <p class="small">This was a team project. The campaign × tier analysis on this page is my contribution to it. Other hypotheses were handled by other team members.</p>
+      <p class="small">This page covers a campaign × tier analysis of the Dunnhumby data, which grew out of a team project in which hypotheses were divided among team members. The lead-effect test and the single-source pipeline were added after the team project.</p>
     </div>
   </div>
 
@@ -210,7 +210,7 @@
   <div class="card">
     <h4>Source</h4>
     <p class="small"><strong>Dunnhumby "The Complete Journey"</strong>: household transactions plus campaign delivery records. Reshaped into a balanced <strong>household × week panel</strong> covering weeks 33–101, the period from the first campaign launch onward. Week 102 is left out; the data end on day 711, so that week holds only 6 days of transactions.</p>
-    <p class="small" style="color:var(--ink-3)">The dataset was used for educational portfolio purposes. This page covers the campaign × tier analysis of a team project; other hypotheses were handled by other team members.</p>
+    <p class="small" style="color:var(--ink-3)">The dataset was used for educational portfolio purposes. This page covers a campaign × tier analysis that grew out of a team project in which hypotheses were divided among team members.</p>
   </div>
 
   <div class="card">
@@ -395,7 +395,7 @@
   </div>
 
   <h4 style="margin-top:38px">Lead-effect check</h4>
-  <p>For the 295 high-spending households that received Type C, I added two indicators to the main model: Lead4 (the four weeks before a household's first Type C week) and Lead8 (weeks five to eight before it). Estimation uses household and week fixed effects, household-clustered standard errors and the same nine campaign-by-tier indicators, so Type A and B activity is controlled as in the main model. The reading rule was fixed before running: an interval that includes zero means no evidence of a pre-existing decline; a negative coefficient whose interval excludes zero means reverse targeting is possible.</p>
+  <p>For the 295 high-spending households that received Type C, I added two indicators to the main model: Lead4 (the four weeks before a household's first Type C week) and Lead8 (weeks five to eight before it). Estimation uses household and week fixed effects, household-clustered standard errors and the same nine campaign-by-tier indicators, so Type A and B activity is controlled as in the main model. The reading rule is recorded in the notebook (h2_stage6_main_regression, step 5): an interval that includes zero means no evidence of a pre-existing decline; a negative coefficient whose interval excludes zero means reverse targeting is possible.</p>
 
   <div class="card">
     <div class="table-wrap">
@@ -589,7 +589,7 @@
 
   <a class="btn" href="https://github.com/jiwoon-oh/dunnhumby-campaign-response" target="_blank" rel="noopener">Code &amp; outputs on GitHub <span class="arw">&rarr;</span></a>
 
-  <p class="small" style="color:var(--ink-3);max-width:76ch">The repository contains the Jupyter notebooks, result CSVs and figure code, reproducible from the raw dataset (kept out of the repo), along with the full README write-up covering the eight numbered analysis steps compressed on this page.</p>
+  <p class="small" style="color:var(--ink-3);max-width:76ch">The repository contains the Jupyter notebooks, result CSVs and figure code, along with the full README write-up covering the eight numbered analysis steps compressed on this page. The notebooks read the raw Dunnhumby files (kept out of the repo) and write the result tables and figures; two fresh-kernel runs on my machine produced identical CSV and PNG hashes.</p>
 
   <div class="card tight" style="margin-top:24px">
     <h4>Related case study</h4>
@@ -603,7 +603,7 @@
 <footer class="wrap">
   <p>Data · Dunnhumby “The Complete Journey” — 2,500 households, weeks 33–101 panel, 30 campaigns. Used for educational portfolio purposes.</p>
   <p>Tools · Python 3, pandas, NumPy, linearmodels, statsmodels, matplotlib</p>
-  <p>Scope · This page covers the campaign × customer tier analysis of a team project. Other hypotheses were handled by other team members.</p>
+  <p>Scope · This page covers a campaign × customer tier analysis that grew out of a team project; the lead-effect test and the single-source pipeline were added afterwards.</p>
   <p>Code · <a href="https://github.com/jiwoon-oh/dunnhumby-campaign-response" target="_blank" rel="noopener">Code &amp; outputs on GitHub</a></p>
 </footer>
 

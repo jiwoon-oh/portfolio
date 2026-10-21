@@ -6,7 +6,7 @@
 <title>Fast-Food Promotion Comparison: A/B test analysis</title>
 <meta name="description" content="Three promotional strategies compared across 137 restaurant locations over four weeks. Data validation, hypothesis testing, effect size, robustness checks, and a business recommendation.">
 <meta property="og:title" content="Fast-Food Promotion Comparison Analysis">
-<meta property="og:description" content="Which of three promotions had the strongest sales? A three-arm comparison across 137 locations: one promotion had lower sales than the other two, and those two could not be separated statistically.">
+<meta property="og:description" content="Which of three promotions had the strongest sales? A three-arm comparison across 137 locations in a hypothetical sample dataset: one promotion had lower sales than the other two, and those two could not be separated statistically.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -228,7 +228,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 <header class="wrap hero">
   <p class="eyebrow">Case study · A/B testing &amp; comparative analysis</p>
   <h1>How did the three promotions compare on <em>sales</em>?</h1>
-  <p class="lede">According to the dataset description, a fast-food chain ran three promotional strategies for a new menu item across 137 stores. Over four weeks, one promotion had lower sales than the other two, while those two could not be separated statistically. A scenario estimate converts the observed gap into dollars.</p>
+  <p class="lede">The dataset description sets up a scenario in which a fast-food chain compares three promotional strategies for a new menu item across 137 stores; I treat it as hypothetical sample data. Over four weeks, one promotion had lower new-item sales than the other two, while those two could not be separated statistically. A scenario estimate converts the observed gap into dollars.</p>
   <p class="meta">137 stores · 4 weeks · 548 observations · Python, pandas, SciPy, statsmodels · <a href="https://github.com/jiwoon-oh/fastfood-promotion-ab-test" target="_blank" rel="noopener">Code &amp; outputs on GitHub ↗</a></p>
 
   <div class="picks">
@@ -248,7 +248,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
       <span class="tag">Not ruled out</span>
     </div>
   </div>
-  <p class="picks-note">Mean weekly sales per store (raw, before market-size adjustment) · Promotions 1 and 3 could not be separated statistically</p>
+  <p class="picks-note">Mean weekly new-item sales per store (raw, before market-size adjustment) · Promotions 1 and 3 could not be separated statistically</p>
 </header>
 
 <div class="wrap main">
@@ -277,8 +277,8 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
     <p class="sec-no">01</p>
     <h3>Overview</h3>
     <p class="sec-sub">Context and scope of the comparison</p>
-    <p class="takeaway">The dataset describes a chain preparing to launch a new menu item with three candidate promotions, and the question is how their sales performance compares.</p>
-    <p>Each of the 137 stores appears under a single promotion, with weekly sales recorded for four weeks. How promotions were assigned could not be verified from the data, and there was no no-promotion control group, so the comparison shows how the three promotions differ from each other, not how much any of them added over doing nothing.</p>
+    <p class="takeaway">The dataset describes a scenario in which a chain plans to add a new menu item and compares three possible promotions. The data are treated as hypothetical sample data, and the question is how the new item's sales compare across the three promotions.</p>
+    <p>Each of the 137 stores appears under a single promotion, with weekly sales recorded for four weeks. The source documents random selection of markets, not random assignment of promotions, so how promotions were assigned could not be verified from the data, and there was no no-promotion control group, so the comparison shows how the three promotions differ from each other, not how much any of them added over doing nothing.</p>
     <p>This project evaluates whether the three strategies differed in sales performance, and turns the result into a recommendation for the business.</p>
   </section>
 
@@ -296,7 +296,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
         <li>Are the findings robust to outliers and to repeated testing?</li>
       </ul>
     </div>
-    <p class="note">The last two questions test whether the observed ranking is robust. A ranking that disappears once market size is accounted for, or that holds in only one segment, would be a weak basis for a launch decision.</p>
+    <p class="note">The last two questions test whether the observed ranking is robust. A ranking that disappears once market size is accounted for, or that holds in only one segment, would be a weak basis for a launch decision in a comparable real test.</p>
   </section>
 
   <!-- 03 ---------------------------------------------------- -->
@@ -319,15 +319,15 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
           <tr><td class="num">LocationID</td><td>Individual store identifier</td></tr>
           <tr><td class="num">MarketSize</td><td>Market size category: Small, Medium, Large</td></tr>
           <tr><td class="num">Promotion</td><td>Promotional strategy recorded for the store (1, 2, 3)</td></tr>
-          <tr><td class="num">Week</td><td>Observation week</td></tr>
-          <tr><td class="num">SalesInThousands</td><td>Weekly sales revenue, in thousands of dollars</td></tr>
+          <tr><td class="num">week</td><td>Observation week</td></tr>
+          <tr><td class="num">SalesInThousands</td><td>Weekly sales of the new menu item, in thousands of dollars</td></tr>
           <tr><td class="num">AgeOfStore</td><td>Store age in years</td></tr>
         </tbody>
       </table>
       </div>
     </div>
     <p><span class="hl">Promotion</span> is stored numerically as 1, 2 and 3, but the values are labels rather than quantities. It was converted to a categorical type before any grouping or modelling, so no step could accidentally treat promotion 3 as “three times promotion 1”.</p>
-    <p class="note"><strong>Source ·</strong> IBM Watson Analytics, “Fast Food Marketing Campaign A/B Test”, distributed via Kaggle. The dataset was used for educational portfolio purposes. This page documents the analysis of this dataset.</p>
+    <p class="note"><strong>Source ·</strong> “Fast Food Marketing Campaign A/B Test” on Kaggle, credited to the IBM Watson Analytics community. Its scenario text matches IBM's description of the SPSS sample file testmarket.sav, which IBM labels hypothetical. I could not confirm that the two files are identical, so the data are treated as hypothetical sample data, used here for an educational portfolio analysis. This page documents the analysis of this dataset.</p>
   </section>
 
   <!-- 04 ---------------------------------------------------- -->
@@ -401,7 +401,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
     <p class="sec-sub">Data validation, unit of analysis, statistical assumptions and robustness checks</p>
 
     <h4 class="blk">Data validation and assignment checks</h4>
-    <p>The structural checks found no problems: no duplicate rows, no store split across promotions, no missing weeks, and every store observed for the full four weeks. The store-level allocation check (SRM) showed no mismatch (p = 0.8898) and market sizes were spread similarly across the three promotions (p = 0.8800), so the three groups can be compared with each other. This does not prove that assignment was random.</p>
+    <p>The structural checks found no problems: no duplicate rows, no store split across promotions, no missing weeks, and every store observed for the full four weeks. The store-level allocation check (SRM) showed no mismatch (p = 0.8898) and market sizes were spread similarly across the three promotions (p = 0.8800), so the three groups can be compared with each other. This does not prove that assignment was random: the source documents random selection of markets, not random assignment of promotions.</p>
     <div class="card tight">
       <p class="small"><span class="hl">548 rows in, 548 rows out.</span> Nothing was deleted, because the quality checks found nothing to remove. The outliers flagged by the IQR rule were not dropped at this stage; they are assessed separately in the outlier sensitivity check below, so that no rows were removed without a documented reason.</p>
     </div>
@@ -488,7 +488,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
         </tbody>
       </table>
       </div>
-      <p class="small" style="margin-top:12px">Mean weekly sales per store in thousands of dollars (n = 43, 47, 47 stores). Adjusted means weight the three market sizes equally.</p>
+      <p class="small" style="margin-top:12px">Mean weekly new-item sales per store in thousands of dollars (n = 43, 47, 47 stores). Adjusted means weight the three market sizes equally.</p>
     </div>
 
     <div class="card">
@@ -542,7 +542,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
     <p class="sec-no">07</p>
     <h3>Business Insights</h3>
     <p class="sec-sub">Practical implications of the statistical result</p>
-    <p class="takeaway">Scenario estimate: applying the Tukey difference to the 47 stores that used Promotion 2 for four weeks gives a difference of roughly two million dollars relative to Promotion 1 (not a measured loss).</p>
+    <p class="takeaway">Scenario estimate: applying the Tukey difference to the 47 stores that used Promotion 2 for four weeks gives a difference of roughly two million dollars relative to Promotion 1 (not a measured loss; based on hypothetical sample data).</p>
     <div class="grid2" style="margin-bottom:16px">
       <div class="callout">
         <p class="big">vs Promotion 1</p>
@@ -557,14 +557,14 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
     </div>
     <div class="card">
       <h4>How to read these figures</h4>
-      <p class="small">The per-store, per-week gap is about $10,770 (Tukey difference before market-size adjustment). Applying it to 47 stores over four weeks gives the scenario figures above. <span class="hl-r">The $2M figure is a scenario estimate, not an amount that any restaurant was measured to have lost.</span></p>
+      <p class="small">The per-store, per-week gap is about $10,770 (Tukey difference before market-size adjustment). Applying it to 47 stores over four weeks gives the scenario figures above. <span class="hl-r">The $2M figure is a scenario estimate based on hypothetical sample data, not an amount that any restaurant was measured to have lost.</span></p>
       <p class="small">It is also a point estimate, and it does not account for implementation costs, differing store responses, seasonality or profit margins; the outcome measured is revenue, so the cost of running each promotion is not included.</p>
     </div>
 
     <h4 class="blk">Recommendation</h4>
     <div class="card">
       <h4><span class="chip rej">Pause or review</span> &nbsp;Promotion 2</h4>
-      <p class="small">Promotion 2 had lower sales in every check that was run: a statistically significant gap against both alternatives, consistency across all market segments, a gap that is not explained by the observed market size or store age (it remained after adjusting for market size: adjusted Promotion 1 − 2 +$10.77K [5.73, 15.80], Promotion 3 − 2 +$9.75K [4.82, 14.69]), and stability when the questionable observation is removed.</p>
+      <p class="small">In this hypothetical scenario, the data would argue for pausing or reviewing Promotion 2. Promotion 2 had lower new-item sales in every check that was run: a statistically significant gap against both alternatives, consistency across all market segments, a gap that is not explained by the observed market size or store age (it remained after adjusting for market size: adjusted Promotion 1 − 2 +$10.77K [5.73, 15.80], Promotion 3 − 2 +$9.75K [4.82, 14.69]), and stability when the questionable observation is removed.</p>
     </div>
     <div class="card">
       <h4><span class="chip na">Undecided</span> &nbsp;Promotion 1 or Promotion 3</h4>
@@ -593,7 +593,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
       </div>
       <div class="card tight">
         <h4>Incomplete allocation documentation</h4>
-        <p class="small">The assignment procedure is not documented, and a passing store-level allocation check (p = 0.8898) does not prove that assignment was random.</p>
+        <p class="small">The source documents random selection of markets, not random assignment of promotions; the assignment procedure is not documented, and a passing store-level allocation check (p = 0.8898) does not prove that assignment was random.</p>
       </div>
       <div class="card tight">
         <h4>No cost or profit data</h4>
@@ -602,6 +602,10 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
       <div class="card tight">
         <h4>A thin segment</h4>
         <p class="small">The small-market group contributes only about five stores per arm. The segment result stayed significant after correction, but it rests on a small sample and deserves re-testing with more data.</p>
+      </div>
+      <div class="card tight">
+        <h4>Hypothetical sample data</h4>
+        <p class="small">IBM labels the matching SPSS sample file as hypothetical. The findings illustrate the method and are not evidence about real campaigns.</p>
       </div>
     </div>
     <h4 class="blk">Future improvements</h4>
@@ -661,14 +665,14 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
     <h3>Repository</h3>
     <p class="sec-sub">Notebook, code, and full write-up</p>
     <p><a class="repo" href="https://github.com/jiwoon-oh/fastfood-promotion-ab-test" target="_blank" rel="noopener">Code &amp; outputs on GitHub <span>→</span></a></p>
-    <p class="note">The repository contains the complete Jupyter notebook with every test and figure reproducible from the raw dataset, along with the full README write-up.</p>
+    <p class="note">The repository contains the Jupyter notebooks (promotion_ab_test and ab_figures), result CSVs and figure code; re-running them produced identical output hashes. The full README write-up is included as well.</p>
   </section>
 
   </main>
 </div>
 
 <footer class="wrap">
-  <p>Data · IBM Watson Analytics, “Fast Food Marketing Campaign A/B Test” (via Kaggle), used for educational portfolio purposes</p>
+  <p>Data · “Fast Food Marketing Campaign A/B Test” (Kaggle, credited to the IBM Watson Analytics community); scenario matches IBM's description of the SPSS sample file testmarket.sav, labelled hypothetical; treated as hypothetical sample data, used for an educational portfolio analysis</p>
   <p>Tools · Python 3, pandas, SciPy, statsmodels, matplotlib</p>
   <p>Code · <a href="https://github.com/jiwoon-oh/fastfood-promotion-ab-test" target="_blank" rel="noopener">Code &amp; outputs on GitHub</a></p>
 </footer>
