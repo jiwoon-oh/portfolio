@@ -95,6 +95,7 @@ section,header{scroll-margin-top:84px}
 .prow:hover .ptitle{text-decoration:underline;text-underline-offset:3px}
 .plabel{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--rc)}
 .pmethods{font-size:12px;line-height:1.5;color:var(--ink-3);margin:0 0 8px}
+.pm{white-space:nowrap}
 .plinks{margin:0;font-size:13px;color:var(--ink-3)}
 .plink{color:var(--blue);text-decoration:none}
 .plink:hover{text-decoration:underline}
@@ -177,28 +178,28 @@ section,header{scroll-margin-top:84px}
     <article class="prow exp">
       <p class="pq">Three promotions ran side by side. Can the data name a winner, or only a loser?</p>
       <p class="pmeta"><span class="ptitle">Fast-Food Promotion Comparison</span> · <span class="plabel">Group comparison</span></p>
-      <p class="pmethods">ANOVA · Tukey HSD · Levene · Shapiro · Effect Size · 548 obs · 137 stores · 4 weeks</p>
+      <p class="pmethods"><span class="pm">ANOVA</span> · <span class="pm">Tukey HSD</span> · <span class="pm">137 stores</span></p>
       <p class="plinks"><a class="plink case" href="projects/ab-test-fastfood/index.html" aria-label="Case study: Fast-Food Promotion Comparison">Case study</a> · <a class="plink pcode" href="https://github.com/jiwoon-oh/fastfood-promotion-ab-test" target="_blank" rel="noopener" aria-label="Code and outputs for Fast-Food Promotion Comparison on GitHub">Code ↗</a></p>
     </article>
 
     <article class="prow quasi">
       <p class="pq">If support follows a net-decline ranking, does it rank risk, or size?</p>
       <p class="pmeta"><span class="ptitle">Seoul Closure Risk</span> · <span class="plabel">Observational · Matching</span></p>
-      <p class="pmethods">Propensity Score Matching · Stratified ATT · Cluster Bootstrap · Gradient Boosting · 67,475 cells · 4 area types · 12 labeled quarters</p>
+      <p class="pmethods"><span class="pm">Propensity-score matching</span> · <span class="pm">Gradient boosting</span> · <span class="pm">67,475 cells</span></p>
       <p class="plinks"><a class="plink case" href="projects/seoul-closure-risk/index.html" aria-label="Case study: Seoul Closure Risk">Case study</a> · <a class="plink pcode" href="https://github.com/jiwoon-oh/seoul-closure-risk" target="_blank" rel="noopener" aria-label="Code and outputs for Seoul Closure Risk on GitHub">Code ↗</a></p>
     </article>
 
     <article class="prow pred">
       <p class="pq">Is revenue growth coming from the heavy spenders everyone watches?</p>
       <p class="pmeta"><span class="ptitle">Revenue Concentration</span> · <span class="plabel">Descriptive · Predictive</span></p>
-      <p class="pmethods">Lorenz / Gini · Wilcoxon · Mann-Whitney · Bootstrap CI · Logistic vs RF · SHAP · 2,500 households · 83 weeks</p>
+      <p class="pmethods"><span class="pm">Lorenz/Gini</span> · <span class="pm">Bootstrap CI</span> · <span class="pm">Logistic vs RF</span> · <span class="pm">2,500 households</span></p>
       <p class="plinks"><a class="plink case" href="projects/dunnhumby-customer/case1/index.html" aria-label="Case study: Revenue Concentration">Case study</a> · <a class="plink pcode" href="https://github.com/jiwoon-oh/dunnhumby-revenue-concentration" target="_blank" rel="noopener" aria-label="Code and outputs for Revenue Concentration on GitHub">Code ↗</a></p>
     </article>
 
     <article class="prow panel">
       <p class="pq">Campaigns look far more effective on low spenders. Is that the campaign, or who receives it?</p>
       <p class="pmeta"><span class="ptitle">Campaign Response Heterogeneity</span> · <span class="plabel">Panel · Fixed effects</span></p>
-      <p class="pmethods">Two-way Fixed Effects · Clustered SE · Lead-Effect Testing · BH-FDR · 172,500 household-weeks · 30 campaigns</p>
+      <p class="pmethods"><span class="pm">Two-way FE</span> · <span class="pm">Lead-effect test</span> · <span class="pm">BH-FDR</span> · <span class="pm">172,500 household-weeks</span></p>
       <p class="plinks"><a class="plink case" href="projects/dunnhumby-customer/case2/index.html" aria-label="Case study: Campaign Response Heterogeneity">Case study</a> · <a class="plink pcode" href="https://github.com/jiwoon-oh/dunnhumby-campaign-response" target="_blank" rel="noopener" aria-label="Code and outputs for Campaign Response Heterogeneity on GitHub">Code ↗</a></p>
     </article>
 
