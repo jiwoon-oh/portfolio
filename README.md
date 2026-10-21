@@ -20,12 +20,12 @@ Four case studies below. In each one the first number changed once the right che
 
 > Is revenue growth coming from the heavy spenders everyone watches?
 
-**Revenue Concentration** · *Descriptive · Predictive* — Lorenz / Gini, Wilcoxon/Mann-Whitney, Bootstrap CI, Logistic vs RF/SHAP  
+**Revenue Concentration** · *Descriptive · Predictive* — Lorenz/Gini, Wilcoxon/Mann-Whitney, Bootstrap CI, Logistic vs RF/SHAP  
 [Case study](https://jiwoon-oh.github.io/portfolio/projects/dunnhumby-customer/case1/) · [Code](https://github.com/jiwoon-oh/dunnhumby-revenue-concentration)
 
 > Campaigns look far more effective on low spenders. Is that the campaign, or who receives it?
 
-**Campaign Response Heterogeneity** · *Panel · Fixed effects* — Two-way Fixed Effects, Clustered SE, Placebo Check, BH-FDR  
+**Campaign Response Heterogeneity** · *Panel · Fixed effects* — Two-way Fixed Effects, Clustered SE, Lead-Effect Testing, BH-FDR  
 [Case study](https://jiwoon-oh.github.io/portfolio/projects/dunnhumby-customer/case2/) · [Code](https://github.com/jiwoon-oh/dunnhumby-campaign-response)
 
 ## About this repository
