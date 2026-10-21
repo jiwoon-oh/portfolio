@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Fast-Food Promotion Comparison — A/B test analysis</title>
-<meta name="description" content="Three promotional strategies tested across 137 restaurant locations over four weeks. Comparative validation, hypothesis testing, effect size, and a business recommendation.">
+<title>Fast-Food Promotion Comparison: A/B test analysis</title>
+<meta name="description" content="Three promotional strategies compared across 137 restaurant locations over four weeks. Data validation, hypothesis testing, effect size, robustness checks, and a business recommendation.">
 <meta property="og:title" content="Fast-Food Promotion Comparison Analysis">
-<meta property="og:description" content="Which of three promotions held up best on sales? A three-arm comparison across 137 locations — and why the answer was an elimination, not a winner.">
+<meta property="og:description" content="Which of three promotions had the strongest sales? A three-arm comparison across 137 locations: one promotion had lower sales than the other two, and those two could not be separated statistically.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -228,7 +228,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 <header class="wrap hero">
   <p class="eyebrow">Case study · A/B testing &amp; comparative analysis</p>
   <h1>How did the three promotions compare on <em>sales</em>?</h1>
-  <p class="lede">A fast-food chain tested three promotional strategies for a new menu item across 137 stores. After four weeks the data would not crown a winner — but it showed one clear laggard, and a scenario estimate puts a figure on the gap.</p>
+  <p class="lede">A fast-food chain ran three promotional strategies for a new menu item across 137 stores. Over four weeks, one promotion had lower sales than the other two, while those two could not be separated statistically. A scenario estimate converts the observed gap into dollars.</p>
   <p class="meta">137 stores · 4 weeks · 548 observations · Python, pandas, SciPy, statsmodels · <a href="https://github.com/jiwoon-oh/fastfood-promotion-ab-test" target="_blank" rel="noopener">Code &amp; outputs on GitHub ↗</a></p>
 
   <div class="picks">
@@ -276,17 +276,17 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
   <section id="s1">
     <p class="sec-no">01</p>
     <h3>Overview</h3>
-    <p class="sec-sub">What the company was trying to decide</p>
-    <p class="takeaway">A chain about to launch a new menu item had three candidate promotions and no basis for choosing between them.</p>
+    <p class="sec-sub">Context and scope of the comparison</p>
+    <p class="takeaway">A chain preparing to launch a new menu item had three candidate promotions and wanted to compare their sales performance.</p>
     <p>Each of 137 stores was assigned a single promotion and its weekly sales were recorded for four weeks. The assignment procedure could not be verified from the data, and there was no no-promotion control group, so the comparison shows how the three promotions differ from each other, not how much any of them added over doing nothing.</p>
-    <p>This project evaluates whether the three strategies differed in sales performance, and converts that answer into a recommendation the business can act on.</p>
+    <p>This project evaluates whether the three strategies differed in sales performance, and turns the result into a recommendation for the business.</p>
   </section>
 
   <!-- 02 ---------------------------------------------------- -->
   <section id="s2">
     <p class="sec-no">02</p>
     <h3>Business Question</h3>
-    <p class="sec-sub">The decision the analysis has to serve</p>
+    <p class="sec-sub">Analytical objectives</p>
     <div class="bq">
       <p class="q">Which of the three promotional strategies had the strongest sales performance?</p>
       <ul>
@@ -296,7 +296,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
         <li>Are the findings robust to outliers and to repeated testing?</li>
       </ul>
     </div>
-    <p class="note">The last two questions matter as much as the first. A ranking that disappears once market size is accounted for, or one that only holds in a single segment, is not something a company should reorganize a launch around.</p>
+    <p class="note">The last two questions test whether the observed ranking is robust. A ranking that disappears once market size is accounted for, or that holds in only one segment, would be a weak basis for a launch decision.</p>
   </section>
 
   <!-- 03 ---------------------------------------------------- -->
@@ -334,14 +334,14 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
   <section id="s4">
     <p class="sec-no">04</p>
     <h3>Methodology</h3>
-    <p class="sec-sub">The reasoning behind each step, not just the sequence</p>
-    <p class="takeaway">Most of the work in this project was deciding what to do — the tests themselves were the short part.</p>
+    <p class="sec-sub">Analytical steps and the reasoning behind each</p>
+    <p class="takeaway">Most of the work in this project went into choosing appropriate comparisons and checks; running the tests themselves was the shorter part.</p>
 
     <div class="dec">
       <p class="idx">01</p>
       <div>
-        <h4>Validate the study design before testing anything</h4>
-        <p class="why">A clean p-value computed on broken assignment is worthless. Duplicates, stores drifting between promotions, missing weeks and assignment balance were all checked first, <b>so that later results would not simply reflect a data defect.</b></p>
+        <h4>Validate the study design before testing</h4>
+        <p class="why">Before testing the promotion differences, I checked for duplicates, stores appearing under more than one promotion, missing weeks and assignment balance, <b>so that later results would not simply reflect a data defect.</b></p>
       </div>
     </div>
 
@@ -349,7 +349,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
       <p class="idx">02</p>
       <div>
         <h4>Match the analysis unit to the assignment unit</h4>
-        <p class="why">Promotions were assigned per store, but the file stores each location as four weekly rows. Treating those as independent would inflate the sample fourfold. Each store was collapsed to its four-week average, <b>because the design earns 137 independent observations, not 548.</b></p>
+        <p class="why">Promotions were assigned per store, but the file stores each location as four weekly rows. Treating those as independent would inflate the sample fourfold. Each store was therefore reduced to its four-week average, <b>because the design provides 137 independent observations, not 548.</b></p>
       </div>
     </div>
 
@@ -357,7 +357,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
       <p class="idx">03</p>
       <div>
         <h4>Check assumptions, then choose the test accordingly</h4>
-        <p class="why">Normality failed while equal variance held. Rather than force one method, ANOVA and a rank-based alternative were run together, <b>so the conclusion had to survive both a parametric and a non-parametric route to count.</b></p>
+        <p class="why">Normality was rejected, while equal variance was not. Rather than rely on one method, ANOVA and a rank-based alternative were run together, <b>so that the conclusion would be supported by both a parametric and a non-parametric test.</b></p>
       </div>
     </div>
 
@@ -365,7 +365,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
       <p class="idx">04</p>
       <div>
         <h4>Follow the group test with a pairwise comparison</h4>
-        <p class="why">ANOVA can only say that groups differ, never which one wins. Tukey's HSD identified the specific pairs <b>and reported the gap in dollars, which is the form the business actually needs.</b></p>
+        <p class="why">ANOVA can indicate that groups differ but not which ones. Tukey's HSD identified the specific pairs <b>and reported each gap in dollars, which is easier to use in a business decision.</b></p>
       </div>
     </div>
 
@@ -373,15 +373,15 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
       <p class="idx">05</p>
       <div>
         <h4>Report effect size alongside significance</h4>
-        <p class="why">Significant and important are different claims. Effect size was reported <b>to prevent a real but modest effect from being sold as a decisive one.</b></p>
+        <p class="why">Statistical significance and practical importance are different questions. Effect size was reported <b>so that a statistically detectable but modest effect is not read as a large one.</b></p>
       </div>
     </div>
 
     <div class="dec">
       <p class="idx">06</p>
       <div>
-        <h4>Try to break the finding before believing it</h4>
-        <p class="why">Three separate attempts: check balance on market size and store age and adjust for market size, re-run without the one questionable observation, and correct for the false positives that repeated segment testing manufactures. <b>A result that survives deliberate attempts to dismantle it is more credible.</b></p>
+        <h4>Robustness and sensitivity checks</h4>
+        <p class="why">Three separate checks were run: balance on market size and store age together with an adjustment for market size, a re-run without the one questionable observation, and a correction for the false positives that repeated segment testing can produce. <b>A result that holds across these checks is less likely to reflect confounding, a single observation or chance.</b></p>
       </div>
     </div>
 
@@ -389,7 +389,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
       <p class="idx">07</p>
       <div>
         <h4>Translate the statistics into money and a decision</h4>
-        <p class="why">The Tukey revenue gap was applied to the 47 Promotion 2 stores over four weeks as a scenario estimate. <b>A recommendation without a magnitude is hard to act on, but this figure is an illustration of scale, not a measured loss.</b></p>
+        <p class="why">The Tukey revenue gap was applied to the 47 Promotion 2 stores over four weeks as a scenario estimate. <b>A recommendation is easier to evaluate with a magnitude attached, but this figure only illustrates scale; it is not a measured loss.</b></p>
       </div>
     </div>
   </section>
@@ -398,23 +398,23 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
   <section id="s5">
     <p class="sec-no">05</p>
     <h3>Analysis</h3>
-    <p class="sec-sub">Where the judgement calls actually happened</p>
+    <p class="sec-sub">Data validation, unit of analysis, statistical assumptions and robustness checks</p>
 
-    <h4 class="blk">Was the study design sound?</h4>
-    <p>Nothing in the structural checks was broken — no duplicate rows, no store split across promotions, no missing weeks, and every store observed for the full four weeks. The store-level allocation check (SRM) showed no mismatch (p = 0.8898) and market sizes were spread similarly across the three promotions (p = 0.8800), so the three groups can be compared with each other. This does not prove that assignment was random.</p>
+    <h4 class="blk">Data validation and assignment checks</h4>
+    <p>The structural checks found no problems: no duplicate rows, no store split across promotions, no missing weeks, and every store observed for the full four weeks. The store-level allocation check (SRM) showed no mismatch (p = 0.8898) and market sizes were spread similarly across the three promotions (p = 0.8800), so the three groups can be compared with each other. This does not prove that assignment was random.</p>
     <div class="card tight">
-      <p class="small"><span class="hl">548 rows in, 548 rows out.</span> Nothing was deleted, because the quality checks found nothing to remove. The outliers the IQR rule flagged were held over for a separate decision rather than quietly dropped here — removing rows silently is how a clean-looking result gets manufactured.</p>
+      <p class="small"><span class="hl">548 rows in, 548 rows out.</span> Nothing was deleted, because the quality checks found nothing to remove. The outliers flagged by the IQR rule were not dropped at this stage; they are assessed separately in the outlier sensitivity check below, so that no rows were removed without a documented reason.</p>
     </div>
 
-    <h4 class="blk">Why the data was reduced from 548 rows to 137</h4>
-    <p>A store's week 1 and week 2 are not independent observations; they resemble each other. Aggregating to store averages fixes that, but it throws away the weekly detail, so the decision needed support.</p>
+    <h4 class="blk">Unit of analysis: from 548 weekly rows to 137 store averages</h4>
+    <p>Weekly observations from the same store, such as week 1 and week 2, are not independent; they resemble each other. Aggregating to store averages addresses this but discards the weekly detail, so I checked whether the aggregation was justified.</p>
     <div class="grid3">
       <div class="card tight">
         <h4>No week effect was detected</h4>
         <p class="small">A reference test on the 548 weekly rows (which treats repeated weeks of one store as independent) found no common week effect (p = 0.9935), so averaging is unlikely to hide a common trend.</p>
       </div>
       <div class="card tight">
-        <h4>Variation lives between stores</h4>
+        <h4>Variation is mainly between stores</h4>
         <p class="small">Store-to-store spread was roughly <span class="hl">3.4×</span> the week-to-week spread within a store.</p>
       </div>
       <div class="card tight">
@@ -423,10 +423,10 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
       </div>
     </div>
 
-    <h4 class="blk">Choosing the statistical test</h4>
+    <h4 class="blk">Statistical assumptions and test selection</h4>
     <figure>
       <img src="assets/qq.png" alt="Q-Q plots for the three promotion groups. Each follows the reference line through the middle but lifts away at the upper tail.">
-      <figcaption>All three groups track the reference line through the body of the distribution and lift away at the upper tail — where the highest store averages sit.</figcaption>
+      <figcaption>All three groups track the reference line through the body of the distribution and lift away at the upper tail, where the highest store averages sit.</figcaption>
     </figure>
     <div class="grid2">
       <div class="card tight">
@@ -438,9 +438,9 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
         <p class="small">Levene's test found no evidence of unequal variances (p = 0.6272), which keeps the parametric route viable.</p>
       </div>
     </div>
-    <p>Relying on ANOVA alone would have been hard to defend; relying only on a rank-based test would have cost the ability to state the gap in dollars. With roughly balanced group sizes (43, 47, 47) and no detected difference in variances, both were run and <span class="hl">required to agree</span> — and they did.</p>
+    <p>ANOVA alone would be hard to justify given the non-normality, while a rank-based test alone would not allow the gap to be stated in dollars. With roughly balanced group sizes (43, 47, 47) and no detected difference in variances, both were run and <span class="hl">required to agree</span>, and they did.</p>
 
-    <h4 class="blk">Which promotions actually differ</h4>
+    <h4 class="blk">Pairwise comparisons (Tukey HSD)</h4>
     <figure>
       <img src="assets/tukey.png" alt="Tukey HSD 95% intervals before market-size adjustment: Promotion 1 minus 2 is +10.77 [2.94, 18.60], Promotion 3 minus 2 is +8.04 [0.39, 15.68], Promotion 1 minus 3 is +2.73 [−5.09, 10.56]">
       <figcaption>Pairwise comparisons with 95% confidence intervals. An interval that excludes the zero line is statistically significant at the 95% level.</figcaption>
@@ -448,7 +448,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
     <div class="card">
       <div class="pair">
         <span class="lbl">P1 · P2</span>
-        <span class="txt">Promotion 2 earns about <strong>$10,770 less</strong> per store-week than Promotion 1</span>
+        <span class="txt">Promotion 2 averaged about <strong>$10,770 less</strong> per store-week than Promotion 1</span>
         <span><span class="chip rej">significant</span></span>
       </div>
       <div class="pair">
@@ -458,21 +458,21 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
       </div>
       <div class="pair">
         <span class="lbl">P2 · P3</span>
-        <span class="txt">Promotion 3 earns about <strong>$8,035 more</strong> per store-week than Promotion 2</span>
+        <span class="txt">Promotion 3 averaged about <strong>$8,035 more</strong> per store-week than Promotion 2</span>
         <span><span class="chip rej">significant</span></span>
       </div>
     </div>
 
-    <h4 class="blk">Trying to break the finding</h4>
-    <p>Three deliberate attempts to explain away Promotion 2's weakness, none of which succeeded.</p>
+    <h4 class="blk">Robustness checks</h4>
+    <p>Three checks tested whether Promotion 2's lower sales could be explained by market size, by a single unusual observation, or by repeated testing. None of them removed the difference.</p>
 
     <div class="card">
-      <h4>Could market size be the real cause?</h4>
-      <p class="small">Market size is far more strongly associated with sales than promotion (partial η² 0.593 vs 0.195 in the main-effects model), but <span class="hl">no imbalance was detected across promotions</span> in market size (p = 0.8800) or store age (p = 0.6387). Controlling for market size did not weaken the promotion difference: Promotion 1 − 2 stayed at +$10.77K with a narrower interval ([2.94, 18.60] → [5.73, 15.80]), and Promotion 3 − 2 rose from +$8.04K to +$9.75K ([0.39, 15.68] → [4.82, 14.69]). This rules out the observed market size as the explanation; unobserved store characteristics are not controlled.</p>
+      <h4>Market size and store age as alternative explanations</h4>
+      <p class="small">Market size is far more strongly associated with sales than promotion (partial η² 0.593 vs 0.195 in the main-effects model), but <span class="hl">no imbalance was detected across promotions</span> in market size (p = 0.8800) or store age (p = 0.6387). Controlling for market size did not weaken the promotion difference: Promotion 1 − 2 stayed at +$10.77K with a narrower interval ([2.94, 18.60] → [5.73, 15.80]), and Promotion 3 − 2 rose from +$8.04K to +$9.75K ([0.39, 15.68] → [4.82, 14.69]). So observed market size does not account for the difference; unobserved store characteristics are not controlled.</p>
     </div>
 
     <div class="card">
-      <h4>What changes when market size is in the model</h4>
+      <h4>Market-size-adjusted model</h4>
       <p class="small">On the same 137 store averages, the promotion × market-size interaction was not significant (F = 1.32, p = 0.2659), so the main-effects model is interpreted; the Small market has only 15 stores, so that test has low power. After adjusting for market size, Promotion 2 is still lower than both alternatives: Promotion 1 − 2 is +$10.77K [5.73, 15.80] and Promotion 3 − 2 is +$9.75K [4.82, 14.69] (Tukey–Kramer 95% intervals; before adjustment +$10.77K [2.94, 18.60] and +$8.04K [0.39, 15.68]). Promotion 1 − 3 is still not separated (+$1.02K [−4.03, 6.06]); an interval that includes zero does not show the two are equal. Partial η² is 0.195 for promotion and 0.593 for market size. Adjusting for observed market size does not control unobserved store characteristics, so this is not a causal estimate.</p>
     </div>
 
@@ -492,8 +492,8 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
     </div>
 
     <div class="card">
-      <h4>Was one bad observation driving it?</h4>
-      <p class="small">Of the 46 weekly observations flagged by the IQR rule (within each promotion), <span class="hl-r">45 came from a single large market</span> (MarketID 3) — plausibly genuine sales in a large market rather than data errors. Deleting them would have deleted signal. One store (507) had a single unusually low week (17.34); with no direct evidence of a data-entry error it was kept, and the ANOVA was re-run without it as a check (F 5.85 → 5.78, p 0.0037 → 0.0039). The conclusion did not move.</p>
+      <h4>Sensitivity to one unusual observation</h4>
+      <p class="small">Of the 46 weekly observations flagged by the IQR rule (within each promotion), <span class="hl-r">45 came from a single large market</span> (MarketID 3), which is plausibly genuine sales in a large market rather than data errors. Deleting them would have removed genuine variation. One store (507) had a single unusually low week (17.34); with no direct evidence of a data-entry error it was kept, and the ANOVA was re-run without it as a check (F 5.85 → 5.78, p 0.0037 → 0.0039). The conclusion was unchanged.</p>
     </div>
 
     <figure>
@@ -502,13 +502,13 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
     </figure>
 
     <div class="card">
-      <h4>Does it hold in every segment — or did repeated testing manufacture it?</h4>
-      <p class="small">Promotion 2 was the weakest arm in small, medium and large markets alike. But testing each segment separately means running three tests, which inflates the chance of a false positive, so both Bonferroni and Benjamini-Hochberg corrections were applied. <span class="hl">All three segments stayed significant afterwards.</span> The one caveat: the small-market segment holds only about five stores per arm, so it carries less weight than the other two. A test of the promotion × market-size interaction was not significant (p = 0.2659), but with only 15 Small-market stores its power is low.</p>
+      <h4>Consistency across market segments and multiple-testing correction</h4>
+      <p class="small">Promotion 2 had the lowest mean in small, medium and large markets alike. Testing each segment separately means running three tests, which increases the chance of a false positive, so both Bonferroni and Benjamini-Hochberg corrections were applied. <span class="hl">All three segments stayed significant afterwards.</span> The one caveat: the small-market segment holds only about five stores per arm, so it carries less weight than the other two. A test of the promotion × market-size interaction was not significant (p = 0.2659), but with only 15 Small-market stores its power is low.</p>
     </div>
 
     <figure>
       <img src="assets/segbar.png" alt="Mean sales by promotion within each market size. Promotion 2 is lowest in small, medium and large markets alike.">
-      <figcaption>Promotion 2 is the weakest arm across every market size, which is why the ranking is treated as a pattern rather than a segment artifact.</figcaption>
+      <figcaption>Promotion 2 has the lowest mean in every market size, so the ranking is treated as a consistent pattern rather than the result of a single segment.</figcaption>
     </figure>
   </section>
 
@@ -516,33 +516,33 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
   <section id="s6">
     <p class="sec-no">06</p>
     <h3>Results</h3>
-    <p class="sec-sub">What the analysis found</p>
-    <p class="takeaway">Promotion 2 loses to both alternatives. Promotions 1 and 3 cannot be separated on sales.</p>
+    <p class="sec-sub">Key findings</p>
+    <p class="takeaway">Promotion 2 had lower sales than both alternatives. Promotions 1 and 3 could not be separated on sales.</p>
     <figure>
       <img src="assets/box.png" alt="Box plots of the 137 store four-week averages by promotion; the means are 58.1, 47.3 and 55.4 thousand dollars for Promotions 1, 2 and 3">
       <figcaption>Four-week mean sales per store (n = 43, 47, 47). Promotion 2 has the lowest median (46.7 vs 56.1 and 49.9 thousand dollars), but the boxes overlap.</figcaption>
     </figure>
     <div class="grid2">
       <div class="card tight">
-        <h4>Promotion 2 underperformed <span class="chip rej">consistent</span></h4>
+        <h4>Promotion 2 had lower sales <span class="chip rej">consistent</span></h4>
         <p class="small">Lower sales than both alternatives, in every market size, after adjusting for market size, and essentially unchanged when the questionable observation is removed (p 0.0037 → 0.0039).</p>
       </div>
       <div class="card tight">
-        <h4>Promotions 1 and 3 are tied <span class="chip na">unresolved</span></h4>
+        <h4>Promotions 1 and 3 were not separated <span class="chip na">unresolved</span></h4>
         <p class="small">No detectable gap overall (+$2.73K, interval [−5.09, 10.56]); by market size the direction is not consistent: Promotion 1 is higher in Small (+0.65) and Medium (+2.20), while Promotion 3 is higher in Large (Promotion 1 − 3 = −1.97).</p>
       </div>
     </div>
-    <h4 class="blk">How large is the effect?</h4>
-    <p>Promotion is associated with roughly <span class="hl">8%</span> of the variation in store sales (one-way η² = 0.0802) — a medium effect by conventional standards. The remaining variation belongs mostly to market size and other store characteristics.</p>
-    <p>That number is worth stating plainly rather than burying. The promotion differences are a consistent pattern, but not the dominant one, and a business planning around this result should size its expectations accordingly.</p>
+    <h4 class="blk">Effect size</h4>
+    <p>Promotion is associated with roughly <span class="hl">8%</span> of the variation in store sales (one-way η² = 0.0802), a medium effect by conventional standards. The remaining variation is likely related mostly to market size and other store characteristics.</p>
+    <p>The promotion differences are consistent across the checks above, but they are not the dominant source of variation in store sales, so expectations based on this result should be set accordingly.</p>
   </section>
 
   <!-- 07 ---------------------------------------------------- -->
   <section id="s7">
     <p class="sec-no">07</p>
     <h3>Business Insights</h3>
-    <p class="sec-sub">From a statistical result to a decision</p>
-    <p class="takeaway">Scenario estimate: applying the Tukey difference to the 47 stores that used Promotion 2 for four weeks gives roughly two million dollars against Promotion 1 (not a measured loss).</p>
+    <p class="sec-sub">Practical implications of the statistical result</p>
+    <p class="takeaway">Scenario estimate: applying the Tukey difference to the 47 stores that used Promotion 2 for four weeks gives a difference of roughly two million dollars relative to Promotion 1 (not a measured loss).</p>
     <div class="grid2" style="margin-bottom:16px">
       <div class="callout">
         <p class="big">vs Promotion 1</p>
@@ -557,19 +557,19 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
     </div>
     <div class="card">
       <h4>How to read these figures</h4>
-      <p class="small">The per-store, per-week gap is about $10,770 (Tukey difference before market-size adjustment). Applying it to 47 stores over four weeks gives the scenario figures above; <span class="hl-r">$2M is not an amount any one restaurant lost.</span></p>
+      <p class="small">The per-store, per-week gap is about $10,770 (Tukey difference before market-size adjustment). Applying it to 47 stores over four weeks gives the scenario figures above; <span class="hl-r">The $2M figure is not an amount that any one restaurant lost.</span></p>
       <p class="small">It is also a point estimate, and it does not account for implementation costs, differing store responses, seasonality or profit margins; the outcome measured is revenue, so the cost of running each promotion is not included.</p>
     </div>
 
     <h4 class="blk">Recommendation</h4>
     <div class="card">
       <h4><span class="chip rej">Pause or review</span> &nbsp;Promotion 2</h4>
-      <p class="small">It underperformed on every check that was run: a statistically significant gap against both alternatives, consistency across all market segments, a gap that is not explained by the observed market size or store age (it remained after adjusting for market size: adjusted Promotion 1 − 2 +$10.77K [5.73, 15.80], Promotion 3 − 2 +$9.75K [4.82, 14.69]), and stability when the questionable observation is removed.</p>
+      <p class="small">Promotion 2 had lower sales in every check that was run: a statistically significant gap against both alternatives, consistency across all market segments, a gap that is not explained by the observed market size or store age (it remained after adjusting for market size: adjusted Promotion 1 − 2 +$10.77K [5.73, 15.80], Promotion 3 − 2 +$9.75K [4.82, 14.69]), and stability when the questionable observation is removed.</p>
     </div>
     <div class="card">
       <h4><span class="chip na">Undecided</span> &nbsp;Promotion 1 or Promotion 3</h4>
-      <p class="small">Sales data cannot separate them, so the choice has to be made on information this dataset does not contain — implementation and marketing cost, operational complexity, inventory and logistics burden, customer retention, and longer-term sales behaviour.</p>
-      <p class="small">Naming what is still missing is more useful than forcing a winner out of a tie. It tells the business exactly what to measure before committing.</p>
+      <p class="small">Sales data cannot separate them, so the choice has to be made on information this dataset does not contain: implementation and marketing cost, operational complexity, inventory and logistics burden, customer retention, and longer-term sales behaviour.</p>
+      <p class="small">Because the sales data do not separate the two, the information listed above would need to be collected before the business commits to either one.</p>
     </div>
   </section>
 
@@ -584,8 +584,8 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
         <p class="small">Long-term effects cannot be evaluated, and a durable effect cannot be told apart from initial novelty. Whether the ranking survives once the promotion stops being new is unknown.</p>
       </div>
       <div class="card tight">
-        <h4>Weekly detail was aggregated away</h4>
-        <p class="small">Averaging to the store level secured independence but removed any view of week-to-week dynamics.</p>
+        <h4>Weekly detail was aggregated</h4>
+        <p class="small">Averaging to the store level ensured independent observations but removed any view of week-to-week dynamics.</p>
       </div>
       <div class="card tight">
         <h4>No no-promotion group</h4>
@@ -618,7 +618,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
   <section id="s9">
     <p class="sec-no">09</p>
     <h3>My Contribution</h3>
-    <p class="sec-sub">End-to-end ownership of the analysis</p>
+    <p class="sec-sub">Scope of my work on the analysis</p>
     <ul class="plain">
       <li>Framed the business question and translated it into testable hypotheses</li>
       <li>Validated the dataset, including assignment consistency and allocation balance</li>
@@ -626,7 +626,7 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
       <li>Evaluated the statistical assumptions and selected methods accordingly</li>
       <li>Ran the group comparison, a non-parametric robustness check, and pairwise post-hoc tests</li>
       <li>Investigated confounding variables and interaction effects</li>
-      <li>Performed sensitivity and multiple-testing analyses to stress-test the finding</li>
+      <li>Performed sensitivity and multiple-testing analyses to check the robustness of the finding</li>
       <li>Converted the statistical result into a scenario estimate of revenue impact</li>
       <li>Wrote the final recommendation, including what the data could not decide</li>
     </ul>

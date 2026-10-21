@@ -1,12 +1,12 @@
 # Jiwoon Oh — Data Analyst
 
-I check whether the effect is real. Data analyst working in causal inference, experimentation and machine learning.
+I use statistical analysis and machine learning to investigate business questions and evaluate results. Data analyst working with hypothesis testing, observational and panel data, and machine learning.
 
 **Site:** https://jiwoon-oh.github.io/portfolio/ · **GitHub:** [jiwoon-oh](https://github.com/jiwoon-oh) · **Email:** [qwer06187@gmail.com](mailto:qwer06187@gmail.com)
 
 ## Projects
 
-Four case studies below. In each one the first number changed once the right check was applied: a sign reversed, a hypothesis failed, a pooled lift was not reproduced at the household level, or the data could rule out a loser but not name a winner.
+Four case studies below: a comparison of three promotions across 137 stores, a net-decline ranking of Seoul food categories compared with closure risk after matching on store count, an analysis of where household revenue growth comes from, and a fixed-effects analysis of campaign response by spending tier. Each one reports its estimates together with their limitations.
 
 > Three promotions ran side by side. Can the data name a winner, or only a loser?
 
