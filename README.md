@@ -6,7 +6,7 @@ Data analyst. I work with promotion comparison, observational, and customer tran
 
 ## Projects
 
-Four case studies below: a comparison of three promotions across 137 stores, a net-decline ranking of Seoul food categories compared with closure risk after matching on store count, an analysis of where household revenue growth comes from, and a fixed-effects analysis of campaign response by spending tier. Each one reports its estimates together with their limitations.
+Each case study reports its estimates together with their limitations.
 
 > Three promotions ran side by side. Can the data name a winner, or only a loser?
 
