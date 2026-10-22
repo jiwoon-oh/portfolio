@@ -4,10 +4,9 @@ Landing-page thumbnails. Each file is a 16:10 center crop of the original photo,
 
 | File | Source | License |
 |---|---|---|
-| `fastfood.webp` | TODO: source URL | TODO: Unsplash License or Pexels License |
-| `seoul.webp` | TODO: source URL | TODO: Unsplash License or Pexels License |
-| `revenue.webp` | TODO: source URL | TODO: Unsplash License or Pexels License |
-| `campaign.webp` | TODO: source URL | TODO: Unsplash License or Pexels License |
+| `fastfood.webp` | TODO: Unsplash photo page URL | Unsplash License |
+| `seoul.webp` | TODO: Unsplash photo page URL | Unsplash License |
+| `revenue.webp` | TODO: Unsplash photo page URL | Unsplash License |
+| `campaign.webp` | TODO: Unsplash photo page URL | Unsplash License |
 
-- Unsplash License: https://unsplash.com/license
-- Pexels License: https://www.pexels.com/license/
+All four photos are from Unsplash. License: https://unsplash.com/license
