@@ -28,6 +28,8 @@
   /* #9C9A95 is 2.2:1 on --bg: kept for the large headline words and [✓] marks;
      small text uses --mute-text (4.7:1) */
   --mute-text:#666460;
+  /* headline grey 3.1:1 on --bg; headline charcoal 4.4:1 against it */
+  --head-mute:#82807B; --head-ink:#1A1A1A;
   --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
   --display:"Inter Tight","Inter",system-ui,sans-serif;
   --pad:28px;
@@ -70,7 +72,9 @@ a:focus-visible,summary:focus-visible{outline:2px solid var(--ink);outline-offse
 .menu a{text-decoration:none}
 .menu a:hover{text-decoration:underline}
 
-.seework{font-size:15px;font-weight:500;align-self:flex-start}
+.go{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.limits{margin:0;font-size:14px;line-height:1.45;color:var(--mute-text);max-width:32ch}
+.seework{font-size:15px;font-weight:500}
 /* abstract colour shape, CSS only */
 .blob{width:min(100%,320px);aspect-ratio:1 / 1.12;margin-top:auto;
   border-radius:58% 42% 52% 48% / 46% 56% 44% 54%;
@@ -82,8 +86,8 @@ a:focus-visible,summary:focus-visible{outline:2px solid var(--ink);outline-offse
     radial-gradient(70% 70% at 50% 50%,#C9B9AE 0%,rgba(201,185,174,0) 100%);
   filter:blur(14px) saturate(1.05)}
 
-h1.headline{font-size:clamp(46px,7.6vw,138px);color:var(--mute);max-width:12ch}
-h1.headline .on{color:var(--ink)}
+h1.headline{font-size:clamp(46px,7.6vw,138px);color:var(--head-mute);max-width:12ch}
+h1.headline .on{color:var(--head-ink)}
 
 /* ── sections: two columns with a hairline between ───────── */
 .sec{display:grid;grid-template-columns:3fr 7fr;border-bottom:1px solid var(--line);scroll-margin-top:0}
@@ -178,7 +182,10 @@ footer{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
     <span class="lab">[2026]</span>
   </nav>
   <div class="c-side">
-    <a class="seework" href="#work">See the work ↘</a>
+    <div class="go">
+      <p class="limits">Each one reports its estimates together with their limitations.</p>
+      <a class="seework" href="#work">See the work ↘</a>
+    </div>
     <div class="blob" aria-hidden="true"></div>
   </div>
   <div class="c-head">
@@ -216,7 +223,7 @@ footer{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
           <p class="pmethods">ANOVA · Tukey HSD · 137 stores</p>
           <p class="plinks"><a href="projects/ab-test-fastfood/index.html" aria-label="Case study: Fast-Food Promotion Comparison">Case study ↗</a><a href="https://github.com/jiwoon-oh/fastfood-promotion-ab-test" target="_blank" rel="noopener" aria-label="Code and outputs for Fast-Food Promotion Comparison on GitHub">Code ↗</a></p>
         </div>
-        <a class="pshot" href="https://github.com/jiwoon-oh/fastfood-promotion-ab-test" target="_blank" rel="noopener" aria-label="Code for Fast-Food Promotion Comparison on GitHub"><img src="assets/thumbs/fastfood.webp" alt="Burger and fries on a plate beside a glass of beer" width="640" height="400" loading="lazy"></a>
+        <a class="pshot" href="projects/ab-test-fastfood/index.html" aria-label="Case study: Fast-Food Promotion Comparison"><img src="assets/thumbs/fastfood.webp" alt="Burger and fries on a plate beside a glass of beer" width="640" height="400" loading="lazy"></a>
       </div>
     </details>
 
@@ -232,7 +239,7 @@ footer{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
           <p class="pmethods">Propensity-score matching · Gradient boosting · 67,475 cells</p>
           <p class="plinks"><a href="projects/seoul-closure-risk/index.html" aria-label="Case study: Seoul Closure Risk">Case study ↗</a><a href="https://github.com/jiwoon-oh/seoul-closure-risk" target="_blank" rel="noopener" aria-label="Code and outputs for Seoul Closure Risk on GitHub">Code ↗</a></p>
         </div>
-        <a class="pshot" href="https://github.com/jiwoon-oh/seoul-closure-risk" target="_blank" rel="noopener" aria-label="Code for Seoul Closure Risk on GitHub"><img src="assets/thumbs/seoul.webp" alt="Seoul shopping street lined with shop signs" width="640" height="400" loading="lazy"></a>
+        <a class="pshot" href="projects/seoul-closure-risk/index.html" aria-label="Case study: Seoul Closure Risk"><img src="assets/thumbs/seoul.webp" alt="Seoul shopping street lined with shop signs" width="640" height="400" loading="lazy"></a>
       </div>
     </details>
 
@@ -248,7 +255,7 @@ footer{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
           <p class="pmethods">Lorenz/Gini · Bootstrap CI · Logistic vs RF · 2,500 households</p>
           <p class="plinks"><a href="projects/dunnhumby-customer/case1/index.html" aria-label="Case study: Revenue Concentration">Case study ↗</a><a href="https://github.com/jiwoon-oh/dunnhumby-revenue-concentration" target="_blank" rel="noopener" aria-label="Code and outputs for Revenue Concentration on GitHub">Code ↗</a></p>
         </div>
-        <a class="pshot" href="https://github.com/jiwoon-oh/dunnhumby-revenue-concentration" target="_blank" rel="noopener" aria-label="Code for Revenue Concentration on GitHub"><img src="assets/thumbs/revenue.webp" alt="Fruit display with price signs in a grocery store" width="640" height="400" loading="lazy"></a>
+        <a class="pshot" href="projects/dunnhumby-customer/case1/index.html" aria-label="Case study: Revenue Concentration"><img src="assets/thumbs/revenue.webp" alt="Fruit display with price signs in a grocery store" width="640" height="400" loading="lazy"></a>
       </div>
     </details>
 
@@ -264,7 +271,7 @@ footer{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
           <p class="pmethods">Two-way FE · Lead-effect test · BH-FDR · 172,500 household-weeks</p>
           <p class="plinks"><a href="projects/dunnhumby-customer/case2/index.html" aria-label="Case study: Campaign Response Heterogeneity">Case study ↗</a><a href="https://github.com/jiwoon-oh/dunnhumby-campaign-response" target="_blank" rel="noopener" aria-label="Code and outputs for Campaign Response Heterogeneity on GitHub">Code ↗</a></p>
         </div>
-        <a class="pshot" href="https://github.com/jiwoon-oh/dunnhumby-campaign-response" target="_blank" rel="noopener" aria-label="Code for Campaign Response Heterogeneity on GitHub"><img src="assets/thumbs/campaign.webp" alt="Shopper putting bread into a grocery cart" width="640" height="400" loading="lazy"></a>
+        <a class="pshot" href="projects/dunnhumby-customer/case2/index.html" aria-label="Case study: Campaign Response Heterogeneity"><img src="assets/thumbs/campaign.webp" alt="Shopper putting bread into a grocery cart" width="640" height="400" loading="lazy"></a>
       </div>
     </details>
   </div>
