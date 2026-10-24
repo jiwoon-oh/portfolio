@@ -16,294 +16,325 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="assets/case.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
 <style>
 /* ============================================================
-   Landing page — reuses every token from case.css.
-   Only the dark hero band and the project grid live here.
+   Landing page only. Case-study pages keep assets/case.css;
+   this page does not load it.
+   Swiss / editorial: warm grey ground, charcoal type, hairlines.
    ============================================================ */
-:root{ --wash-a:#EFEDFC; --wash-b:#E6F0FB; --wash-c:#EDF2FA;
-       --night:#14142A; --night-2:#1E1B3A; --night-3:#2A2350;
-       --on-night:#F2F1FA; --on-night-2:#B9B6D4; --on-night-3:#8A86AC; }
+:root{
+  --bg:#E7E5E0; --ink:#262626; --mute:#9C9A95; --line:rgba(0,0,0,.18);
+  /* #9C9A95 is 2.2:1 on --bg: kept for the large headline words and [✓] marks;
+     small text uses --mute-text (4.7:1) */
+  --mute-text:#666460;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --display:"Inter Tight","Inter",system-ui,sans-serif;
+  --pad:28px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:400 15px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+p,h1,h2,h3,ul{margin:0}
+ul{padding:0;list-style:none}
+img{max-width:100%}
 
-body{padding-top:0}
-/* anchors must clear the fixed nav */
-section,header{scroll-margin-top:84px}
+a{color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+a:hover{text-decoration-thickness:2px}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 
-/* ── nav ─────────────────────────────────────────────────────
-   Structure comes from case.css. Only the colours change here,
-   because this page's nav sits over a dark hero until scrolled. */
-.nav .brand{color:var(--on-night)}
-.nav ul a{color:var(--on-night-2)}
-.nav ul a:hover{color:var(--on-night);background:rgba(255,255,255,.09)}
-.nav.solid .brand{color:var(--ink)}
-.nav.solid ul a{color:var(--ink-2)}
-.nav.solid ul a:hover{color:var(--ink);background:rgba(35,35,58,.06)}
+/* small bracket labels: [01], [2026], [✓] */
+.lab{font-size:12px;line-height:1.4;letter-spacing:.02em;color:var(--mute-text)}
+.display{font-family:var(--display);font-weight:800;text-transform:uppercase;
+  letter-spacing:-.03em;line-height:.95}
 
-/* ── dark hero band — fills the first screen ─────────────── */
-.night{position:relative;overflow:hidden;background:var(--night);
-  min-height:100vh;min-height:100svh;
-  display:flex;align-items:center;
-  padding:120px 0 84px}
-.night::before{content:"";position:absolute;inset:0;pointer-events:none;
+/* ── header + hero (first screen) ─────────────────────────────
+   3 columns ≈ 30 / 40 / 30. Row 1: initials · intro · menu.
+   Row 2: link + gradient shape · headline across columns 2–3. */
+.hero{display:grid;grid-template-columns:3fr 4fr 3fr;grid-template-rows:auto 1fr;
+  min-height:100vh;min-height:100svh;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.hero > *{padding:var(--pad)}
+.hero > * + *{border-left:1px solid var(--line)}
+.c-mark{grid-column:1;grid-row:1}
+.c-intro{grid-column:2;grid-row:1;border-bottom:1px solid var(--line)}
+.c-menu{grid-column:3;grid-row:1;display:flex;justify-content:space-between;gap:16px;border-bottom:1px solid var(--line)}
+.c-side{grid-column:1;grid-row:2;border-left:0;display:flex;flex-direction:column;gap:36px}
+.c-head{grid-column:2 / span 2;grid-row:2;display:flex;flex-direction:column;justify-content:flex-end;gap:22px}
+
+.mark{font-family:var(--display);font-weight:800;font-size:30px;letter-spacing:-.04em;
+  text-decoration:none;line-height:1}
+.intro{font-family:var(--display);font-weight:700;text-transform:uppercase;
+  font-size:15px;line-height:1.3;letter-spacing:-.005em;max-width:34ch}
+.menu{display:flex;flex-direction:column;gap:2px;font-size:15px}
+.menu a{text-decoration:none}
+.menu a:hover{text-decoration:underline}
+
+.seework{font-size:15px;font-weight:500;align-self:flex-start}
+/* abstract colour shape, CSS only */
+.blob{width:min(100%,320px);aspect-ratio:1 / 1.12;margin-top:auto;
+  border-radius:58% 42% 52% 48% / 46% 56% 44% 54%;
   background:
-    radial-gradient(760px 520px at 12% 4%,rgba(123,111,216,.42),transparent 62%),
-    radial-gradient(680px 480px at 88% 92%,rgba(76,127,224,.30),transparent 66%),
-    radial-gradient(520px 380px at 62% 26%,rgba(155,110,200,.16),transparent 70%),
-    linear-gradient(158deg,var(--night) 0%,var(--night-2) 52%,var(--night-3) 100%)}
-.night .wrap{position:relative;z-index:2;width:100%}
+    radial-gradient(38% 34% at 30% 28%,#F2A365 0%,rgba(242,163,101,0) 100%),
+    radial-gradient(40% 38% at 70% 40%,#E77A8E 0%,rgba(231,122,142,0) 100%),
+    radial-gradient(46% 42% at 44% 72%,#1E1E22 0%,rgba(30,30,34,0) 100%),
+    radial-gradient(52% 48% at 78% 82%,#6F8297 0%,rgba(111,130,151,0) 100%),
+    radial-gradient(70% 70% at 50% 50%,#C9B9AE 0%,rgba(201,185,174,0) 100%);
+  filter:blur(14px) saturate(1.05)}
 
-.greet{font-family:var(--mono);font-size:12px;letter-spacing:.17em;
-  text-transform:uppercase;color:var(--on-night-3);margin:0 0 22px}
-.night h1{font-size:clamp(38px,5.6vw,68px);line-height:1.1;letter-spacing:-.035em;
-  font-weight:600;color:var(--on-night);margin:0 0 26px;max-width:15ch}
-.night h1 em{font-style:normal;
-  background:linear-gradient(96deg,#A99BF0,#7FA8F2);
-  -webkit-background-clip:text;background-clip:text;color:transparent}
-.night .lede{font-size:clamp(16.5px,1.75vw,19.5px);color:var(--on-night-2);
-  max-width:56ch;margin:0 0 14px;line-height:1.65}
-.night .lede strong{color:var(--on-night);font-weight:500}
-.night .meta{font-family:var(--mono);font-size:12.5px;color:var(--on-night-3);
-  margin:0 0 38px;letter-spacing:.01em}
+h1.headline{font-size:clamp(46px,7.6vw,138px);color:var(--mute);max-width:12ch}
+h1.headline .on{color:var(--ink)}
 
-.herolinks{display:flex;flex-wrap:wrap;gap:11px;margin:0}
-.hbtn{display:inline-flex;align-items:center;gap:10px;font-size:14.5px;font-weight:500;
-  text-decoration:none;border-radius:12px;padding:13px 21px;transition:all .2s ease;
-  border:1px solid rgba(255,255,255,.17);color:var(--on-night);
-  background:rgba(255,255,255,.07)}
-.hbtn:hover{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.3)}
-.hbtn.primary{background:var(--on-night);color:var(--night);border-color:transparent;font-weight:600}
-.hbtn.primary:hover{background:#fff}
-.hbtn .arw{font-family:var(--mono);font-size:13px;opacity:.6}
+/* ── sections: two columns with a hairline between ───────── */
+.sec{display:grid;grid-template-columns:3fr 7fr;border-bottom:1px solid var(--line);scroll-margin-top:0}
+.sec > *{padding:calc(var(--pad) * 1.6) var(--pad)}
+.sec > * + *{border-left:1px solid var(--line)}
+.sec h2{font-size:clamp(34px,4.2vw,64px);margin:14px 0 22px}
+.sec .lead{color:#55534F;max-width:46ch;margin:0 0 24px}
 
-/* ── section headings on the light body ─────────────────── */
-.band{padding-top:88px}
-.band.last{padding-bottom:20px}
-.shead{margin:0 0 34px}
-.shead .k{font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;
-  text-transform:uppercase;color:var(--ink-3);margin:0 0 9px}
-.shead h2{font-size:clamp(25px,3vw,34px);letter-spacing:-.028em;font-weight:600;
-  margin:0 0 9px;line-height:1.22}
-.shead p{font-size:16px;color:var(--ink-2);max-width:64ch;margin:0}
+.checks li{font-size:14px;line-height:1.75}
+.checks li::before{content:"[✓]" / "";color:var(--mute);margin-right:8px;font-size:12px}
 
-/* ── project rows ────────────────────────────────────────── */
-.pgrid{display:flex;flex-direction:column;gap:28px;max-width:900px;margin:0}
-.prow{position:relative;padding:2px 0 2px 14px;border-left:2px solid var(--rc);
-  display:flex;align-items:center;gap:20px;
-  transition:border-left-width .15s ease,padding-left .15s ease}
-.ptext{flex:1 1 auto;min-width:0}
-/* photo thumbnail: muted and lightly tinted toward the site violet */
-.pthumb{position:relative;flex:0 0 160px;width:160px;height:100px;
-  border-radius:10px;overflow:hidden;background:var(--wash-a)}
-.pthumb img{display:block;width:100%;height:100%;object-fit:cover;filter:saturate(.8)}
-.pthumb::after{content:"";position:absolute;inset:0;pointer-events:none;
-  background:rgba(123,111,216,.16);transition:opacity .15s ease}
-.prow:hover .pthumb::after{opacity:.45}
-/* the thumbnail links to the code repository, so it sits above the row link */
-a.pthumb{z-index:2}
-.prow a.pthumb:hover::after{opacity:0}
-.prow:has(a.pthumb:hover) .ptitle{text-decoration:none}
-a.pthumb:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-.prow:hover{border-left-width:3px;padding-left:13px}
-.prow.exp{--rc:var(--mint)}
-.prow.quasi{--rc:var(--violet)}
-.prow.pred{--rc:var(--amber)}
-.prow.panel{--rc:var(--blue)}
-.pq{font-size:18px;font-weight:400;line-height:1.45;color:var(--ink);margin:0 0 8px}
-.pmeta{margin:0 0 4px;font-size:14px;line-height:1.5}
-.ptitle{color:var(--ink);font-weight:500}
-.prow:hover .ptitle{text-decoration:underline;text-underline-offset:3px}
-.plabel{font-family:var(--mono);font-size:11px;letter-spacing:.06em;color:var(--rc)}
-.pmethods{font-size:12px;line-height:1.5;color:var(--ink-3);margin:0 0 8px}
-.pm{white-space:nowrap}
-.plinks{margin:0;font-size:13px;color:var(--ink-3)}
-.plink{color:var(--blue);text-decoration:none}
-.plink:hover{text-decoration:underline}
-/* the whole row is clickable through the Case study link; Code sits above it */
-.plink.case::after{content:"";position:absolute;inset:0;z-index:1}
-.plink.case:focus-visible{outline:none}
-.plink.case:focus-visible::after{outline:2px solid var(--blue);outline-offset:2px}
-.plink.pcode{position:relative;z-index:2}
-.plink.pcode:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+/* ── Selected work: accordion (details / summary, no JS) ── */
+.acc details{border-bottom:1px solid var(--line)}
+.acc details:last-child{border-bottom:0}
+.acc summary{list-style:none;cursor:pointer;padding:26px 0 24px;
+  display:grid;grid-template-columns:1fr auto;column-gap:20px;row-gap:8px}
+.acc details:first-child summary{padding-top:0}
+.acc summary::-webkit-details-marker{display:none}
+.acc .ptitle{font-size:clamp(22px,2.3vw,34px);line-height:1}
+.acc .pq{display:block;grid-column:1;font-size:14px;color:var(--mute-text);max-width:60ch}
+.acc .arw{grid-column:2;grid-row:1;font-size:22px;line-height:1}
+.acc .arw::after{content:"↓"}
+.acc details[open] .arw::after{content:"↑"}
+.acc summary:hover .ptitle{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:5px}
+
+.pbody{padding:0 0 30px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,360px);gap:24px;align-items:start}
+.acc details[open] .pbody{animation:reveal .22s ease-out}
+@keyframes reveal{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.pmeta{font-size:14px;margin:0 0 6px}
+.pmeta .lab{font-size:12px}
+.pmethods{font-size:14px;color:#55534F;margin:0 0 16px}
+.plinks{font-size:15px;font-weight:500;display:flex;gap:22px;flex-wrap:wrap}
+.pshot{display:block;aspect-ratio:16 / 10;overflow:hidden;border-radius:2px}
+.pshot img{display:block;width:100%;height:100%;object-fit:cover;filter:saturate(.8)}
 
 /* ── about ───────────────────────────────────────────────── */
-.about{display:grid;grid-template-columns:1.35fr 1fr;gap:22px;align-items:start}
-.about .card{margin:0}
-.about .card p{font-size:16px;line-height:1.72}
-.stackgroup{margin:0 0 18px}
-.stackgroup:last-child{margin-bottom:0}
-.stackgroup .gk{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;
-  text-transform:uppercase;color:var(--ink-3);margin:0 0 9px}
+.about-copy p{max-width:68ch;margin:0 0 16px}
+.about-copy p:last-child{margin-bottom:0}
+.stack{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;
+  margin-top:34px;padding-top:24px;border-top:1px solid var(--line)}
+.stack .lab{margin:0 0 8px}
 
 /* ── contact ─────────────────────────────────────────────── */
-.contact{display:flex;flex-wrap:wrap;gap:12px;margin:0}
-.contact .btn{margin:0}
+.contact-links{display:flex;flex-direction:column;gap:6px;font-size:clamp(18px,1.7vw,24px);font-weight:500;margin-top:18px}
 
-@media (max-width:920px){
-  .night{padding:100px 0 72px}
-  .pgrid{gap:24px}
-  .pq{font-size:16px}
-  .about{grid-template-columns:1fr}
-  .band{padding-top:62px}
-  .herolinks .hbtn{flex:1 1 0;justify-content:center;padding:13px 14px}
-  .herolinks .hbtn.primary{flex:1 1 100%}
+footer{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
+  padding:18px var(--pad) 28px;font-size:12px;color:var(--mute-text)}
+
+/* ── responsive: one column, horizontal lines only ───────── */
+@media (max-width:900px){
+  :root{--pad:20px}
+  .hero{grid-template-columns:1fr;grid-template-rows:none;min-height:0}
+  .hero > *{grid-column:1 !important;grid-row:auto !important}
+  .hero > * + *{border-left:0;border-top:1px solid var(--line)}
+  .c-intro,.c-menu{border-bottom:0}
+  .c-head{order:2}
+  .c-side{order:3}
+  .blob{width:min(70%,260px);margin-top:0}
+  h1.headline{font-size:clamp(40px,12vw,84px)}
+  .sec{grid-template-columns:1fr}
+  .sec > * + *{border-left:0;border-top:1px solid var(--line)}
+  .pbody{grid-template-columns:1fr}
+  .stack{grid-template-columns:1fr 1fr}
 }
-@media (max-width:600px){
-  .pthumb{display:none}
-}
-@media (max-width:520px){
-  .nav .brand{font-size:14px}
-  .nav ul a{padding:8px 7px;font-size:12px}
+@media (max-width:480px){
+  .stack{grid-template-columns:1fr}
 }
 @media (prefers-reduced-motion:reduce){
-  .prow{transition:none}
-  .pthumb::after{transition:none}
+  html{scroll-behavior:auto}
+  .acc details[open] .pbody{animation:none}
 }
 </style>
 </head>
 <body>
 
-<nav class="nav" id="nav">
-  <div class="wrap">
-    <a class="brand" href="#top">Jiwoon&nbsp;Oh</a>
-    <ul>
+<!-- ══ header + hero ══════════════════════════════════════ -->
+<header class="hero" id="top">
+  <div class="c-mark">
+    <a class="mark" href="#top" aria-label="Jiwoon Oh, home">JO.</a>
+  </div>
+  <div class="c-intro">
+    <p class="intro">I work with promotion, observational and customer transaction data, using statistics and machine learning to support business decisions.</p>
+  </div>
+  <nav class="c-menu" aria-label="Main">
+    <ul class="menu">
       <li><a href="#work">Work</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#contact">Contact</a></li>
+      <li><a href="https://github.com/jiwoon-oh" target="_blank" rel="noopener">GitHub ↗</a></li>
+      <li><a href="mailto:jiwoonds@gmail.com">Email ↗</a></li>
     </ul>
+    <span class="lab">[2026]</span>
+  </nav>
+  <div class="c-side">
+    <a class="seework" href="#work">See the work ↘</a>
+    <div class="blob" aria-hidden="true"></div>
   </div>
-</nav>
-
-<!-- ══ hero ═══════════════════════════════════════════════ -->
-<header class="night" id="top">
-  <div class="wrap">
-    <p class="greet" id="greet">Good evening</p>
-    <h1>I use data to answer <em>business questions</em>.</h1>
-    <p class="lede">I work with promotion comparison, observational, and customer transaction data, using statistical analysis and machine learning to evaluate patterns and support business decisions. Each one reports its estimates together with their <strong>limitations</strong>.</p>
-    <p class="meta">Hypothesis testing · Observational data · Panel data · Machine learning</p>
-    <div class="herolinks">
-      <a class="hbtn primary" href="#work">See the work <span class="arw">↓</span></a>
-      <a class="hbtn" href="https://github.com/jiwoon-oh" target="_blank" rel="noopener">GitHub <span class="arw">↗</span></a>
-      <a class="hbtn" href="mailto:jiwoonds@gmail.com">Email <span class="arw">↗</span></a>
-    </div>
+  <div class="c-head">
+    <p class="lab">[<span id="greet">Good evening</span>]</p>
+    <h1 class="headline display">I use <span class="on">data</span> to answer <span class="on">business questions</span>.</h1>
   </div>
 </header>
 
+<main>
+
 <!-- ══ work ═══════════════════════════════════════════════ -->
-<section class="band wrap" id="work">
-  <div class="shead">
-    <p class="k">Selected work</p>
-    <h2>Four questions, four analytical approaches</h2>
-    <p>Each case study starts from a question about the data and uses the method that suits it: a direct group comparison for the promotion study, propensity-score matching for the observational Seoul data, descriptive and predictive analysis for revenue concentration, and fixed-effects panel models for campaign response.</p>
+<section class="sec" id="work">
+  <div>
+    <p class="lab">[01] Selected work</p>
+    <h2 class="display">Four questions, four approaches</h2>
+    <p class="lead">Each case study starts from a question about the data and uses the method that suits it: a direct group comparison for the promotion study, propensity-score matching for the observational Seoul data, descriptive and predictive analysis for revenue concentration, and fixed-effects panel models for campaign response.</p>
+    <ul class="checks">
+      <li>Group comparison</li>
+      <li>Observational · Matching</li>
+      <li>Descriptive · Predictive</li>
+      <li>Panel · Fixed effects</li>
+    </ul>
   </div>
 
-  <div class="pgrid">
-
-    <article class="prow exp">
-      <a class="pthumb" href="https://github.com/jiwoon-oh/fastfood-promotion-ab-test" target="_blank" rel="noopener" aria-label="Code for Fast-Food Promotion Comparison on GitHub"><img src="assets/thumbs/fastfood.webp" alt="Burger and fries on a plate beside a glass of beer" width="640" height="400" loading="lazy"></a>
-      <div class="ptext">
-        <p class="pq">Three promotions ran side by side. Can the data name a winner, or only a loser?</p>
-        <p class="pmeta"><span class="ptitle">Fast-Food Promotion Comparison</span> · <span class="plabel">Group comparison</span></p>
-        <p class="pmethods"><span class="pm">ANOVA</span> · <span class="pm">Tukey HSD</span> · <span class="pm">137 stores</span></p>
-        <p class="plinks"><a class="plink case" href="projects/ab-test-fastfood/index.html" aria-label="Case study: Fast-Food Promotion Comparison">Case study</a> · <a class="plink pcode" href="https://github.com/jiwoon-oh/fastfood-promotion-ab-test" target="_blank" rel="noopener" aria-label="Code and outputs for Fast-Food Promotion Comparison on GitHub">Code ↗</a></p>
+  <div class="acc">
+    <details open>
+      <summary>
+        <h3 class="ptitle display">Fast-Food Promotion Comparison</h3>
+        <span class="arw" aria-hidden="true"></span>
+        <span class="pq">Three promotions ran side by side. Can the data name a winner, or only a loser?</span>
+      </summary>
+      <div class="pbody">
+        <div>
+          <p class="pmeta"><span class="lab">[Group comparison]</span></p>
+          <p class="pmethods">ANOVA · Tukey HSD · 137 stores</p>
+          <p class="plinks"><a href="projects/ab-test-fastfood/index.html" aria-label="Case study: Fast-Food Promotion Comparison">Case study ↗</a><a href="https://github.com/jiwoon-oh/fastfood-promotion-ab-test" target="_blank" rel="noopener" aria-label="Code and outputs for Fast-Food Promotion Comparison on GitHub">Code ↗</a></p>
+        </div>
+        <a class="pshot" href="https://github.com/jiwoon-oh/fastfood-promotion-ab-test" target="_blank" rel="noopener" aria-label="Code for Fast-Food Promotion Comparison on GitHub"><img src="assets/thumbs/fastfood.webp" alt="Burger and fries on a plate beside a glass of beer" width="640" height="400" loading="lazy"></a>
       </div>
-    </article>
+    </details>
 
-    <article class="prow quasi">
-      <a class="pthumb" href="https://github.com/jiwoon-oh/seoul-closure-risk" target="_blank" rel="noopener" aria-label="Code for Seoul Closure Risk on GitHub"><img src="assets/thumbs/seoul.webp" alt="Seoul shopping street lined with shop signs" width="640" height="400" loading="lazy"></a>
-      <div class="ptext">
-        <p class="pq">If support follows a net-decline ranking, does it rank risk, or size?</p>
-        <p class="pmeta"><span class="ptitle">Seoul Closure Risk</span> · <span class="plabel">Observational · Matching</span></p>
-        <p class="pmethods"><span class="pm">Propensity-score matching</span> · <span class="pm">Gradient boosting</span> · <span class="pm">67,475 cells</span></p>
-        <p class="plinks"><a class="plink case" href="projects/seoul-closure-risk/index.html" aria-label="Case study: Seoul Closure Risk">Case study</a> · <a class="plink pcode" href="https://github.com/jiwoon-oh/seoul-closure-risk" target="_blank" rel="noopener" aria-label="Code and outputs for Seoul Closure Risk on GitHub">Code ↗</a></p>
+    <details>
+      <summary>
+        <h3 class="ptitle display">Seoul Closure Risk</h3>
+        <span class="arw" aria-hidden="true"></span>
+        <span class="pq">If support follows a net-decline ranking, does it rank risk, or size?</span>
+      </summary>
+      <div class="pbody">
+        <div>
+          <p class="pmeta"><span class="lab">[Observational · Matching]</span></p>
+          <p class="pmethods">Propensity-score matching · Gradient boosting · 67,475 cells</p>
+          <p class="plinks"><a href="projects/seoul-closure-risk/index.html" aria-label="Case study: Seoul Closure Risk">Case study ↗</a><a href="https://github.com/jiwoon-oh/seoul-closure-risk" target="_blank" rel="noopener" aria-label="Code and outputs for Seoul Closure Risk on GitHub">Code ↗</a></p>
+        </div>
+        <a class="pshot" href="https://github.com/jiwoon-oh/seoul-closure-risk" target="_blank" rel="noopener" aria-label="Code for Seoul Closure Risk on GitHub"><img src="assets/thumbs/seoul.webp" alt="Seoul shopping street lined with shop signs" width="640" height="400" loading="lazy"></a>
       </div>
-    </article>
+    </details>
 
-    <article class="prow pred">
-      <a class="pthumb" href="https://github.com/jiwoon-oh/dunnhumby-revenue-concentration" target="_blank" rel="noopener" aria-label="Code for Revenue Concentration on GitHub"><img src="assets/thumbs/revenue.webp" alt="Fruit display with price signs in a grocery store" width="640" height="400" loading="lazy"></a>
-      <div class="ptext">
-        <p class="pq">Is revenue growth coming from the heavy spenders everyone watches?</p>
-        <p class="pmeta"><span class="ptitle">Revenue Concentration</span> · <span class="plabel">Descriptive · Predictive</span></p>
-        <p class="pmethods"><span class="pm">Lorenz/Gini</span> · <span class="pm">Bootstrap CI</span> · <span class="pm">Logistic vs RF</span> · <span class="pm">2,500 households</span></p>
-        <p class="plinks"><a class="plink case" href="projects/dunnhumby-customer/case1/index.html" aria-label="Case study: Revenue Concentration">Case study</a> · <a class="plink pcode" href="https://github.com/jiwoon-oh/dunnhumby-revenue-concentration" target="_blank" rel="noopener" aria-label="Code and outputs for Revenue Concentration on GitHub">Code ↗</a></p>
+    <details>
+      <summary>
+        <h3 class="ptitle display">Revenue Concentration</h3>
+        <span class="arw" aria-hidden="true"></span>
+        <span class="pq">Is revenue growth coming from the heavy spenders everyone watches?</span>
+      </summary>
+      <div class="pbody">
+        <div>
+          <p class="pmeta"><span class="lab">[Descriptive · Predictive]</span></p>
+          <p class="pmethods">Lorenz/Gini · Bootstrap CI · Logistic vs RF · 2,500 households</p>
+          <p class="plinks"><a href="projects/dunnhumby-customer/case1/index.html" aria-label="Case study: Revenue Concentration">Case study ↗</a><a href="https://github.com/jiwoon-oh/dunnhumby-revenue-concentration" target="_blank" rel="noopener" aria-label="Code and outputs for Revenue Concentration on GitHub">Code ↗</a></p>
+        </div>
+        <a class="pshot" href="https://github.com/jiwoon-oh/dunnhumby-revenue-concentration" target="_blank" rel="noopener" aria-label="Code for Revenue Concentration on GitHub"><img src="assets/thumbs/revenue.webp" alt="Fruit display with price signs in a grocery store" width="640" height="400" loading="lazy"></a>
       </div>
-    </article>
+    </details>
 
-    <article class="prow panel">
-      <a class="pthumb" href="https://github.com/jiwoon-oh/dunnhumby-campaign-response" target="_blank" rel="noopener" aria-label="Code for Campaign Response Heterogeneity on GitHub"><img src="assets/thumbs/campaign.webp" alt="Shopper putting bread into a grocery cart" width="640" height="400" loading="lazy"></a>
-      <div class="ptext">
-        <p class="pq">Campaigns look far more effective on low spenders. Is that the campaign, or who receives it?</p>
-        <p class="pmeta"><span class="ptitle">Campaign Response Heterogeneity</span> · <span class="plabel">Panel · Fixed effects</span></p>
-        <p class="pmethods"><span class="pm">Two-way FE</span> · <span class="pm">Lead-effect test</span> · <span class="pm">BH-FDR</span> · <span class="pm">172,500 household-weeks</span></p>
-        <p class="plinks"><a class="plink case" href="projects/dunnhumby-customer/case2/index.html" aria-label="Case study: Campaign Response Heterogeneity">Case study</a> · <a class="plink pcode" href="https://github.com/jiwoon-oh/dunnhumby-campaign-response" target="_blank" rel="noopener" aria-label="Code and outputs for Campaign Response Heterogeneity on GitHub">Code ↗</a></p>
+    <details>
+      <summary>
+        <h3 class="ptitle display">Campaign Response Heterogeneity</h3>
+        <span class="arw" aria-hidden="true"></span>
+        <span class="pq">Campaigns look far more effective on low spenders. Is that the campaign, or who receives it?</span>
+      </summary>
+      <div class="pbody">
+        <div>
+          <p class="pmeta"><span class="lab">[Panel · Fixed effects]</span></p>
+          <p class="pmethods">Two-way FE · Lead-effect test · BH-FDR · 172,500 household-weeks</p>
+          <p class="plinks"><a href="projects/dunnhumby-customer/case2/index.html" aria-label="Case study: Campaign Response Heterogeneity">Case study ↗</a><a href="https://github.com/jiwoon-oh/dunnhumby-campaign-response" target="_blank" rel="noopener" aria-label="Code and outputs for Campaign Response Heterogeneity on GitHub">Code ↗</a></p>
+        </div>
+        <a class="pshot" href="https://github.com/jiwoon-oh/dunnhumby-campaign-response" target="_blank" rel="noopener" aria-label="Code for Campaign Response Heterogeneity on GitHub"><img src="assets/thumbs/campaign.webp" alt="Shopper putting bread into a grocery cart" width="640" height="400" loading="lazy"></a>
       </div>
-    </article>
-
+    </details>
   </div>
 </section>
 
 <!-- ══ about ══════════════════════════════════════════════ -->
-<section class="band wrap" id="about">
-  <div class="shead">
-    <p class="k">About</p>
-    <h2>How I work</h2>
+<section class="sec" id="about">
+  <div>
+    <p class="lab">[02] About</p>
+    <h2 class="display">How I work</h2>
   </div>
-  <div class="about">
-    <div class="card">
+  <div>
+    <div class="about-copy">
       <p>My analysis is mostly in Python, on retail sales, store-level and public commercial-district data. The studies here use group comparisons (ANOVA, Tukey HSD), propensity-score matching, fixed-effects panel regression, bootstrap confidence intervals, and logistic regression, random forest and gradient boosting models. The method follows the structure of the data and the question being asked, for example matching where groups differ in size and household fixed effects where the same households are observed week after week.</p>
       <p>I report estimates with confidence intervals or tests, and I describe observational results as adjusted associations rather than causal effects. Where the data cannot separate two explanations, I keep both and state what additional data would settle it.</p>
-      <p style="margin-bottom:0">Each case study has its own limitations section covering what the design cannot identify and which data or analysis would address it. Revenue Concentration and Seoul Closure Risk were team projects; each page states which part is mine. Campaign Response Heterogeneity grew out of a team project on the same dataset; its Scope note explains the details.</p>
+      <p>Each case study has its own limitations section covering what the design cannot identify and which data or analysis would address it. Revenue Concentration and Seoul Closure Risk were team projects; each page states which part is mine. Campaign Response Heterogeneity grew out of a team project on the same dataset; its Scope note explains the details.</p>
     </div>
-    <div class="card">
-      <div class="stackgroup">
-        <p class="gk">Methods</p>
-        <div class="skills">
-          <span class="skill">Observational analysis</span>
-          <span class="skill">Matching &amp; fixed effects</span>
-          <span class="skill">Panel data</span>
-          <span class="skill">Hypothesis testing</span>
-          <span class="skill">Predictive modeling</span>
-        </div>
+    <div class="stack">
+      <div>
+        <p class="lab">Methods</p>
+        <ul class="checks">
+          <li>Observational analysis</li>
+          <li>Matching &amp; fixed effects</li>
+          <li>Panel data</li>
+          <li>Hypothesis testing</li>
+          <li>Predictive modeling</li>
+        </ul>
       </div>
-      <div class="stackgroup">
-        <p class="gk">Tools</p>
-        <div class="skills">
-          <span class="skill">Python</span>
-          <span class="skill">pandas</span>
-          <span class="skill">statsmodels</span>
-          <span class="skill">linearmodels</span>
-          <span class="skill">scikit-learn</span>
-          <span class="skill">SciPy</span>
-          <span class="skill">SQL</span>
-        </div>
+      <div>
+        <p class="lab">Tools</p>
+        <ul class="checks">
+          <li>Python</li>
+          <li>pandas</li>
+          <li>statsmodels</li>
+          <li>linearmodels</li>
+          <li>scikit-learn</li>
+          <li>SciPy</li>
+          <li>SQL</li>
+        </ul>
       </div>
-      <div class="stackgroup">
-        <p class="gk">Reporting</p>
-        <div class="skills">
-          <span class="skill">matplotlib</span>
-          <span class="skill">Tableau</span>
-          <span class="skill">Jupyter</span>
-        </div>
+      <div>
+        <p class="lab">Reporting</p>
+        <ul class="checks">
+          <li>matplotlib</li>
+          <li>Tableau</li>
+          <li>Jupyter</li>
+        </ul>
       </div>
     </div>
   </div>
 </section>
 
 <!-- ══ contact ════════════════════════════════════════════ -->
-<section class="band last wrap" id="contact">
-  <div class="shead">
-    <p class="k">Contact</p>
-    <h2>Get in touch</h2>
-    <p>Open to data analyst and data scientist roles. The code for each study is on GitHub.</p>
+<section class="sec" id="contact">
+  <div>
+    <p class="lab">[03] Contact</p>
+    <h2 class="display">Get in touch</h2>
   </div>
-  <div class="contact">
-    <a class="btn" href="mailto:jiwoonds@gmail.com">jiwoonds@gmail.com <span class="arw">↗</span></a>
-    <a class="btn" href="https://github.com/jiwoon-oh" target="_blank" rel="noopener">github.com/jiwoon-oh <span class="arw">↗</span></a>
+  <div>
+    <p>Open to data analyst and data scientist roles. The code for each study is on GitHub.</p>
+    <p class="contact-links">
+      <a href="mailto:jiwoonds@gmail.com">jiwoonds@gmail.com ↗</a>
+      <a href="https://github.com/jiwoon-oh" target="_blank" rel="noopener">github.com/jiwoon-oh ↗</a>
+    </p>
   </div>
 </section>
 
-<footer class="wrap">
+</main>
+
+<footer>
   <p>Jiwoon Oh · Data Analyst</p>
   <p>Built with plain HTML and CSS. Figures in the case studies are generated by the analysis code in the linked repositories. Photos: Unsplash.</p>
 </footer>
@@ -316,15 +347,6 @@ a.pthumb:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
   else if (h < 12) t = "Good morning";
   else if (h < 18) t = "Good afternoon";
   document.getElementById("greet").textContent = t;
-})();
-
-/* nav turns solid once the dark hero has scrolled past */
-(function(){
-  var nav = document.getElementById("nav"), hero = document.getElementById("top");
-  if (!("IntersectionObserver" in window)) { nav.classList.add("solid"); return; }
-  new IntersectionObserver(function(es){
-    nav.classList.toggle("solid", !es[0].isIntersecting);
-  }, { rootMargin: "-66px 0px 0px 0px", threshold: 0 }).observe(hero);
 })();
 </script>
 
