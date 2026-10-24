@@ -9,18 +9,14 @@
 <meta property="og:description" content="172,500 household-weeks and 30 campaigns; the results are reported as associations, not campaign effects.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../../assets/case.css">
-<style>
-/* per-project tint — structure and components come from case.css */
-:root{ --wash-a:#F6EEF3; --wash-b:#EFEAF8; --wash-c:#F1EDF9 }
-</style>
 </head>
 <body>
 
 <nav class="nav" id="nav">
   <div class="wrap">
-    <a class="brand" href="../../../index.html">Jiwoon&nbsp;Oh</a>
+    <a class="brand" href="../../../index.html" aria-label="Jiwoon Oh, home">JO.</a>
     <ul>
       <li><a href="../../../index.html#work">Work</a></li>
       <li><a href="../../../index.html#about">About</a></li>
@@ -30,10 +26,16 @@
 </nav>
 
 <header class="wrap hero">
-  <p class="eyebrow">Case 02 · Observational analysis &amp; panel methods</p>
-  <h1>Campaign response by spending tier: a pooled <em>+242%</em> difference versus fixed-effects estimates</h1>
+  <p class="kicker">[Case 02]</p>
+  <h1>Campaign Response Heterogeneity</h1>
+  <p class="subtitle">Campaign response by spending tier: a pooled +242% difference versus fixed-effects estimates</p>
   <p class="lede">Comparing weeks when any campaign was running with quiet weeks, the pooled difference is +242% for the lowest-spending households, against +60% for mid and +23% for high spenders. These are descriptive differences, not estimates of campaign lift. In the fixed-effects model, which compares each household with its own other weeks, none of the low-tier campaign-type estimates is distinguishable from zero, and the one estimate that survives multiple-comparison correction, Type C × high-spending, is negative and is reported as an association.</p>
-  <p class="meta">172,500 household-weeks · 30 campaigns · 3 spending tiers · Python, pandas, linearmodels · <a href="https://github.com/jiwoon-oh/dunnhumby-campaign-response" target="_blank" rel="noopener">Code &amp; outputs on GitHub ↗</a></p>
+  <dl class="byline">
+    <div><dt>Approach</dt><dd>Observational analysis &amp; panel methods</dd></div>
+    <div><dt>Data</dt><dd>172,500 household-weeks · 30 campaigns · 3 spending tiers</dd></div>
+    <div><dt>Tools</dt><dd>Python, pandas, linearmodels</dd></div>
+    <div><dt>Code</dt><dd><a href="https://github.com/jiwoon-oh/dunnhumby-campaign-response" target="_blank" rel="noopener">Code &amp; outputs on GitHub ↗</a></dd></div>
+  </dl>
   <div class="picks">
     <div class="pick drop">
       <p class="name">POOLED · LOW-SPENDING TIER</p>
@@ -620,15 +622,6 @@
     });
   }, { rootMargin: '-10% 0px -70% 0px', threshold: 0 });
   secs.forEach(function(s){ if(s) io.observe(s); });
-})();
-</script>
-<script>
-/* site nav: transparent at the top, solid once scrolled */
-(function(){
-  var n = document.getElementById("nav");
-  if (!n) return;
-  var f = function(){ n.classList.toggle("solid", window.scrollY > 10); };
-  f(); addEventListener("scroll", f, { passive: true });
 })();
 </script>
 

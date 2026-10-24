@@ -9,18 +9,14 @@
 <meta property="og:description" content="2,500 households in the data over an 83-week stable period; 2,095 compared across two 10-week windows (weeks 17–26 and 90–99), with a decomposition of where the spending increase came from.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../../assets/case.css">
-<style>
-/* per-project tint — structure and components come from case.css */
-:root{ --wash-a:#F2EDFA; --wash-b:#EDE9F8; --wash-c:#F6EEF4 }
-</style>
 </head>
 <body>
 
 <nav class="nav" id="nav">
   <div class="wrap">
-    <a class="brand" href="../../../index.html">Jiwoon&nbsp;Oh</a>
+    <a class="brand" href="../../../index.html" aria-label="Jiwoon Oh, home">JO.</a>
     <ul>
       <li><a href="../../../index.html#work">Work</a></li>
       <li><a href="../../../index.html#about">About</a></li>
@@ -30,10 +26,16 @@
 </nav>
 
 <header class="wrap hero">
-  <p class="eyebrow">Case 01 · Customer analytics &amp; retention</p>
-  <h1>Customer spending and revenue concentration: initial top spenders spent <em>less</em> in the later window</h1>
+  <p class="kicker">[Case 01]</p>
+  <h1>Revenue Concentration</h1>
+  <p class="subtitle">Customer spending and revenue concentration: initial top spenders spent less in the later window</p>
   <p class="lede">The hypothesis was that revenue growth came from a small group of heavy spenders spending more. In every test, the initially high-spending households showed lower spending in the later window, while the remaining households showed an increase. Among the households outside the top 20% (wide panel), most of the net spending increase came from existing households; this is a contribution decomposition, not a causal estimate.</p>
-  <p class="meta">2,500 households in the data · 83-week stable period · Dunnhumby "The Complete Journey" · Python, pandas, SciPy, scikit-learn · <a href="https://github.com/jiwoon-oh/dunnhumby-revenue-concentration" target="_blank" rel="noopener">Code &amp; outputs on GitHub ↗</a></p>
+  <dl class="byline">
+    <div><dt>Approach</dt><dd>Customer analytics &amp; retention</dd></div>
+    <div><dt>Data</dt><dd>2,500 households in the data · 83-week stable period · Dunnhumby "The Complete Journey"</dd></div>
+    <div><dt>Tools</dt><dd>Python, pandas, SciPy, scikit-learn</dd></div>
+    <div><dt>Code</dt><dd><a href="https://github.com/jiwoon-oh/dunnhumby-revenue-concentration" target="_blank" rel="noopener">Code &amp; outputs on GitHub ↗</a></dd></div>
+  </dl>
   <div class="picks">
     <div class="pick drop">
       <p class="name">INITIAL TOP 20% · ABSOLUTE SPEND</p>
@@ -652,15 +654,6 @@
     });
   }, { rootMargin: '-10% 0px -70% 0px', threshold: 0 });
   secs.forEach(function(s){ if(s) io.observe(s); });
-})();
-</script>
-<script>
-/* site nav: transparent at the top, solid once scrolled */
-(function(){
-  var n = document.getElementById("nav");
-  if (!n) return;
-  var f = function(){ n.classList.toggle("solid", window.scrollY > 10); };
-  f(); addEventListener("scroll", f, { passive: true });
 })();
 </script>
 

@@ -9,214 +9,19 @@
 <meta property="og:description" content="Which of three promotions had the strongest sales? A three-arm comparison across 137 locations in a hypothetical sample dataset: one promotion had lower sales than the other two, and those two could not be separated statistically.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/case.css">
 <style>
-:root{
-  --ink:#23233A; --ink-2:#4A4A66; --ink-3:#7B7B96;
-  --wash-a:#EFEDFC; --wash-b:#E3F0FB;
-  --glass:rgba(255,255,255,.66); --glass-2:rgba(255,255,255,.42);
-  --edge:rgba(255,255,255,.85);
-  --blue:#4C7FE0; --violet:#7B6FD8; --rose:#D9536B; --mint:#2F9E88; --amber:#C97A2E;
-  --r:16px;
-  --sans:"IBM Plex Sans",-apple-system,system-ui,sans-serif;
-  --mono:"IBM Plex Mono",ui-monospace,monospace;
-}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
-body{
-  margin:0; font-family:var(--sans); color:var(--ink);
-  background:linear-gradient(168deg,var(--wash-a) 0%,var(--wash-b) 62%,#E9F2FA 100%);
-  background-attachment:fixed; line-height:1.7; -webkit-font-smoothing:antialiased;
-}
-.wrap{max-width:1160px;margin:0 auto;padding:0 32px}
-
-/* ── site nav — matches assets/case.css on the other pages ── */
-.nav{position:fixed;top:0;left:0;right:0;z-index:50;
-  border-bottom:1px solid transparent;
-  transition:background .3s ease,border-color .3s ease,backdrop-filter .3s ease}
-.nav .wrap{display:flex;align-items:center;justify-content:space-between;
-  height:66px;gap:20px}
-.nav .brand{font-size:15px;font-weight:600;letter-spacing:-.015em;
-  color:var(--ink);text-decoration:none;white-space:nowrap}
-.nav ul{display:flex;gap:4px;list-style:none;margin:0;padding:0}
-.nav ul a{font-size:13.5px;color:var(--ink-2);text-decoration:none;
-  padding:8px 13px;border-radius:9px;display:block;
-  transition:color .18s,background .18s}
-.nav ul a:hover{color:var(--ink);background:rgba(35,35,58,.06)}
-.nav.solid{background:rgba(252,251,255,.86);backdrop-filter:blur(14px);
-  border-bottom-color:rgba(35,35,58,.09)}
-
-/* hero */
-.hero{padding:126px 32px 56px}
-.eyebrow{font-family:var(--mono);font-size:11.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-3);margin:0 0 24px}
-h1{font-size:clamp(38px,5.4vw,64px);line-height:1.1;letter-spacing:-.035em;font-weight:600;margin:0 0 22px;max-width:17ch}
-h1 em{font-style:normal;color:var(--rose)}
-.lede{font-size:clamp(16.5px,1.7vw,19px);color:var(--ink-2);max-width:64ch;margin:0 0 18px}
-.meta{font-family:var(--mono);font-size:12.5px;color:var(--ink-3);margin:0;letter-spacing:.01em}
-
-.picks{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin:46px 0 0}
-.pick{position:relative;overflow:hidden;background:var(--glass);border:1px solid var(--edge);
-  border-radius:var(--r);padding:24px 22px 20px;
-  opacity:0;transform:translateY(12px);animation:rise .6s cubic-bezier(.2,.7,.3,1) forwards}
-.pick:nth-child(1){animation-delay:.05s}
-.pick:nth-child(2){animation-delay:.34s}
-.pick:nth-child(3){animation-delay:.19s}
-@keyframes rise{to{opacity:1;transform:none}}
-.pick .name{font-family:var(--mono);font-size:12px;letter-spacing:.1em;color:var(--ink-3);margin:0 0 8px}
-.pick .val{font-family:var(--mono);font-size:clamp(24px,2.9vw,32px);font-weight:600;letter-spacing:-.025em;margin:0;line-height:1.15;white-space:nowrap}
-.pick .unit{font-size:12.5px;color:var(--ink-3);font-weight:400;margin-left:5px;letter-spacing:0}
-.pick .tag{display:inline-block;margin-top:14px;font-size:12px;font-weight:600;padding:5px 11px;border-radius:999px}
-.pick.keep .val{color:var(--blue)}
-.pick.keep .tag{background:rgba(47,158,136,.14);color:var(--mint)}
-.pick.drop{background:var(--glass-2);border-color:rgba(217,83,107,.32)}
-.pick.drop .val{color:var(--rose)}
-.pick.drop .name{color:var(--rose);opacity:.75}
-.pick.drop .tag{background:rgba(217,83,107,.14);color:var(--rose)}
-.pick.drop::after{content:"";position:absolute;inset:0;pointer-events:none;
-  background:repeating-linear-gradient(-45deg,transparent 0 10px,rgba(217,83,107,.05) 10px 20px)}
-.picks-note{font-family:var(--mono);font-size:12.5px;color:var(--ink-3);margin:14px 0 0}
-
-/* layout */
-.main{display:grid;grid-template-columns:212px minmax(0,1fr);gap:56px;padding:72px 32px 32px;align-items:start}
-main{min-width:0}
-
-/* rail */
-.rail{position:sticky;top:90px}
-.rail h2{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);margin:0 0 12px;font-weight:500}
-.rail ol{list-style:none;margin:0;padding:0}
-.rail li{margin:0 0 2px}
-.rail a{display:block;text-decoration:none;color:var(--ink-2);padding:7px 11px;border-radius:9px;font-size:13.5px;line-height:1.4;transition:background .18s,color .18s}
-.rail a:hover{background:rgba(255,255,255,.6);color:var(--ink)}
-.rail a.on{background:rgba(255,255,255,.92);color:var(--ink);font-weight:600}
-.rail .n{font-family:var(--mono);font-size:11px;color:var(--ink-3);margin-right:7px}
-.rail a.on .n{color:var(--blue)}
-
-/* sections */
-section{scroll-margin-top:84px;margin:0 0 68px}
-.sec-no{font-family:var(--mono);font-size:11.5px;color:var(--ink-3);letter-spacing:.12em;margin:0 0 6px}
-h3{font-size:clamp(22px,2.4vw,29px);letter-spacing:-.025em;font-weight:600;margin:0 0 7px;line-height:1.25}
-h4.blk{font-size:17px;font-weight:600;letter-spacing:-.015em;margin:36px 0 12px}
-.sec-sub{color:var(--ink-3);font-size:15px;margin:0 0 22px}
-p{margin:0 0 16px;max-width:70ch;font-size:16px}
-.takeaway{font-size:17.5px;font-weight:500;line-height:1.6;color:var(--ink);max-width:64ch;margin:0 0 20px;letter-spacing:-.012em}
-.card{background:var(--glass);border:1px solid var(--edge);border-radius:var(--r);padding:24px 26px;margin:0 0 20px}
-.card.tight{padding:20px 22px}
-.card h4{font-size:15.5px;font-weight:600;margin:0 0 10px;letter-spacing:-.01em}
-.card p{font-size:15.5px;margin-bottom:12px}
-.card p:last-child{margin-bottom:0}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:0 0 20px}
-.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:0 0 20px}
-.grid2>*,.grid3>*{margin:0}
-.small{font-size:15.5px}
-.figures{font-family:var(--mono);font-size:13px;color:var(--ink-3);margin:0 0 9px}
-.hl{font-weight:600;color:var(--ink)}
-.hl-r{font-weight:600;color:var(--rose)}
-.hl-b{font-weight:600;color:var(--blue)}
-
-/* quote-style business question */
-.bq{background:var(--glass);border:1px solid var(--edge);border-radius:var(--r);padding:34px 36px;margin:0 0 20px}
-.bq .q{font-size:clamp(20px,2.5vw,27px);font-weight:600;letter-spacing:-.025em;line-height:1.35;margin:0;max-width:26ch}
-.bq ul{margin:22px 0 0;padding:0;list-style:none}
-.bq li{position:relative;padding-left:20px;font-size:15.5px;color:var(--ink-2);margin:0 0 8px}
-.bq li::before{content:"";position:absolute;left:0;top:11px;width:7px;height:7px;border-radius:50%;background:var(--violet);opacity:.65}
-.bq li:last-child{margin-bottom:0}
-
-/* decision blocks — the core of Methodology */
-.dec{background:var(--glass);border:1px solid var(--edge);border-radius:var(--r);padding:22px 24px;margin:0 0 12px;
-  display:grid;grid-template-columns:34px 1fr;gap:16px}
-.dec .idx{font-family:var(--mono);font-size:13px;font-weight:600;color:var(--violet);padding-top:2px}
-.dec h4{font-size:16px;font-weight:600;margin:0 0 7px;letter-spacing:-.015em}
-.dec .why{font-size:15.5px;color:var(--ink-2);margin:0}
-.dec .why b{color:var(--ink);font-weight:600}
-
-/* stats */
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin:0 0 20px}
-.stat{background:var(--glass-2);border-radius:12px;padding:16px 18px}
-.stat .k{font-family:var(--mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);margin:0 0 5px}
-.stat .v{font-family:var(--mono);font-size:20px;font-weight:600;margin:0;letter-spacing:-.02em;white-space:nowrap}
-.v.blue{color:var(--blue)} .v.violet{color:var(--violet)}
-.v.rose{color:var(--rose)} .v.mint{color:var(--mint)} .v.ink{color:var(--ink-2)}
-.chip{display:inline-block;font-size:11.5px;font-weight:600;padding:3px 10px;border-radius:999px;white-space:nowrap;vertical-align:middle}
-.chip.rej{background:rgba(217,83,107,.13);color:var(--rose)}
-.chip.hold{background:rgba(47,158,136,.14);color:var(--mint)}
-.chip.na{background:rgba(123,111,216,.13);color:var(--violet)}
-.chip.warn{background:rgba(201,122,46,.14);color:var(--amber)}
-
-/* figure */
-figure{margin:0 0 20px;background:var(--glass);border:1px solid var(--edge);border-radius:var(--r);padding:20px 22px 14px}
-figure img{width:100%;height:auto;display:block}
-figcaption{font-size:13.5px;color:var(--ink-3);margin-top:11px;line-height:1.6;max-width:76ch}
-
-/* table */
-.table-wrap{overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:14.5px;min-width:420px}
-th,td{padding:10px 9px;text-align:right;border-bottom:1px solid rgba(35,35,58,.09)}
-th:first-child,td:first-child{text-align:left}
-th{font-family:var(--mono);font-size:10.5px;letter-spacing:.08em;color:var(--ink-3);font-weight:500;text-transform:uppercase}
-td.num{font-family:var(--mono)}
-tr:last-child td{border-bottom:none}
-
-/* pair rows */
-.pair{display:grid;grid-template-columns:78px 1fr auto;gap:14px;align-items:baseline;
-  padding:13px 0;border-bottom:1px solid rgba(35,35,58,.08)}
-.pair:last-child{border-bottom:none}
-.pair .lbl{font-family:var(--mono);font-size:13.5px;font-weight:600}
-.pair .txt{font-size:15.5px;color:var(--ink-2);line-height:1.55}
-
-/* callout */
-.callout{background:rgba(255,255,255,.5);border:1px solid var(--edge);border-radius:var(--r);padding:26px 28px;margin:0}
-.callout .big{font-size:14px;font-family:var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin:0 0 12px}
-.money{font-family:var(--mono);font-size:clamp(28px,3.8vw,40px);font-weight:600;letter-spacing:-.035em;margin:0;line-height:1.05}
-.callout .sub{font-size:14px;color:var(--ink-3);margin:12px 0 0;line-height:1.6}
-
-/* skills / contribution lists */
-.tags{display:flex;flex-wrap:wrap;gap:7px;margin:0}
-.tags span{font-size:13.5px;background:var(--glass-2);border-radius:8px;padding:6px 12px;color:var(--ink-2)}
-ul.plain{margin:0;padding:0;list-style:none}
-ul.plain li{position:relative;padding-left:19px;font-size:15.5px;color:var(--ink-2);margin:0 0 9px}
-ul.plain li::before{content:"";position:absolute;left:0;top:11px;width:6px;height:6px;border-radius:50%;background:var(--mint);opacity:.7}
-ul.plain li:last-child{margin-bottom:0}
-
-/* repo link */
-.repo{display:inline-flex;align-items:center;gap:10px;background:var(--glass);border:1px solid var(--edge);
-  border-radius:12px;padding:15px 22px;text-decoration:none;color:var(--ink);font-size:15.5px;font-weight:500;
-  transition:background .18s}
-.repo:hover{background:rgba(255,255,255,.9)}
-.repo span{font-family:var(--mono);font-size:13.5px;color:var(--blue)}
-
-.note{font-size:14px;color:var(--ink-3);line-height:1.65;max-width:76ch}
-
-footer{padding:36px 32px 80px;border-top:1px solid rgba(35,35,58,.1);margin-top:16px}
-footer p{font-size:13px;color:var(--ink-3);margin:0 0 5px}
-footer a{color:var(--blue);text-decoration:none}
-footer a:hover{text-decoration:underline}
-a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
-
-@media (max-width:920px){
-  .nav .wrap{height:58px}
-  .nav ul{gap:0}
-  .nav ul a{padding:8px 9px;font-size:12.5px}
-  .main{grid-template-columns:minmax(0,1fr);gap:0;padding:48px 22px 32px}
-  .rail{position:static;margin-bottom:40px;min-width:0}
-  .rail ol{display:flex;gap:7px;overflow-x:auto;padding-bottom:6px}
-  .rail li{flex:0 0 auto}
-  .rail a{white-space:nowrap;background:rgba(255,255,255,.55)}
-  .grid2,.grid3,.picks{grid-template-columns:1fr}
-  .pair{grid-template-columns:1fr;gap:5px}
-  .dec{grid-template-columns:1fr;gap:8px}
-  .hero{padding:92px 22px 36px}
-  footer{padding:36px 22px 80px}
-  .wrap{padding:0 22px}
-}
-@media (prefers-reduced-motion:reduce){.pick{animation:none;opacity:1;transform:none}}
+/* this page's pair rows have three columns */
+.pair{grid-template-columns:78px 1fr auto}
+@media (max-width:900px){.pair{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
 
 <nav class="nav" id="nav">
   <div class="wrap">
-    <a class="brand" href="../../index.html">Jiwoon&nbsp;Oh</a>
+    <a class="brand" href="../../index.html" aria-label="Jiwoon Oh, home">JO.</a>
     <ul>
       <li><a href="../../index.html#work">Work</a></li>
       <li><a href="../../index.html#about">About</a></li>
@@ -226,10 +31,16 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 </nav>
 
 <header class="wrap hero">
-  <p class="eyebrow">Case study · A/B testing &amp; comparative analysis</p>
-  <h1>How did the three promotions compare on <em>sales</em>?</h1>
+  <p class="kicker">[Case study]</p>
+  <h1>Fast-Food Promotion Comparison</h1>
+  <p class="subtitle">How did the three promotions compare on sales?</p>
   <p class="lede">The dataset description sets up a scenario in which a fast-food chain compares three promotional strategies for a new menu item across 137 stores; I treat it as hypothetical sample data. Over four weeks, one promotion had lower new-item sales than the other two, while those two could not be separated statistically. A scenario estimate converts the observed gap into dollars.</p>
-  <p class="meta">137 stores · 4 weeks · 548 observations · Python, pandas, SciPy, statsmodels · <a href="https://github.com/jiwoon-oh/fastfood-promotion-ab-test" target="_blank" rel="noopener">Code &amp; outputs on GitHub ↗</a></p>
+  <dl class="byline">
+    <div><dt>Approach</dt><dd>A/B testing &amp; comparative analysis</dd></div>
+    <div><dt>Data</dt><dd>137 stores · 4 weeks · 548 observations</dd></div>
+    <div><dt>Tools</dt><dd>Python, pandas, SciPy, statsmodels</dd></div>
+    <div><dt>Code</dt><dd><a href="https://github.com/jiwoon-oh/fastfood-promotion-ab-test" target="_blank" rel="noopener">Code &amp; outputs on GitHub ↗</a></dd></div>
+  </dl>
 
   <div class="picks">
     <div class="pick keep">
@@ -693,15 +504,6 @@ a:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
 })();
 </script>
 
-<script>
-/* site nav: transparent at the top, solid once scrolled */
-(function(){
-  var n = document.getElementById("nav");
-  if (!n) return;
-  var f = function(){ n.classList.toggle("solid", window.scrollY > 10); };
-  f(); addEventListener("scroll", f, { passive: true });
-})();
-</script>
 
 </body>
 </html>

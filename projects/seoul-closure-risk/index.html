@@ -9,18 +9,14 @@
 <meta property="og:description" content="67,475 commercial-district cells (all four area types) across 12 labeled quarters, and how the category with the highest pooled net-decline rate among neighborhood commercial areas (34,647 of those cells) compares with matched cells: its net-decline rate is lower after matching on store count, but not at every size.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="../../assets/case.css">
-<style>
-/* per-project tint — structure and components come from case.css */
-:root{ --wash-a:#E8F4F1; --wash-b:#E2EEF9; --wash-c:#EAF1F8 }
-</style>
 </head>
 <body>
 
 <nav class="nav" id="nav">
   <div class="wrap">
-    <a class="brand" href="../../index.html">Jiwoon&nbsp;Oh</a>
+    <a class="brand" href="../../index.html" aria-label="Jiwoon Oh, home">JO.</a>
     <ul>
       <li><a href="../../index.html#work">Work</a></li>
       <li><a href="../../index.html#about">About</a></li>
@@ -30,10 +26,16 @@
 </nav>
 
 <header class="wrap hero">
-  <p class="eyebrow">Case study · Observational analysis &amp; forecasting</p>
-  <h1>Net decline and <em>store count</em> in Seoul commercial districts</h1>
+  <p class="kicker">[Case study]</p>
+  <h1>Seoul Closure Risk</h1>
+  <p class="subtitle">Net decline and store count in Seoul commercial districts</p>
   <p class="lede">Seoul's commercial-district data includes quarterly openings and closures, from which food categories can be ranked by a net-decline rate (this project's own definition). If small-business support were allocated by such a ranking, it could influence where support goes. Korean restaurants have the highest net-decline rate overall in neighborhood commercial areas, though they rank first in only 3 of the 12 quarters taken one by one. After matching on store count the sign of the gap reverses, and the reversed difference does not hold at every size.</p>
-  <p class="meta">67,475 cells (all four area types; the matching analysis uses the 34,647 neighborhood cells) · 12 labeled quarters · 10 food categories · Python, pandas, statsmodels, scikit-learn · <a href="https://github.com/jiwoon-oh/seoul-closure-risk" target="_blank" rel="noopener">Code &amp; outputs on GitHub ↗</a></p>
+  <dl class="byline">
+    <div><dt>Approach</dt><dd>Observational analysis &amp; forecasting</dd></div>
+    <div><dt>Data</dt><dd>67,475 cells (all four area types; the matching analysis uses the 34,647 neighborhood cells) · 12 labeled quarters · 10 food categories</dd></div>
+    <div><dt>Tools</dt><dd>Python, pandas, statsmodels, scikit-learn</dd></div>
+    <div><dt>Code</dt><dd><a href="https://github.com/jiwoon-oh/seoul-closure-risk" target="_blank" rel="noopener">Code &amp; outputs on GitHub ↗</a></dd></div>
+  </dl>
   <div class="picks">
     <div class="pick drop">
       <p class="name">RAW COMPARISON</p>
@@ -780,15 +782,6 @@
     });
   }, { rootMargin: '-10% 0px -70% 0px', threshold: 0 });
   secs.forEach(function(s){ if(s) io.observe(s); });
-})();
-</script>
-<script>
-/* site nav: transparent at the top, solid once scrolled */
-(function(){
-  var n = document.getElementById("nav");
-  if (!n) return;
-  var f = function(){ n.classList.toggle("solid", window.scrollY > 10); };
-  f(); addEventListener("scroll", f, { passive: true });
 })();
 </script>
 
