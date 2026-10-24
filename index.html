@@ -46,14 +46,14 @@ a{color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-und
 a:hover{text-decoration-thickness:2px}
 a:focus-visible,summary:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 
-/* small bracket labels: [01], [2026], [✓] */
+/* small bracket labels: [01], [✓] */
 .lab{font-size:12px;line-height:1.4;letter-spacing:.02em;color:var(--mute-text)}
 .display{font-family:var(--display);font-weight:800;text-transform:uppercase;
   letter-spacing:-.03em;line-height:.95}
 
 /* ── header + hero (first screen) ─────────────────────────────
-   3 columns ≈ 30 / 40 / 30. Row 1: initials · intro · menu.
-   Row 2: link + gradient shape · headline across columns 2–3. */
+   3 columns ≈ 30 / 40 / 30. Row 1: initials · empty cell · menu.
+   Row 2: limitations line + link · headline across columns 2–3. */
 .hero{display:grid;grid-template-columns:3fr 4fr 3fr;grid-template-rows:auto 1fr;
   min-height:100vh;min-height:100svh;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 .hero > *{padding:var(--pad)}
@@ -66,8 +66,6 @@ a:focus-visible,summary:focus-visible{outline:2px solid var(--ink);outline-offse
 
 .mark{font-family:var(--display);font-weight:800;font-size:30px;letter-spacing:-.04em;
   text-decoration:none;line-height:1}
-.intro{font-family:var(--display);font-weight:700;text-transform:uppercase;
-  font-size:15px;line-height:1.3;letter-spacing:-.005em;max-width:34ch}
 .menu{display:flex;flex-direction:column;gap:2px;font-size:15px}
 .menu a{text-decoration:none}
 .menu a:hover{text-decoration:underline}
@@ -75,16 +73,6 @@ a:focus-visible,summary:focus-visible{outline:2px solid var(--ink);outline-offse
 .go{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
 .limits{margin:0;font-size:14px;line-height:1.45;color:var(--mute-text);max-width:32ch}
 .seework{font-size:15px;font-weight:500}
-/* abstract colour shape, CSS only */
-.blob{width:min(100%,320px);aspect-ratio:1 / 1.12;margin-top:auto;
-  border-radius:58% 42% 52% 48% / 46% 56% 44% 54%;
-  background:
-    radial-gradient(38% 34% at 30% 28%,#F2A365 0%,rgba(242,163,101,0) 100%),
-    radial-gradient(40% 38% at 70% 40%,#E77A8E 0%,rgba(231,122,142,0) 100%),
-    radial-gradient(46% 42% at 44% 72%,#1E1E22 0%,rgba(30,30,34,0) 100%),
-    radial-gradient(52% 48% at 78% 82%,#6F8297 0%,rgba(111,130,151,0) 100%),
-    radial-gradient(70% 70% at 50% 50%,#C9B9AE 0%,rgba(201,185,174,0) 100%);
-  filter:blur(14px) saturate(1.05)}
 
 h1.headline{font-size:clamp(46px,7.6vw,138px);color:var(--head-mute);max-width:12ch}
 h1.headline .on{color:var(--head-ink)}
@@ -142,10 +130,10 @@ footer{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
   .hero{grid-template-columns:1fr;grid-template-rows:none;min-height:0}
   .hero > *{grid-column:1 !important;grid-row:auto !important}
   .hero > * + *{border-left:0;border-top:1px solid var(--line)}
-  .c-intro,.c-menu{border-bottom:0}
+  .c-intro{display:none}
+  .c-menu{border-bottom:0}
   .c-head{order:2}
   .c-side{order:3}
-  .blob{width:min(70%,260px);margin-top:0}
   h1.headline{font-size:clamp(40px,12vw,84px)}
   .sec{grid-template-columns:1fr}
   .sec > * + *{border-left:0;border-top:1px solid var(--line)}
@@ -168,9 +156,7 @@ footer{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
   <div class="c-mark">
     <a class="mark" href="#top" aria-label="Jiwoon Oh, home">JO.</a>
   </div>
-  <div class="c-intro">
-    <p class="intro">I work with promotion, observational and customer transaction data, using statistics and machine learning to support business decisions.</p>
-  </div>
+  <div class="c-intro" aria-hidden="true"></div>
   <nav class="c-menu" aria-label="Main">
     <ul class="menu">
       <li><a href="#work">Work</a></li>
@@ -179,17 +165,14 @@ footer{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
       <li><a href="https://github.com/jiwoon-oh" target="_blank" rel="noopener">GitHub ↗</a></li>
       <li><a href="mailto:jiwoonds@gmail.com">Email ↗</a></li>
     </ul>
-    <span class="lab">[2026]</span>
   </nav>
   <div class="c-side">
     <div class="go">
       <p class="limits">Each one reports its estimates together with their limitations.</p>
       <a class="seework" href="#work">See the work ↘</a>
     </div>
-    <div class="blob" aria-hidden="true"></div>
   </div>
   <div class="c-head">
-    <p class="lab">[<span id="greet">Good evening</span>]</p>
     <h1 class="headline display">I use <span class="on">data</span> to answer <span class="on">business questions</span>.</h1>
   </div>
 </header>
@@ -200,7 +183,7 @@ footer{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
 <section class="sec" id="work">
   <div>
     <p class="lab">[01] Selected work</p>
-    <h2 class="display">Four questions, four approaches</h2>
+    <h2 class="display">Projects</h2>
     <p class="lead">Each case study starts from a question about the data and uses the method that suits it: a direct group comparison for the promotion study, propensity-score matching for the observational Seoul data, descriptive and predictive analysis for revenue concentration, and fixed-effects panel models for campaign response.</p>
     <ul class="checks">
       <li>Group comparison</li>
@@ -345,17 +328,6 @@ footer{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
   <p>Jiwoon Oh · Data Analyst</p>
   <p>Built with plain HTML and CSS. Figures in the case studies are generated by the analysis code in the linked repositories. Photos: Unsplash.</p>
 </footer>
-
-<script>
-/* time-based greeting */
-(function(){
-  var h = new Date().getHours(), t = "Good evening";
-  if (h < 5)       t = "Good night";
-  else if (h < 12) t = "Good morning";
-  else if (h < 18) t = "Good afternoon";
-  document.getElementById("greet").textContent = t;
-})();
-</script>
 
 </body>
 </html>
