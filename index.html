@@ -59,8 +59,8 @@ a:focus-visible,summary:focus-visible{outline:2px solid var(--ink);outline-offse
 .hero > *{padding:var(--pad)}
 .hero > * + *{border-left:1px solid var(--line)}
 .c-mark{grid-column:1;grid-row:1}
-.c-intro{grid-column:2;grid-row:1;border-bottom:1px solid var(--line)}
-.c-menu{grid-column:3;grid-row:1;display:flex;justify-content:space-between;gap:16px;border-bottom:1px solid var(--line)}
+.c-intro{grid-column:2;grid-row:1}
+.c-menu{grid-column:3;grid-row:1;display:flex;justify-content:space-between;gap:16px;border-left:0}
 .c-side{grid-column:1;grid-row:2;border-left:0;display:flex;flex-direction:column;gap:36px}
 .c-head{grid-column:2 / span 2;grid-row:2;display:flex;flex-direction:column;justify-content:flex-end;gap:22px}
 
@@ -131,7 +131,8 @@ footer{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
   .hero > *{grid-column:1 !important;grid-row:auto !important}
   .hero > * + *{border-left:0;border-top:1px solid var(--line)}
   .c-intro{display:none}
-  .c-menu{border-bottom:0}
+  .c-menu{border-top:0;padding-top:4px}
+  .c-head{border-top:0;padding-top:36px}
   .c-head{order:2}
   .c-side{order:3}
   h1.headline{font-size:clamp(40px,12vw,84px)}
