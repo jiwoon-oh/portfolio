@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Esports Draft Prediction and Recommendation | Case Study</title>
+<meta name="description" content="A League of Legends draft tool built from a T1 analyst's point of view. A pick-choice model put the opponent's actual pick in its top 5 63.5% of the time on 55 held-out playoff games (baseline 41.6%). The pick recommender was checked on 301 out-of-sample LCK games; the ban ranking failed its check and is shown as reference only.">
+<meta property="og:title" content="Esports draft prediction: opponent picks in the top 5 63.5% of the time on held-out playoffs">
+<meta property="og:description" content="2,055 pro games, 27,177 solo-queue games, time-ordered validation; pick recommendations checked out of sample, ban ranking did not pass.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../../assets/case.css">
+</head>
+<body>
+
+<nav class="nav" id="nav">
+  <div class="wrap">
+    <a class="brand" href="../../index.html" aria-label="Jiwoon Oh, home">JO.</a>
+    <ul>
+      <li><a href="../../index.html#work">Work</a></li>
+      <li><a href="../../index.html#about">About</a></li>
+      <li><a href="../../index.html#contact">Contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="wrap hero">
+  <p class="kicker">[Case study]</p>
+  <h1>Esports Draft Prediction and Recommendation</h1>
+  <p class="subtitle">Predicting the opponent's next ban or pick, and recommending which of ours wins more</p>
+  <p class="lede">During a draft an analyst wants three answers: what the opponent will take next, how much a champion changes our chance of winning, and therefore what to ban or pick now. I built a separate model for each. On 55 playoff games held back until the end and evaluated once, the opponent's actual pick was in the model's top 5 63.5% of the time, against 41.6% for a meta-and-roster baseline. The pick recommendations were then checked on 301 LCK games the models had not seen: teams that strayed further from them lost more, an observational association rather than proof. The ban ranking did not pass the same check and is shown as reference only.</p>
+  <dl class="byline">
+    <div><dt>Approach</dt><dd>Predictive modelling, simulation &amp; time-ordered validation</dd></div>
+    <div><dt>Data</dt><dd>2,055 pro games · 503 LCK drafts · 27,177 solo-queue games</dd></div>
+    <div><dt>Tools</dt><dd>Python, pandas, scikit-learn, LightGBM</dd></div>
+    <div><dt>Code</dt><dd><a href="https://github.com/jiwoon-oh/lol-project" target="_blank" rel="noopener">Code &amp; outputs on GitHub ↗</a></dd></div>
+  </dl>
+  <div class="picks">
+    <div class="pick keep">
+      <p class="name">OPPONENT PICK · TOP 5 · 55 PLAYOFF GAMES</p>
+      <p class="val">63.5<span class="unit">%</span></p>
+      <span class="tag">Baseline 41.6%, evaluated once</span>
+    </div>
+    <div class="pick split">
+      <p class="name">STRAYING FROM PICK RECS · 301 UNSEEN GAMES</p>
+      <p class="val">−0.70<span class="unit"> slope</span></p>
+      <span class="tag">95% CI [−1.35, −0.11], not causal</span>
+    </div>
+    <div class="pick drop">
+      <p class="name">STRAYING FROM BAN RECS · SAME 301 GAMES</p>
+      <p class="val">−1.40<span class="unit"> slope</span></p>
+      <span class="tag">95% CI [−3.71, +0.61], did not pass</span>
+    </div>
+  </div>
+  <p class="picks-note">2026 LCK season · trained on games up to Aug 25 · playoffs (from Aug 26) held back for the final test</p>
+</header>
+
+<div class="wrap main">
+<nav class="rail" aria-label="Contents">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#s0">00 · Executive summary<span class="p">start here</span></a></li>
+    <li><a href="#s1">01 · Overview</a></li>
+    <li><a href="#s2">02 · Business question</a></li>
+    <li><a href="#s3">03 · Data<span class="p">2,055 pro games</span></a></li>
+    <li><a href="#s4">04 · Validation design<span class="p">time order only</span></a></li>
+    <li><a href="#s5">05 · Analysis<span class="p">M4 · win value · M5</span></a></li>
+    <li><a href="#s6">06 · Results<span class="p">picks pass, bans fail</span></a></li>
+    <li><a href="#s7">07 · Business insights</a></li>
+    <li><a href="#s8">08 · Limitations</a></li>
+    <li><a href="#s9">09 · Tools &amp; skills</a></li>
+    <li><a href="#s10">10 · Repository</a></li>
+  </ol>
+</nav>
+
+<main>
+
+<section id="s0">
+  <p class="sec-no">00</p>
+  <h3>Executive summary</h3>
+  <p class="sec-sub">Question, method and findings in brief</p>
+
+  <p class="takeaway">Pro picks are explained by meta, comfort and reactions to the opponent far more than by the champion that wins most. Adding win value to the opponent model barely moved its accuracy, so "probability of picking" (prediction) and "win value" (recommendation) are kept as two separate models.</p>
+
+  <div class="card">
+    <h4>Three questions, three outputs</h4>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th class="tl">Question during the draft</th><th class="tl">Output</th><th class="tl">How it was checked</th></tr></thead>
+      <tbody>
+        <tr><td class="tl">What will the opponent pick or ban next?</td><td class="tl lead">M4 pick-choice model: a probability for every legal champion</td><td class="tl">55 playoff games, once, after the model was frozen</td></tr>
+        <tr><td class="tl">How much does this champion change our chance of winning?</td><td class="tl lead">Win value: a champion's share of gold at 10/15/20/25 min plus wins at equal gold</td><td class="tl">970 pro games over 5 evaluation patches</td></tr>
+        <tr><td class="tl">So what should we ban or pick now?</td><td class="tl lead">M5 recommender: plays out the rest of the draft thousands of times per candidate</td><td class="tl">301 LCK games, models rebuilt from data before each patch</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <h4 style="margin-top:34px">Key findings</h4>
+  <div class="card tight">
+    <p class="small"><strong>Opponent prediction holds up on held-out games.</strong> On 55 Play-In and playoff games, the actual pick was in the top 5 63.5% of the time and the actual ban 64.7%, against 41.6% and 43.8% for the baseline. Random guessing puts it in the top 5 about 4% of the time.</p>
+  </div>
+  <div class="card tight">
+    <p class="small"><strong>The probabilities became usable after simulation.</strong> Events the old method called "70% or more" happened 42% of the time; with Monte Carlo draft rollouts they happened 67% of the time (138 games never used for tuning).</p>
+  </div>
+  <div class="card tight">
+    <p class="small"><strong>Draft value predicts results, and straying from the pick recommendation is associated with losing.</strong> On 301 out-of-sample LCK games, adding draft value to team strength and side lowered log loss from 0.6261 to 0.6065; the slope of missed value on results was −0.70 [−1.35, −0.11].</p>
+  </div>
+  <div class="card tight">
+    <p class="small"><strong>The ban ranking did not pass.</strong> The slope for missed ban value was −1.40 [−3.71, +0.61], so its interval includes zero. The ban panel in the dashboard says so.</p>
+  </div>
+
+  <div class="callout" style="margin-top:30px">
+    <p class="big">How this is reported</p>
+    <p class="money">Prediction validated; recommendation an association</p>
+    <p class="sub">The opponent model was frozen and tested once on games it never saw. The recommendation checks use observational games with only team strength (Elo) and side controlled, so they show that following the pick recommendation goes with winning, not that it causes it.</p>
+  </div>
+
+  <h4 style="margin-top:34px">At a glance</h4>
+  <div class="card">
+    <div class="pair">
+      <span class="lbl">Pro games</span>
+      <span class="txt">LCK, LCK CL, LPL, LEC, LCS up to Aug 25, 2026 (LCK 447)</span>
+      <span class="num">2,055 games</span>
+    </div>
+    <div class="pair">
+      <span class="lbl">Draft order</span>
+      <span class="txt">LCK games × 20 steps, 10,060 picks and bans</span>
+      <span class="num">503 games</span>
+    </div>
+    <div class="pair">
+      <span class="lbl">Solo queue</span>
+      <span class="txt">105 accounts of 58 LCK players, with 10/15/20/25-min frames and kill events</span>
+      <span class="num">27,177 games</span>
+    </div>
+    <div class="pair">
+      <span class="lbl">Final test</span>
+      <span class="txt">Play-In and playoff games from Aug 26, evaluated once with the model frozen</span>
+      <span class="num">55 games</span>
+    </div>
+    <div class="pair">
+      <span class="lbl">Causal claim</span>
+      <span class="txt">None for the recommendations. Observational games, only Elo and side controlled</span>
+      <span class="num">—</span>
+    </div>
+  </div>
+</section>
+
+<section id="s1">
+  <p class="sec-no">01</p>
+  <h3>Overview</h3>
+  <p class="sec-sub">What was built, and why prediction and recommendation are separate</p>
+
+  <p>A draft has 20 steps: each team bans and picks in a fixed order, and every choice changes what the other side can do. An analyst in the booth needs to know what the opponent is likely to take next and which of our options leaves us with the stronger finished composition.</p>
+
+  <p>The obvious approach, ranking champions by win rate, mixes up two different things. <strong>Strong teams make their champions look good</strong>, and a pro team's choice depends on meta, its players' champion pools and what the opponent just did. So the project keeps a model of what teams <em>do</em> pick (M4) apart from an estimate of what a champion is <em>worth</em> once team strength is controlled (win value), and only the recommender (M5) combines them.</p>
+
+  <div class="grid2">
+    <div class="card tight">
+      <h4>Approach</h4>
+      <p class="small">Models whose reasons can be shown: GLMs (logistic, ridge, elastic net, Poisson) with coefficients and intervals for the value side. LightGBM is mixed into opponent prediction only, where hit rate is the goal. Every split is in time order, and the playoffs stayed closed until the end.</p>
+    </div>
+    <div class="card tight">
+      <h4>Scope</h4>
+      <p class="small">One input, a daily champion meta score used as an M4 feature, was produced by a teammate and is credited in the data table. The project also includes source-backed player and team profiles (section 05 D) and a local draft dashboard.</p>
+    </div>
+  </div>
+
+  <p class="takeaway">Main result: the opponent model is the best-validated part. The pick recommender passes an out-of-sample check as an association; the ban recommender does not.</p>
+</section>
+
+<section id="s2">
+  <p class="sec-no">02</p>
+  <h3>Business question</h3>
+  <p class="sec-sub">What the analyst needs, and what would make the answer misleading</p>
+
+  <div class="card">
+    <h4>Given the draft so far, what should T1 ban or pick next?</h4>
+    <p class="small">Concretely: for each legal champion, how likely is the opponent to take it later in the draft, and how much does taking or denying it change the expected win rate of the finished ten-champion draft?</p>
+  </div>
+
+  <div class="card">
+    <h4>Two traps <span class="chip warn">confounding &amp; leakage</span></h4>
+    <p class="small"><strong>Team strength.</strong> A champion picked mostly by strong teams wins often whatever it does. Win value therefore controls for pre-game Elo, player mastery and, in solo queue, the number of pros in the game.</p>
+    <p class="small"><strong>Future data.</strong> A random train/test split lets future games predict past ones. Every split here is by date; patch names (26.01–26.16) are only labels for time windows.</p>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><p class="k">Training data to</p><p class="v blue">Aug 25</p></div>
+    <div class="stat"><p class="k">Final test from</p><p class="v violet">Aug 26</p></div>
+    <div class="stat"><p class="k">Draft steps</p><p class="v mint">20</p></div>
+    <div class="stat"><p class="k">Final test runs</p><p class="v ink">1</p></div>
+  </div>
+</section>
+
+<section id="s3">
+  <p class="sec-no">03</p>
+  <h3>Data</h3>
+  <p class="sec-sub">Sources for the draft models, and what could not be used</p>
+
+  <div class="card">
+    <h4>Sources for the draft models</h4>
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th class="tl">Data</th><th class="tl">Source</th><th class="tl">Size</th><th class="tl">Used in</th></tr></thead>
+      <tbody>
+        <tr><td class="tl lead">Pro game records</td><td class="tl">Oracle's Elixir CSV</td><td class="tl">5 leagues, 2,055 games (LCK 447)</td><td class="tl">M1–M3, win value</td></tr>
+        <tr><td class="tl lead">LCK draft order</td><td class="tl">Leaguepedia Cargo API</td><td class="tl">503 games × 20 steps</td><td class="tl">M4</td></tr>
+        <tr><td class="tl lead">Solo queue</td><td class="tl">Riot Games API (match-v5 + timeline)</td><td class="tl">27,177 games of 58 players</td><td class="tl">M0 attributes, M1–M3, mastery</td></tr>
+        <tr><td class="tl lead">Patch changes</td><td class="tl">Riot patch notes (KR)</td><td class="tl">26.01–26.21, 834 champion changes</td><td class="tl">M0 rework detection, M4</td></tr>
+        <tr><td class="tl lead">Champion info</td><td class="tl">Data Dragon, Meraki role classes</td><td class="tl">173 champions</td><td class="tl">Name mapping, M0 checks</td></tr>
+        <tr><td class="tl lead">Rosters and schedule</td><td class="tl">Leaguepedia</td><td class="tl">10 teams, 67 players, 188 matches</td><td class="tl">Lineups, series</td></tr>
+        <tr><td class="tl lead">Meta score</td><td class="tl">Teammate's output</td><td class="tl">111 match days × 172 champions</td><td class="tl">M4 meta feature</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="small" style="margin-top:14px"><strong>Why solo queue.</strong> The LCK has only 447 games, far too few to measure champion traits and matchups. The researched players' own solo-queue games add volume while staying close to the pro meta, so the models are layered: solo queue → five pro leagues → LCK, with each layer pulled harder toward zero.</p>
+  </div>
+
+  <div class="card tight">
+    <h4>What could not be used <span class="chip info">collection rules</span></h4>
+    <p class="small">Collection followed robots.txt (with an RFC 9309 parser written for the project), waited 1–2 seconds between requests and stopped a site at the first 403, 429 or captcha. The LoL Esports live stats feed, which has pro kill and position events, is a private API, so pro games use Oracle's Elixir summary stats (such as 15-minute gold) instead. 2025 data was dropped because the 2026 draft rules (First Selection, fearless) differ.</p>
+  </div>
+
+  <div class="card tight">
+    <h4>Known gaps</h4>
+    <p class="small">The solo-queue match-list API cut off older games for 28 of 89 accounts, so early-season mastery may be underestimated. Two of the 67 players who played have no solo-queue account found, and one LCK game is missing from Oracle's Elixir, so only its draft is available.</p>
+  </div>
+</section>
+
+<section id="s4">
+  <p class="sec-no">04</p>
+  <h3>Validation design</h3>
+  <p class="sec-sub">Four time windows, each with one job</p>
+
+  <div class="card">
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th class="tl">Split</th><th class="tl">Period</th><th class="tl">Used for</th></tr></thead>
+      <tbody>
+        <tr><td class="tl lead">Training</td><td class="tl">Start of the 2026 season to Aug 25</td><td class="tl">All model fitting</td></tr>
+        <tr><td class="tl lead">Rehearsal</td><td class="tl">LCK 26.14, 26.15 and Road to MSI</td><td class="tl">Choosing settings only (regularisation, feature groups); coefficients refit each time on earlier data</td></tr>
+        <tr><td class="tl lead">Extra evaluation</td><td class="tl">26.08, 26.09, 26.10</td><td class="tl">Re-checking win value and the replay test on games never used for tuning</td></tr>
+        <tr class="mark"><td class="tl lead">Final test</td><td class="tl">55 Play-In and playoff games from Aug 26</td><td class="tl">M4 frozen first, then evaluated once; nothing changed afterwards</td></tr>
+      </tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>① The rehearsal only uses what was known at the time</h4>
+    <p class="small">Champion attributes, composition predictions and M4 were rebuilt for each rehearsal patch from data before that patch.</p>
+  </div>
+  <div class="card">
+    <h4>② Choosing among many variants on one rehearsal is optimistic</h4>
+    <p class="small">That is why M4 was checked again on the playoffs, and the win-value and replay results on patches the rehearsal never used. The extra patches changed one decision (section 05 B).</p>
+  </div>
+  <div class="card">
+    <h4>③ Pass rules were written before running</h4>
+    <p class="small">For the tie-zone, composition-context and ban checks, the pass rule (for example "upper bound of the 95% interval below zero") was recorded in the decision log before the check was run.</p>
+  </div>
+</section>
+
+<section id="s5">
+  <p class="sec-no">05</p>
+  <h3>Analysis</h3>
+  <p class="sec-sub">Opponent model, win value, recommender and research profiles</p>
+
+  <h4>A · M4: what will the opponent pick or ban?</h4>
+  <p>At each draft step the model learns which of the roughly 120–134 legal champions the team actually chose. It started as a conditional logit (softmax within the step) and grew one feature group at a time, compared on the rehearsal: meta, pick-order fit, player pools and mastery, open roles, fearless exclusions, reactive features (answers to the opponent's picks, blocking combos and counters), the first- and second-pick team's ban habits, and the earlier games of the same series.</p>
+
+  <div class="card">
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th class="tl">Rehearsal stage (LCK 26.14, 26.15, RTM)</th><th>Picks top 5</th><th>Bans top 5</th><th class="tl">What changed</th></tr></thead>
+      <tbody>
+        <tr><td class="tl">Baseline (meta + open roles + player pools)</td><td class="num">45.6%</td><td class="num">50.1%</td><td class="tl"></td></tr>
+        <tr><td class="tl">Conditional logit, first version</td><td class="num">57.6%</td><td class="num">54.9%</td><td class="tl">Order, player pools, meta</td></tr>
+        <tr><td class="tl">+ reactive features</td><td class="num">61.9%</td><td class="num">64.3%</td><td class="tl">Second ban phase 33.0 → 57.4%</td></tr>
+        <tr><td class="tl">Pick LightGBM (5 leagues, LCK weight 3)</td><td class="num">67.2%</td><td class="num"></td><td class="tl">Non-linearity +3.6 pp, five leagues +1.0 pp</td></tr>
+        <tr class="mark"><td class="tl lead">Final (+ series features, ban ensemble)</td><td class="num lead">66.5%</td><td class="num lead">69.8%</td><td class="tl">Frozen here</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="small" style="margin-top:14px"><strong>Tried and left out</strong> (within ±0.5 pp on the rehearsal): win value, team-specific coefficients, blind-pick safety, champion embeddings, research mentions, international and cup events, and series-level fearless planning. Picks use LightGBM, which clearly beat the conditional logit (62.6 → 67.2%); bans use a z-score ensemble of the linear model and LightGBM, because the linear model was better there.</p>
+  </div>
+
+  <figure>
+    <img src="assets/m4_topk.png" alt="Bar chart of top 1, top 3 and top 5 hit rates on 55 playoff games. Picks: baseline 14.0, 31.5, 41.6 percent against M4 26.7, 50.4, 63.5 percent. Bans: baseline 17.5, 32.4, 43.8 percent against M4 30.0, 52.2, 64.7 percent.">
+    <figcaption>Final test on 55 held-out playoff games, evaluated once. Top 5 is 3–5 points below the rehearsal, but the gap over the baseline (+21–22 points) is larger.</figcaption>
+  </figure>
+
+  <figure>
+    <img src="assets/m4_phase.png" alt="Top-5 accuracy by draft phase, baseline against M4: ban phase 1 56.7 to 68.8, pick phase 1 36.7 to 64.5, ban phase 2 24.5 to 58.6, pick phase 2 49.1 to 61.8 percent.">
+    <figcaption>The largest gain is in the second ban phase (+34.1 points), where reactive features carry most of the signal.</figcaption>
+  </figure>
+
+  <h4 style="margin-top:38px">B · Win value: what a champion is worth once team strength is controlled</h4>
+  <p>A single 0/1 result is noisy. Instead, gold difference at 10, 15, 20 and 25 minutes is converted to a "winning state" on the log-odds scale, and each time point is regressed on champion-by-role with ridge, with team strength controlled. Games that ended before a time point are set to ±3.5. A separate logistic term gives back the share of wins at equal gold, so champions that win without leading in gold are not penalised.</p>
+
+  <div class="card">
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th class="tl">Variant (5 evaluation patches, 970 pro games)</th><th>Log loss</th></tr></thead>
+      <tbody>
+        <tr><td class="tl">M1 composition-trait model only</td><td class="num">0.6430</td></tr>
+        <tr><td class="tl">Controls only (league, Elo, mastery)</td><td class="num">0.6356</td></tr>
+        <tr><td class="tl">M1 + time-window gold paths (best on two patches)</td><td class="num">0.6355</td></tr>
+        <tr class="mark"><td class="tl lead">Time-window gold paths without M1 (adopted)</td><td class="num lead">0.6285</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="small" style="margin-top:14px"><strong>Why the adopted variant changed.</strong> On the two rehearsal patches alone, M1 + paths was best. With five patches, M1 was weak early in the season, and a learned weight on M1 came out near zero on every patch (−0.43 to 0.22). Choosing on two patches had let luck in, so M1 was dropped. A coin flip is 0.693.</p>
+  </div>
+
+  <figure>
+    <img src="assets/value_variants.png" alt="Horizontal bar chart of pro-game log loss for six win-value variants; time-window gold paths alone score 0.6285, the lowest, and the M1 composition-trait model alone 0.6430, the highest.">
+    <figcaption>Each evaluation patch was fitted only on earlier data. The axis starts at 0.62.</figcaption>
+  </figure>
+
+  <figure>
+    <img src="assets/champion_value.png" alt="Dot plot with 95 percent intervals of the ten highest and ten lowest champion win values among champions with at least 200 games, from Senna ADC at about plus 4.8 points to Varus ADC at about minus 4.4 points.">
+    <figcaption>Of 212 champion-role entries with 200+ games, 44 have intervals that exclude zero. Intervals are from 50 bootstrap resamples.</figcaption>
+  </figure>
+
+  <h4 style="margin-top:38px">C · M5: playing out the rest of the draft</h4>
+  <p>An earlier version added up per-step probabilities as if they were independent. It turned "30%, 30% and 20% at three later steps" into 57%, although a champion can only be taken once and might be banned in between. The recommender now simulates instead.</p>
+
+  <div class="card">
+    <ol class="small" style="padding-left:20px;margin:0">
+      <li>From the current draft state, M4 gives both teams' probabilities for every remaining step (opponent = prediction, T1 = usual habits).</li>
+      <li>For each T1 candidate, M4 is recomputed from the state right after that choice, so the opponent's likely reaction is included.</li>
+      <li>The rest of the draft is played out 1,500–4,500 times with no repeats, lowering probabilities as roles fill. All candidates share the same random numbers.</li>
+      <li>Each finished draft gets a win rate from the Elo gap and side, summed champion win values, and player-by-champion mastery × 0.32; the results are averaged.</li>
+      <li>Pick candidates whose gap to the top one is within the win-value uncertainty form a tie zone, ordered by how often T1 usually picks them.</li>
+    </ol>
+    <p class="code" style="margin-top:16px">win rate = σ( base + (Σ T1 values − Σ opponent values) / 25 )
+base     = 0.093 × side + 2.32 × (T1 Elo − opponent Elo) / 400</p>
+  </div>
+
+  <figure>
+    <img src="assets/calibration.png" alt="Calibration curve for the event that the opponent picks a given champion later in the phase. The old independent method flattens out, reaching 42 percent observed at about 78 percent predicted; Monte Carlo rollouts reach 67 percent and stay closer to the diagonal.">
+    <figcaption>138 LCK games from 26.08–26.10, never used for tuning, with each draft rewound to every step. Rollouts also brought the ratio of predicted to actual counts from 0.93 to 1.00.</figcaption>
+  </figure>
+
+  <h4 style="margin-top:38px">D · Research profiles</h4>
+  <p>Alongside the draft models, profiles of 58 players and 10 teams summarise how articles, interviews and fan communities see each of them, with a source, a date and a verbatim quote behind every claim. Claude sub-agents did only two steps, extracting claims and drafting profiles; search, storage, quote checking and evaluation were code.</p>
+
+  <div class="card">
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th class="tl">Measure</th><th>Value</th><th>Threshold</th></tr></thead>
+      <tbody>
+        <tr><td class="tl">Claims extracted</td><td class="num">10,497</td><td class="num"></td></tr>
+        <tr><td class="tl">Quotes found in the source text</td><td class="num lead">94.0%</td><td class="num">70%</td></tr>
+        <tr><td class="tl">Claims supported by the quote (human sample of 256)</td><td class="num lead">98.4%</td><td class="num">80%</td></tr>
+        <tr><td class="tl">Claims attributed to the right person (same sample)</td><td class="num lead">94.9%</td><td class="num">85%</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="small" style="margin-top:14px">Checked against game records, sources' overall rating of a player moved with the player's usual lane gold (rank correlation +0.34, p 0.01, 57 players), but ratings of laning or specific champions barely did (+0.04 to +0.13). Adding research mentions to M4 did not improve it, so profiles appear only as evidence in the dashboard.</p>
+  </div>
+</section>
+
+<section id="s6">
+  <p class="sec-no">06</p>
+  <h3>Results</h3>
+  <p class="sec-sub">Out-of-sample checks of the recommender</p>
+
+  <p>Expected win rates computed with tables built from all data up to Aug 25 are in-sample, and the real result of an untaken pick is never observed. So for 8 LCK windows (301 games), the win-value table and M4 were rebuilt from data before each window, and two questions were asked.</p>
+
+  <div class="card">
+    <div class="table-wrap">
+    <table>
+      <thead><tr><th class="tl">Check</th><th class="tl">Result</th><th class="tl">Reading</th></tr></thead>
+      <tbody>
+        <tr class="mark"><td class="tl lead">① Does draft value predict results on top of Elo and side?</td><td class="tl">Log loss 0.6261 → 0.6065, difference −0.0196 [−0.0347, −0.0046]</td><td class="tl"><span class="chip hold">passes</span></td></tr>
+        <tr class="mark"><td class="tl lead">② Did teams that strayed from the pick recommendation lose more?</td><td class="tl">Slope −0.70 [−1.35, −0.11], p 0.04, over 3,020 pick turns</td><td class="tl"><span class="chip hold">passes</span></td></tr>
+        <tr><td class="tl">Ban check, same design</td><td class="tl">Slope −1.40 [−3.71, +0.61], over 3,020 ban turns</td><td class="tl"><span class="chip rej">fails</span></td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p class="small" style="margin-top:14px">The effect comes mostly from clearly worse drafts: in the bottom quarter of draft-value gap, blue was expected to win 52% on team strength and side and actually won 37%. On the two windows not used for any win-value setting (26.07, 26.16; 70 games) the log-loss difference was −0.0406. The effect is small and varies by window (no help on 26.09 and Road to MSI).</p>
+  </div>
+
+  <figure>
+    <img src="assets/rec_check_quartiles.png" alt="Bar chart of expected against actual blue win rate by quarter of draft win-value gap on 301 out-of-sample games: 52 against 37 percent when blue's draft is much worse, 55 against 67, 55 against 61, and 54 against 65 percent when it is much better.">
+    <figcaption>Draft value tables rebuilt from data before each window. Observational data, so this is an association.</figcaption>
+  </figure>
+
+  <figure>
+    <img src="assets/tests_forest.png" alt="Forest plot of six out-of-sample tests with 95 percent intervals. Passing, with the interval left of zero: draft win value on top of team strength, and deviation from pick recommendations. Failing: M1 composition traits, composition context, player-champion mastery, and deviation from ban recommendations.">
+    <figcaption>Every test on one page. Pass means the whole 95% interval lies left of zero. Composition traits, composition context and mastery did not help predict results, so they are shown in the dashboard as evidence only.</figcaption>
+  </figure>
+
+  <h4 style="margin-top:38px">Why the ban ranking failed</h4>
+  <div class="card">
+    <p class="small">The first half of the ban score is right: when the top ban candidate was left open, the opponent took it 23.0% of the time against a predicted 22.9%. The second half, how much a ban lowers the opponent's draft value, did not show up in results. The ban ranking is also more concentrated than picks (top 5 champions take 50.8% of first places), and 18.7% of first-ban top choices were champions the banning team later picked itself, a cost the score does not count because our own side is held fixed.</p>
+  </div>
+
+  <div class="callout" style="margin-top:26px">
+    <p class="big">Reported as</p>
+    <p class="money">Pick recommendations: an association that holds out of sample. Bans: reference only.</p>
+    <p class="sub">The dashboard keeps the ban score but labels it as not validated and points to the opponent's predicted picks instead.</p>
+  </div>
+</section>
+
+<section id="s7">
+  <p class="sec-no">07</p>
+  <h3>Business insights</h3>
+  <p class="sec-sub">What this means for draft preparation</p>
+
+  <div class="card">
+    <h4>① Predict and value separately</h4>
+    <p class="small">What a team will pick and what wins are different quantities. Win value added almost nothing to M4, and pro pick shares (top 5 champions about 15% of picks) are far more spread than the value-only ranking. <strong>A preparation sheet should show both columns rather than one blended score.</strong></p>
+  </div>
+  <div class="card">
+    <h4>② Earlier games in the series are strong evidence</h4>
+    <p class="small">39.5% of bans from game 2 onward repeat a ban the same team made earlier in the series. <strong>In a fearless series, the previous games are among the best predictors of the next draft.</strong></p>
+  </div>
+  <div class="card">
+    <h4>③ Pair effects show in lane gold, not in results</h4>
+    <p class="small">Strong lane counters move 15-minute gold by about ±150–250, and the pair terms raised lane-gold R² from 0.066 to 0.074, but adding them to result prediction made it worse. <strong>Matchups are useful as draft-time evidence, not as a win-rate adjustment.</strong></p>
+  </div>
+
+  <h4 style="margin-top:38px">Recommendations</h4>
+
+  <div class="rec">
+    <h4><span class="rn">01</span> Use the opponent model for ban planning</h4>
+    <dl>
+      <div class="rrow"><dt>Who</dt><dd>Draft analysts</dd></div>
+      <div class="rrow"><dt>What</dt><dd>Plan bans from the opponent's predicted picks and their threat, not from the ban-value ranking</dd></div>
+      <div class="rrow"><dt>Why</dt><dd>The opponent probabilities passed the held-out test and matched observed take rates (23.0% vs 22.9%); the ban-value ranking did not pass</dd></div>
+    </dl>
+  </div>
+
+  <div class="rec">
+    <h4><span class="rn">02</span> Treat pick recommendations as a shortlist</h4>
+    <dl>
+      <div class="rrow"><dt>Who</dt><dd>Coaching staff</dd></div>
+      <div class="rrow"><dt>What</dt><dd>Read the tie zone and the evidence chips (main, mastery, synergy, matchup) together, rather than taking the single top card</dd></div>
+      <div class="rrow"><dt>Why</dt><dd>The top recommendation leans on a few champions with high single-champion value; the tie-zone rule only reduced the top-5 share from 39.0% to 35.8%</dd></div>
+    </dl>
+  </div>
+
+  <div class="rec">
+    <h4><span class="rn">03</span> Get event-level pro data before adding composition effects</h4>
+    <dl>
+      <div class="rrow"><dt>Who</dt><dd>Analytics lead</dd></div>
+      <div class="rrow"><dt>What</dt><dd>License pro event data (kills, positions, objectives with timestamps) through the official route</dd></div>
+      <div class="rrow"><dt>Why</dt><dd>Composition traits, their non-additive part and lane matchups all failed to improve pro predictions with summary stats alone; finer outcomes are the most direct way to test them again</dd></div>
+    </dl>
+  </div>
+</section>
+
+<section id="s8">
+  <p class="sec-no">08</p>
+  <h3>Limitations</h3>
+  <p class="sec-sub">What the design cannot show</p>
+
+  <div class="card">
+    <h4>No causal claim for the recommendations</h4>
+    <p class="small">Teams that strayed further from the pick recommendations lost more (slope −0.70, p 0.04), but only Elo and side are controlled, so other factors may be mixed in. The best-validated part is the probability of what the opponent will pick.</p>
+  </div>
+
+  <div class="grid2">
+    <div class="card tight">
+      <h4>Win value is per champion</h4>
+      <p class="small">Composition interactions enter only through role filling in the rollouts. That is why recommendations lean toward a few champions (Ashe, Rumble, Syndra).</p>
+    </div>
+    <div class="card tight">
+      <h4>Rollouts are partly static</h4>
+      <p class="small">Champions picked inside a rollout don't feed back into M4's features; only the one-move lookahead does. T1's remaining turns are filled from its usual habits.</p>
+    </div>
+    <div class="card tight">
+      <h4>Some overconfidence remains</h4>
+      <p class="small">Events called 50–70% happened 44–51% of the time.</p>
+    </div>
+    <div class="card tight">
+      <h4>Profiles describe opinion</h4>
+      <p class="small">The research profiles show how sources see a player, not the player's actual skill. Human review covered 256 claims and was applied directly to 9 of the 68 targets.</p>
+    </div>
+  </div>
+</section>
+
+<section id="s9">
+  <p class="sec-no">09</p>
+  <h3>Tools &amp; Skills</h3>
+  <p class="sec-sub">What was used, and for what</p>
+
+  <div class="card">
+    <h4>Programming &amp; data handling</h4>
+    <div class="skills">
+      <span class="skill">Python</span>
+      <span class="skill">pandas</span>
+      <span class="skill">NumPy</span>
+      <span class="skill">scikit-learn</span>
+      <span class="skill">LightGBM</span>
+      <span class="skill">REST API Collection</span>
+      <span class="skill">robots.txt Compliance</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>Modelling</h4>
+    <div class="skills">
+      <span class="skill">Conditional Logit</span>
+      <span class="skill">Learning to Rank</span>
+      <span class="skill">Hierarchical Ridge / Elastic Net</span>
+      <span class="skill">Poisson &amp; Fractional Logit</span>
+      <span class="skill">Monte Carlo Simulation</span>
+      <span class="skill">Temperature Calibration</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>Validation</h4>
+    <div class="skills">
+      <span class="skill">Time-Ordered Splits</span>
+      <span class="skill">One-Shot Held-Out Test</span>
+      <span class="skill">Bootstrap Intervals</span>
+      <span class="skill">Pass Rules Set Before Testing</span>
+      <span class="skill">Replay Testing</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <h4>Practices</h4>
+    <div class="skills">
+      <span class="skill">Leakage Prevention</span>
+      <span class="skill">Confounder Control</span>
+      <span class="skill">LLM Output Verification</span>
+      <span class="skill">Association vs Causation Reporting</span>
+    </div>
+  </div>
+</section>
+
+<section id="s10">
+  <p class="sec-no">10</p>
+  <h3>Repository</h3>
+  <p class="sec-sub">Code, design notes and full write-up</p>
+
+  <a class="btn" href="https://github.com/jiwoon-oh/lol-project" target="_blank" rel="noopener">Code &amp; outputs on GitHub <span class="arw">&rarr;</span></a>
+
+  <p class="small" style="color:var(--ink-3);max-width:76ch">The repository contains the pipeline and model code, the draft dashboard and scouting-report code, the README write-up (in English and Korean) with a demo video, and design notes and a decision log in Korean. Collected source text and game data are kept out of the repository, so the models and dashboard cannot be run from it alone.</p>
+</section>
+
+</main>
+</div>
+
+<footer class="wrap">
+  <p>Data · Oracle's Elixir (pro games), Leaguepedia (draft order, rosters), Riot Games API and Data Dragon (solo queue, champions), a teammate's daily meta score. Raw data is not redistributed.</p>
+  <p>Tools · Python 3, pandas, NumPy, scikit-learn, LightGBM, matplotlib</p>
+  <p>Esports Draft Prediction and Recommendation isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc.</p>
+  <p>Code · <a href="https://github.com/jiwoon-oh/lol-project" target="_blank" rel="noopener">Code &amp; outputs on GitHub</a></p>
+</footer>
+
+<script>
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail a'));
+  var secs  = links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+  if(!('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(!e.isIntersecting) return;
+      var i = secs.indexOf(e.target);
+      links.forEach(function(a,j){ a.classList.toggle('on', j===i); });
+    });
+  }, { rootMargin: '-10% 0px -70% 0px', threshold: 0 });
+  secs.forEach(function(s){ if(s) io.observe(s); });
+})();
+</script>
+
+</body>
+</html>
