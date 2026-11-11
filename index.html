@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Jiwoon Oh — Data Analyst</title>
-<meta name="description" content="Data analyst working with statistical analysis, hypothesis testing, observational and panel data, and machine learning. Five case studies: a three-way promotion comparison, a Seoul closure-risk analysis using propensity-score matching, a household revenue concentration analysis, a campaign response analysis with fixed effects, and an esports draft recommender validated on held-out games.">
+<meta name="description" content="Data analyst working with statistical analysis, hypothesis testing, observational and panel data, and machine learning. Five case studies: a campaign response analysis with fixed effects, an esports draft recommender validated on held-out games, a Seoul closure-risk analysis using propensity-score matching, a household revenue concentration analysis, and a three-way promotion comparison.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://jiwoon-oh.github.io/portfolio/">
 <meta property="og:title" content="Jiwoon Oh — Data Analyst">
-<meta property="og:description" content="Statistical analysis, hypothesis testing, panel data and machine learning. Five case studies: promotion comparison, Seoul closure risk, revenue concentration, campaign response and esports draft recommendation.">
+<meta property="og:description" content="Statistical analysis, hypothesis testing, panel data and machine learning. Five case studies: campaign response, esports draft recommendation, Seoul closure risk, revenue concentration and promotion comparison.">
 <meta property="og:image" content="https://jiwoon-oh.github.io/portfolio/assets/og-cover.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -185,30 +185,46 @@ footer{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
   <div>
     <p class="lab">[01] Selected work</p>
     <h2 class="display">Projects</h2>
-    <p class="lead">Each case study starts from a question about the data and uses the method that suits it: a direct group comparison for the promotion study, propensity-score matching for the observational Seoul data, descriptive and predictive analysis for revenue concentration, fixed-effects panel models for campaign response, and predictive models with draft simulation for esports draft recommendation.</p>
+    <p class="lead">Each case study starts from a question about the data and uses the method that suits it: fixed-effects panel models for campaign response, predictive models with draft simulation for esports draft recommendation, propensity-score matching for the observational Seoul data, descriptive and predictive analysis for revenue concentration, and a direct group comparison for the promotion study.</p>
     <ul class="checks">
-      <li>Group comparison</li>
-      <li>Observational · Matching</li>
-      <li>Descriptive · Predictive</li>
       <li>Panel · Fixed effects</li>
       <li>Predictive · Simulation</li>
+      <li>Observational · Matching</li>
+      <li>Descriptive · Predictive</li>
+      <li>Group comparison</li>
     </ul>
   </div>
 
   <div class="acc">
     <details open>
       <summary>
-        <h3 class="ptitle display">Fast-Food Promotion Comparison</h3>
+        <h3 class="ptitle display">Campaign Response Heterogeneity</h3>
         <span class="arw" aria-hidden="true"></span>
-        <span class="pq">Three promotions ran side by side. Can the data name a winner, or only a loser?</span>
+        <span class="pq">Campaigns look far more effective on low spenders. Is that the campaign, or who receives it?</span>
       </summary>
       <div class="pbody">
         <div>
-          <p class="pmeta"><span class="lab">[Group comparison]</span></p>
-          <p class="pmethods">ANOVA · Tukey HSD · 137 stores</p>
-          <p class="plinks"><a href="projects/ab-test-fastfood/index.html" aria-label="Case study: Fast-Food Promotion Comparison">Case study ↗</a><a href="https://github.com/jiwoon-oh/fastfood-promotion-ab-test" target="_blank" rel="noopener" aria-label="Code and outputs for Fast-Food Promotion Comparison on GitHub">Code ↗</a></p>
+          <p class="pmeta"><span class="lab">[Panel · Fixed effects]</span></p>
+          <p class="pmethods">Two-way FE · Lead-effect test · BH-FDR · 172,500 household-weeks</p>
+          <p class="plinks"><a href="projects/dunnhumby-customer/case2/index.html" aria-label="Case study: Campaign Response Heterogeneity">Case study ↗</a><a href="https://github.com/jiwoon-oh/dunnhumby-campaign-response" target="_blank" rel="noopener" aria-label="Code and outputs for Campaign Response Heterogeneity on GitHub">Code ↗</a></p>
         </div>
-        <a class="pshot" href="projects/ab-test-fastfood/index.html" aria-label="Case study: Fast-Food Promotion Comparison"><img src="assets/thumbs/fastfood.webp" alt="Burger and fries on a plate beside a glass of beer" width="640" height="400" loading="lazy"></a>
+        <a class="pshot" href="projects/dunnhumby-customer/case2/index.html" aria-label="Case study: Campaign Response Heterogeneity"><img src="assets/thumbs/campaign.webp" alt="Shopper putting bread into a grocery cart" width="640" height="400" loading="lazy"></a>
+      </div>
+    </details>
+
+    <details>
+      <summary>
+        <h3 class="ptitle display">Esports Draft Recommendation</h3>
+        <span class="arw" aria-hidden="true"></span>
+        <span class="pq">Can a model predict the opponent's next ban or pick, and tell which of ours actually wins more?</span>
+      </summary>
+      <div class="pbody">
+        <div>
+          <p class="pmeta"><span class="lab">[Predictive · Simulation]</span></p>
+          <p class="pmethods">Hierarchical GLM · LightGBM ranking · Monte Carlo draft simulation · 2,055 pro games</p>
+          <p class="plinks"><a href="projects/lol-draft/index.html" aria-label="Case study: Esports Draft Recommendation">Case study ↗</a><a href="https://github.com/jiwoon-oh/lol-project" target="_blank" rel="noopener" aria-label="Code and outputs for Esports Draft Recommendation on GitHub">Code ↗</a></p>
+        </div>
+        <a class="pshot" href="projects/lol-draft/index.html" aria-label="Case study: Esports Draft Recommendation"><img src="assets/thumbs/lol.webp" alt="Retro computer, handheld console, joystick and cassette tapes under pink and blue light" width="640" height="400" loading="lazy"></a>
       </div>
     </details>
 
@@ -246,33 +262,17 @@ footer{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
 
     <details>
       <summary>
-        <h3 class="ptitle display">Campaign Response Heterogeneity</h3>
+        <h3 class="ptitle display">Fast-Food Promotion Comparison</h3>
         <span class="arw" aria-hidden="true"></span>
-        <span class="pq">Campaigns look far more effective on low spenders. Is that the campaign, or who receives it?</span>
+        <span class="pq">Three promotions ran side by side. Can the data name a winner, or only a loser?</span>
       </summary>
       <div class="pbody">
         <div>
-          <p class="pmeta"><span class="lab">[Panel · Fixed effects]</span></p>
-          <p class="pmethods">Two-way FE · Lead-effect test · BH-FDR · 172,500 household-weeks</p>
-          <p class="plinks"><a href="projects/dunnhumby-customer/case2/index.html" aria-label="Case study: Campaign Response Heterogeneity">Case study ↗</a><a href="https://github.com/jiwoon-oh/dunnhumby-campaign-response" target="_blank" rel="noopener" aria-label="Code and outputs for Campaign Response Heterogeneity on GitHub">Code ↗</a></p>
+          <p class="pmeta"><span class="lab">[Group comparison]</span></p>
+          <p class="pmethods">ANOVA · Tukey HSD · 137 stores</p>
+          <p class="plinks"><a href="projects/ab-test-fastfood/index.html" aria-label="Case study: Fast-Food Promotion Comparison">Case study ↗</a><a href="https://github.com/jiwoon-oh/fastfood-promotion-ab-test" target="_blank" rel="noopener" aria-label="Code and outputs for Fast-Food Promotion Comparison on GitHub">Code ↗</a></p>
         </div>
-        <a class="pshot" href="projects/dunnhumby-customer/case2/index.html" aria-label="Case study: Campaign Response Heterogeneity"><img src="assets/thumbs/campaign.webp" alt="Shopper putting bread into a grocery cart" width="640" height="400" loading="lazy"></a>
-      </div>
-    </details>
-
-    <details>
-      <summary>
-        <h3 class="ptitle display">Esports Draft Recommendation</h3>
-        <span class="arw" aria-hidden="true"></span>
-        <span class="pq">Can a model predict the opponent's next ban or pick, and tell which of ours actually wins more?</span>
-      </summary>
-      <div class="pbody">
-        <div>
-          <p class="pmeta"><span class="lab">[Predictive · Simulation]</span></p>
-          <p class="pmethods">Hierarchical GLM · LightGBM ranking · Monte Carlo draft simulation · 2,055 pro games</p>
-          <p class="plinks"><a href="projects/lol-draft/index.html" aria-label="Case study: Esports Draft Recommendation">Case study ↗</a><a href="https://github.com/jiwoon-oh/lol-project" target="_blank" rel="noopener" aria-label="Code and outputs for Esports Draft Recommendation on GitHub">Code ↗</a></p>
-        </div>
-        <a class="pshot" href="projects/lol-draft/index.html" aria-label="Case study: Esports Draft Recommendation"><img src="assets/thumbs/lol.webp" alt="Retro computer, handheld console, joystick and cassette tapes under pink and blue light" width="640" height="400" loading="lazy"></a>
+        <a class="pshot" href="projects/ab-test-fastfood/index.html" aria-label="Case study: Fast-Food Promotion Comparison"><img src="assets/thumbs/fastfood.webp" alt="Burger and fries on a plate beside a glass of beer" width="640" height="400" loading="lazy"></a>
       </div>
     </details>
   </div>

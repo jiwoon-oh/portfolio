@@ -10,13 +10,24 @@ Each case study reports its estimates together with their limitations.
 
 <table>
 <tr>
-<td width="240" valign="middle"><a href="https://github.com/jiwoon-oh/fastfood-promotion-ab-test"><img width="220" src="assets/thumbs/fastfood.webp" alt="Burger and fries on a plate beside a glass of beer"></a></td>
+<td width="240" valign="middle"><a href="https://github.com/jiwoon-oh/dunnhumby-campaign-response"><img width="220" src="assets/thumbs/campaign.webp" alt="Shopper putting bread into a grocery cart"></a></td>
 <td valign="middle">
 
-> Three promotions ran side by side. Can the data name a winner, or only a loser?
+> Campaigns look far more effective on low spenders. Is that the campaign, or who receives it?
 
-**Fast-Food Promotion Comparison** · *Group comparison* — ANOVA, Tukey HSD, Levene/Shapiro, Effect Size  
-[Case study](https://jiwoon-oh.github.io/portfolio/projects/ab-test-fastfood/) · [Code](https://github.com/jiwoon-oh/fastfood-promotion-ab-test)
+**Campaign Response Heterogeneity** · *Panel · Fixed effects* — Two-way Fixed Effects, Clustered SE, Lead-Effect Testing, BH-FDR  
+[Case study](https://jiwoon-oh.github.io/portfolio/projects/dunnhumby-customer/case2/) · [Code](https://github.com/jiwoon-oh/dunnhumby-campaign-response)
+
+</td>
+</tr>
+<tr>
+<td width="240" valign="middle"><a href="https://github.com/jiwoon-oh/lol-project"><img width="220" src="assets/thumbs/lol.webp" alt="Retro computer, handheld console, joystick and cassette tapes under pink and blue light"></a></td>
+<td valign="middle">
+
+> Can a model predict the opponent's next ban or pick, and tell which of ours actually wins more?
+
+**Esports Draft Recommendation** · *Predictive · Simulation* — Hierarchical Elastic Net/Ridge GLM, LightGBM Ranking, Monte Carlo Simulation, Time-Split Validation  
+[Case study](https://jiwoon-oh.github.io/portfolio/projects/lol-draft/) · [Code](https://github.com/jiwoon-oh/lol-project)
 
 </td>
 </tr>
@@ -43,24 +54,13 @@ Each case study reports its estimates together with their limitations.
 </td>
 </tr>
 <tr>
-<td width="240" valign="middle"><a href="https://github.com/jiwoon-oh/dunnhumby-campaign-response"><img width="220" src="assets/thumbs/campaign.webp" alt="Shopper putting bread into a grocery cart"></a></td>
+<td width="240" valign="middle"><a href="https://github.com/jiwoon-oh/fastfood-promotion-ab-test"><img width="220" src="assets/thumbs/fastfood.webp" alt="Burger and fries on a plate beside a glass of beer"></a></td>
 <td valign="middle">
 
-> Campaigns look far more effective on low spenders. Is that the campaign, or who receives it?
+> Three promotions ran side by side. Can the data name a winner, or only a loser?
 
-**Campaign Response Heterogeneity** · *Panel · Fixed effects* — Two-way Fixed Effects, Clustered SE, Lead-Effect Testing, BH-FDR  
-[Case study](https://jiwoon-oh.github.io/portfolio/projects/dunnhumby-customer/case2/) · [Code](https://github.com/jiwoon-oh/dunnhumby-campaign-response)
-
-</td>
-</tr>
-<tr>
-<td width="240" valign="middle"><a href="https://github.com/jiwoon-oh/lol-project"><img width="220" src="assets/thumbs/lol.webp" alt="Retro computer, handheld console, joystick and cassette tapes under pink and blue light"></a></td>
-<td valign="middle">
-
-> Can a model predict the opponent's next ban or pick, and tell which of ours actually wins more?
-
-**Esports Draft Recommendation** · *Predictive · Simulation* — Hierarchical Elastic Net/Ridge GLM, LightGBM Ranking, Monte Carlo Simulation, Time-Split Validation  
-[Case study](https://jiwoon-oh.github.io/portfolio/projects/lol-draft/) · [Code](https://github.com/jiwoon-oh/lol-project)
+**Fast-Food Promotion Comparison** · *Group comparison* — ANOVA, Tukey HSD, Levene/Shapiro, Effect Size  
+[Case study](https://jiwoon-oh.github.io/portfolio/projects/ab-test-fastfood/) · [Code](https://github.com/jiwoon-oh/fastfood-promotion-ab-test)
 
 </td>
 </tr>
