@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Esports Draft Prediction and Recommendation | Case Study</title>
+<title>Esports Draft Recommendation | Case Study</title>
 <meta name="description" content="A League of Legends draft tool built from a T1 analyst's point of view. A pick-choice model put the opponent's actual pick in its top 5 63.5% of the time on 55 held-out playoff games (baseline 41.6%). The pick recommender was checked on 301 out-of-sample LCK games; the ban ranking failed its check and is shown as reference only.">
 <meta property="og:title" content="Esports draft prediction: opponent picks in the top 5 63.5% of the time on held-out playoffs">
 <meta property="og:description" content="2,055 pro games, 27,177 solo-queue games, time-ordered validation; pick recommendations checked out of sample, ban ranking did not pass.">
@@ -27,7 +27,7 @@
 
 <header class="wrap hero">
   <p class="kicker">[Case study]</p>
-  <h1>Esports Draft Prediction and Recommendation</h1>
+  <h1>Esports Draft Recommendation</h1>
   <p class="subtitle">Predicting the opponent's next ban or pick, and recommending which of ours wins more</p>
   <p class="lede">During a draft an analyst wants three answers: what the opponent will take next, how much a champion changes our chance of winning, and therefore what to ban or pick now. I built a separate model for each. On 55 playoff games held back until the end and evaluated once, the opponent's actual pick was in the model's top 5 63.5% of the time, against 41.6% for a meta-and-roster baseline. The pick recommendations were then checked on 301 LCK games the models had not seen: teams that strayed further from them lost more, an observational association rather than proof. The ban ranking did not pass the same check and is shown as reference only.</p>
   <dl class="byline">
@@ -552,7 +552,7 @@ base     = 0.093 × side + 2.32 × (T1 Elo − opponent Elo) / 400</p>
 <footer class="wrap">
   <p>Data · Oracle's Elixir (pro games), Leaguepedia (draft order, rosters), Riot Games API and Data Dragon (solo queue, champions), a teammate's daily meta score. Raw data is not redistributed.</p>
   <p>Tools · Python 3, pandas, NumPy, scikit-learn, LightGBM, matplotlib</p>
-  <p>Esports Draft Prediction and Recommendation isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc.</p>
+  <p>Esports Draft Recommendation isn't endorsed by Riot Games and doesn't reflect the views or opinions of Riot Games or anyone officially involved in producing or managing Riot Games properties. Riot Games, and all associated properties are trademarks or registered trademarks of Riot Games, Inc.</p>
   <p>Code · <a href="https://github.com/jiwoon-oh/lol-project" target="_blank" rel="noopener">Code &amp; outputs on GitHub</a></p>
 </footer>
 

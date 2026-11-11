@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Jiwoon Oh — Data Analyst</title>
-<meta name="description" content="Data analyst working with statistical analysis, hypothesis testing, observational and panel data, and machine learning. Four case studies: a three-way promotion comparison, a Seoul closure-risk analysis using propensity-score matching, a household revenue concentration analysis, and a campaign response analysis with fixed effects.">
+<meta name="description" content="Data analyst working with statistical analysis, hypothesis testing, observational and panel data, and machine learning. Five case studies: a three-way promotion comparison, a Seoul closure-risk analysis using propensity-score matching, a household revenue concentration analysis, a campaign response analysis with fixed effects, and an esports draft recommender validated on held-out games.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://jiwoon-oh.github.io/portfolio/">
 <meta property="og:title" content="Jiwoon Oh — Data Analyst">
-<meta property="og:description" content="Statistical analysis, hypothesis testing, panel data and machine learning. Four case studies: promotion comparison, Seoul closure risk, revenue concentration and campaign response.">
+<meta property="og:description" content="Statistical analysis, hypothesis testing, panel data and machine learning. Five case studies: promotion comparison, Seoul closure risk, revenue concentration, campaign response and esports draft recommendation.">
 <meta property="og:image" content="https://jiwoon-oh.github.io/portfolio/assets/og-cover.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
@@ -185,12 +185,13 @@ footer{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
   <div>
     <p class="lab">[01] Selected work</p>
     <h2 class="display">Projects</h2>
-    <p class="lead">Each case study starts from a question about the data and uses the method that suits it: a direct group comparison for the promotion study, propensity-score matching for the observational Seoul data, descriptive and predictive analysis for revenue concentration, and fixed-effects panel models for campaign response.</p>
+    <p class="lead">Each case study starts from a question about the data and uses the method that suits it: a direct group comparison for the promotion study, propensity-score matching for the observational Seoul data, descriptive and predictive analysis for revenue concentration, fixed-effects panel models for campaign response, and predictive models with draft simulation for esports draft recommendation.</p>
     <ul class="checks">
       <li>Group comparison</li>
       <li>Observational · Matching</li>
       <li>Descriptive · Predictive</li>
       <li>Panel · Fixed effects</li>
+      <li>Predictive · Simulation</li>
     </ul>
   </div>
 
@@ -261,7 +262,7 @@ footer{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
 
     <details>
       <summary>
-        <h3 class="ptitle display">Esports Draft Prediction and Recommendation</h3>
+        <h3 class="ptitle display">Esports Draft Recommendation</h3>
         <span class="arw" aria-hidden="true"></span>
         <span class="pq">Can a model predict the opponent's next ban or pick, and tell which of ours actually wins more?</span>
       </summary>
@@ -269,9 +270,9 @@ footer{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
         <div>
           <p class="pmeta"><span class="lab">[Predictive · Simulation]</span></p>
           <p class="pmethods">Hierarchical GLM · LightGBM ranking · Monte Carlo draft simulation · 2,055 pro games</p>
-          <p class="plinks"><a href="projects/lol-draft/index.html" aria-label="Case study: Esports Draft Prediction and Recommendation">Case study ↗</a><a href="https://github.com/jiwoon-oh/lol-project" target="_blank" rel="noopener" aria-label="Code and outputs for Esports Draft Prediction and Recommendation on GitHub">Code ↗</a></p>
+          <p class="plinks"><a href="projects/lol-draft/index.html" aria-label="Case study: Esports Draft Recommendation">Case study ↗</a><a href="https://github.com/jiwoon-oh/lol-project" target="_blank" rel="noopener" aria-label="Code and outputs for Esports Draft Recommendation on GitHub">Code ↗</a></p>
         </div>
-        <a class="pshot" href="projects/lol-draft/index.html" aria-label="Case study: Esports Draft Prediction and Recommendation"><img src="assets/thumbs/lol.webp" alt="Retro computer, handheld console, joystick and cassette tapes under pink and blue light" width="640" height="400" loading="lazy"></a>
+        <a class="pshot" href="projects/lol-draft/index.html" aria-label="Case study: Esports Draft Recommendation"><img src="assets/thumbs/lol.webp" alt="Retro computer, handheld console, joystick and cassette tapes under pink and blue light" width="640" height="400" loading="lazy"></a>
       </div>
     </details>
   </div>
@@ -285,9 +286,9 @@ footer{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
   </div>
   <div>
     <div class="about-copy">
-      <p>My analysis is mostly in Python, on retail sales, store-level and public commercial-district data. The studies here use group comparisons (ANOVA, Tukey HSD), propensity-score matching, fixed-effects panel regression, bootstrap confidence intervals, and logistic regression, random forest and gradient boosting models. The method follows the structure of the data and the question being asked, for example matching where groups differ in size and household fixed effects where the same households are observed week after week.</p>
+      <p>My analysis is mostly in Python, on retail sales, store-level, public commercial-district and esports match data. The studies here use group comparisons (ANOVA, Tukey HSD), propensity-score matching, fixed-effects panel regression, bootstrap confidence intervals, logistic regression, random forest and gradient boosting models, and Monte Carlo simulation. The method follows the structure of the data and the question being asked, for example matching where groups differ in size, household fixed effects where the same households are observed week after week, and time-ordered splits where future games must not inform predictions of past ones.</p>
       <p>I report estimates with confidence intervals or tests, and I describe observational results as adjusted associations rather than causal effects. Where the data cannot separate two explanations, I keep both and state what additional data would settle it.</p>
-      <p>Each case study has its own limitations section covering what the design cannot identify and which data or analysis would address it. Revenue Concentration and Seoul Closure Risk were team projects; each page states which part is mine. Campaign Response Heterogeneity grew out of a team project on the same dataset; its Scope note explains the details.</p>
+      <p>Each case study has its own limitations section covering what the design cannot identify and which data or analysis would address it. Revenue Concentration and Seoul Closure Risk were team projects; each page states which part is mine. Campaign Response Heterogeneity grew out of a team project on the same dataset; its Scope note explains the details. Esports Draft Recommendation uses one input from a teammate, a daily champion meta score, which its Scope note credits.</p>
     </div>
     <div class="stack">
       <div>
@@ -298,6 +299,7 @@ footer{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
           <li>Panel data</li>
           <li>Hypothesis testing</li>
           <li>Predictive modeling</li>
+          <li>Simulation</li>
         </ul>
       </div>
       <div>
@@ -308,6 +310,7 @@ footer{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
           <li>statsmodels</li>
           <li>linearmodels</li>
           <li>scikit-learn</li>
+          <li>LightGBM</li>
           <li>SciPy</li>
           <li>SQL</li>
         </ul>

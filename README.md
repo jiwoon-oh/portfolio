@@ -59,7 +59,7 @@ Each case study reports its estimates together with their limitations.
 
 > Can a model predict the opponent's next ban or pick, and tell which of ours actually wins more?
 
-**Esports Draft Prediction and Recommendation** · *Predictive · Simulation* — Hierarchical Elastic Net/Ridge GLM, LightGBM Ranking, Monte Carlo Simulation, Time-Split Validation  
+**Esports Draft Recommendation** · *Predictive · Simulation* — Hierarchical Elastic Net/Ridge GLM, LightGBM Ranking, Monte Carlo Simulation, Time-Split Validation  
 [Case study](https://jiwoon-oh.github.io/portfolio/projects/lol-draft/) · [Code](https://github.com/jiwoon-oh/lol-project)
 
 </td>
