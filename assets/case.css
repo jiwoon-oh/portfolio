@@ -297,3 +297,29 @@ footer p{font-size:13px;color:var(--ink-3);margin:0 0 6px;max-width:110ch}
   .byline{grid-template-columns:1fr}
 }
 @media (prefers-reduced-motion:reduce){.pick{animation:none;opacity:1;transform:none}}
+
+/* ── accent: deep green #1e4137 for emphasis text, coral #FC726C for
+   markers only (coral is 2.1:1 on --bg, so never used for text) ── */
+:root{--green:#1e4137;--coral:#FC726C;--on-green:#F1EEE8;--on-green-2:#C9D3CC}
+.rail a{position:relative;transition:color .25s,padding-left .25s}
+.rail a:hover{color:var(--green)}
+.rail a.on{color:var(--green);padding-left:12px}
+.rail a::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:3px;background:var(--coral);
+  transform:scaleY(0);transition:transform .25s}
+.rail a.on::before{transform:scaleY(1)}
+.sec-no{color:var(--green)}
+.pick .val,.stat .v,.v.blue,.v.violet,.v.rose,.v.mint,.v.ink,.v.amber{color:var(--green)}
+.pick.keep{border-top:3px solid var(--coral)}
+.pick.keep .tag{background:var(--green);border-color:var(--green);color:var(--on-green)}
+.callout{background:var(--green);border-color:var(--green);color:var(--on-green)}
+.callout .big,.callout .sub{color:var(--on-green-2)}
+.callout .money{color:var(--on-green)}
+.callout a{color:var(--on-green)}
+.nav .lang span{background:var(--green);color:var(--on-green)}
+a:focus-visible{outline-color:var(--green)}
+@media (max-width:900px){
+  .rail a.on{padding-left:0}
+  .rail a::before{top:auto;bottom:0;left:0;right:0;width:auto;height:3px;transform:scaleX(0)}
+  .rail a.on::before{transform:scaleX(1)}
+}
+@media (prefers-reduced-motion:reduce){.rail a,.rail a::before{transition:none}}
