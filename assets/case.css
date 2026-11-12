@@ -303,7 +303,7 @@ footer p{font-size:13px;color:var(--ink-3);margin:0 0 6px;max-width:110ch}
 :root{--green:#1e4137;--coral:#FC726C;--on-green:#F1EEE8;--on-green-2:#C9D3CC}
 .rail a{position:relative;transition:color .25s,padding-left .25s}
 .rail a:hover{color:var(--green)}
-.rail a.on{color:var(--green);padding-left:12px}
+.rail a.on{color:var(--coral);padding-left:12px}
 .rail a::before{content:"";position:absolute;left:0;top:10px;bottom:10px;width:3px;background:var(--coral);
   transform:scaleY(0);transition:transform .25s}
 .rail a.on::before{transform:scaleY(1)}
