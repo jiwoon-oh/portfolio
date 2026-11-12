@@ -58,7 +58,7 @@ a:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
 /* language switch (EN / KO), top right of the nav */
 .nav ul{align-items:center}
 .nav .lang{display:flex;gap:2px;border:1px solid var(--line);border-radius:999px;padding:2px}
-.nav .lang span,.nav .lang a{font-size:12px;font-weight:600;letter-spacing:.04em;line-height:1;padding:5px 10px;border-radius:999px;text-decoration:none}
+.nav .lang span,.nav .lang a{font-size:14px;font-weight:600;letter-spacing:.04em;line-height:1;padding:8px 14px;border-radius:999px;text-decoration:none}
 .nav .lang span{background:var(--ink);color:var(--bg)}
 .nav .lang a{color:var(--ink-3)}
 .nav .lang a:hover{color:var(--ink)}
