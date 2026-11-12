@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>e스포츠 밴픽 추천 | 케이스 스터디</title>
+<meta content="T1 분석관의 관점에서 만든 리그 오브 레전드 밴픽 도구입니다. 픽 선택 모델은 끝까지 남겨 둔 플레이오프 55경기에서 상대의 실제 픽을 상위 5 안에 63.5% 맞혔습니다(기준선 41.6%). 픽 추천은 학습 밖 LCK 301경기로 확인했고, 밴 순위는 같은 확인을 통과하지 못해 참고용으로만 보여 줍니다." name="description"/>
+<meta content="e스포츠 밴픽 예측: 남겨 둔 플레이오프에서 상대 픽 상위 5 적중 63.5%" property="og:title"/>
+<meta content="대회 2,055경기, 솔로랭크 27,177경기, 시간 순서 검증. 픽 추천은 학습 밖에서 확인했고 밴 순위는 통과하지 못했습니다." property="og:description"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="../../assets/case.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<style>:root{--sans:"Inter","Noto Sans KR",-apple-system,system-ui,"Segoe UI",sans-serif;--display:"Inter Tight","Noto Sans KR","Inter",-apple-system,system-ui,sans-serif}body{word-break:keep-all;overflow-wrap:break-word}</style>
+</head>
+<body>
+<nav class="nav" id="nav">
+<div class="wrap">
+<a aria-label="Jiwoon Oh, 홈" class="brand" href="../../index.ko.html">JO.</a>
+<ul>
+<li><a href="../../index.ko.html#work">Work</a></li>
+<li><a href="../../index.ko.html#about">About</a></li>
+<li><a href="../../index.ko.html#contact">Contact</a></li>
+<li class="lang"><a aria-label="View in English" href="index.html" hreflang="en" lang="en">EN</a><span aria-current="page">KO</span></li>
+</ul>
+</div>
+</nav>
+<header class="wrap hero">
+<p class="kicker">[Case 02]</p>
+<h1>e스포츠 밴픽 추천</h1>
+<p class="subtitle">상대의 다음 밴·픽을 예측하고, 우리 쪽 선택 중 무엇이 더 이기는지 추천하기</p>
+<p class="lede">밴픽 중에 분석관은 세 가지 답을 원합니다: 상대가 다음에 무엇을 가져갈지, 이 챔피언이 우리 승률을 얼마나 바꾸는지, 그래서 지금 무엇을 밴하거나 픽해야 하는지. 각각에 대해 따로 모델을 만들었습니다. 끝까지 남겨 두었다가 한 번만 평가한 플레이오프 55경기에서, 모델은 상대의 실제 픽을 상위 5 안에 63.5% 맞혔습니다. 메타·로스터 기준선은 41.6%였습니다. 이어서 모델이 보지 못한 LCK 301경기로 픽 추천을 확인했습니다. 추천에서 더 벗어난 팀이 더 졌지만, 이는 증명이 아니라 관찰된 연관입니다. 밴 순위는 같은 확인을 통과하지 못해 참고용으로만 보여 줍니다.</p>
+<dl class="byline">
+<div><dt>접근</dt><dd>예측 모델링, 시뮬레이션, 시간 순서 검증</dd></div>
+<div><dt>데이터</dt><dd>대회 2,055경기 · LCK 밴픽 503경기 · 솔로랭크 27,177경기</dd></div>
+<div><dt>도구</dt><dd>Python, pandas, scikit-learn, LightGBM</dd></div>
+<div><dt>코드</dt><dd><a href="https://github.com/jiwoon-oh/lol-project" rel="noopener" target="_blank">GitHub 코드·결과물 ↗</a></dd></div>
+</dl>
+<div class="picks">
+<div class="pick keep">
+<p class="name">상대 픽 · 상위 5 · 플레이오프 55경기</p>
+<p class="val">63.5<span class="unit">%</span></p>
+<span class="tag">기준선 41.6%, 한 번만 평가</span>
+</div>
+<div class="pick split">
+<p class="name">픽 추천에서 벗어난 정도 · 처음 보는 301경기</p>
+<p class="val">−0.70<span class="unit"> 기울기</span></p>
+<span class="tag">95% CI [−1.35, −0.11], 인과 아님</span>
+</div>
+<div class="pick drop">
+<p class="name">밴 추천에서 벗어난 정도 · 같은 301경기</p>
+<p class="val">−1.40<span class="unit"> 기울기</span></p>
+<span class="tag">95% CI [−3.71, +0.61], 통과 못 함</span>
+</div>
+</div>
+<p class="picks-note">2026 LCK 시즌 · 8월 25일까지 경기로 학습 · 플레이오프(8월 26일부터)는 최종 검증용으로 남겨 둠</p>
+</header>
+<div class="wrap main">
+<nav aria-label="목차" class="rail">
+<h2>목차</h2>
+<ol>
+<li><a href="#s0">00 · 요약<span class="p">여기서 시작</span></a></li>
+<li><a href="#s1">01 · 개요</a></li>
+<li><a href="#s2">02 · 비즈니스 질문</a></li>
+<li><a href="#s3">03 · 데이터<span class="p">대회 2,055경기</span></a></li>
+<li><a href="#s4">04 · 검증 설계<span class="p">시간 순서로만</span></a></li>
+<li><a href="#s5">05 · 분석<span class="p">M4 · 이길 가치 · M5</span></a></li>
+<li><a href="#s6">06 · 결과<span class="p">픽 통과, 밴 미통과</span></a></li>
+<li><a href="#s7">07 · 비즈니스 시사점</a></li>
+<li><a href="#s8">08 · 한계</a></li>
+<li><a href="#s9">09 · 도구와 기술</a></li>
+<li><a href="#s10">10 · 저장소</a></li>
+</ol>
+</nav>
+<main>
+<section id="s0">
+<p class="sec-no">00</p>
+<h3>요약</h3>
+<p class="sec-sub">질문, 방법, 결과를 짧게</p>
+<p class="takeaway">프로 팀의 픽은 가장 잘 이기는 챔피언보다 메타, 숙련도, 상대에 대한 반응으로 훨씬 더 잘 설명됩니다. 상대 예측 모델에 이길 가치를 넣어도 정확도가 거의 오르지 않았습니다. 그래서 "고를 확률"(예측)과 "이길 가치"(추천)를 별도 모델로 둡니다.</p>
+<div class="card">
+<h4>세 가지 질문, 세 가지 결과물</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th class="tl">밴픽 중의 질문</th><th class="tl">결과물</th><th class="tl">확인 방법</th></tr></thead>
+<tbody>
+<tr><td class="tl">상대는 다음에 무엇을 픽하거나 밴할까?</td><td class="tl lead">M4 픽 선택 모델: 고를 수 있는 모든 챔피언에 대한 확률</td><td class="tl">모델을 고정한 뒤 플레이오프 55경기로 한 번</td></tr>
+<tr><td class="tl">이 챔피언은 우리 승률을 얼마나 바꿀까?</td><td class="tl lead">이길 가치: 10/15/20/25분 골드에서 챔피언이 차지하는 몫 + 같은 골드에서의 승리</td><td class="tl">평가 패치 5개, 대회 970경기</td></tr>
+<tr><td class="tl">그래서 지금 무엇을 밴하거나 픽해야 할까?</td><td class="tl lead">M5 추천기: 후보마다 남은 밴픽을 수천 번 끝까지 진행해 봄</td><td class="tl">LCK 301경기, 패치마다 그 이전 데이터로 모델을 다시 만듦</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<h4 style="margin-top:34px">주요 결과</h4>
+<div class="card tight">
+<p class="small"><strong>상대 예측은 남겨 둔 경기에서도 유지됩니다.</strong> 플레이인·플레이오프 55경기에서 실제 픽이 상위 5 안에 든 비율은 63.5%, 실제 밴은 64.7%였고, 기준선은 각각 41.6%, 43.8%였습니다. 무작위로 고르면 상위 5 안에 들 확률은 약 4%입니다.</p>
+</div>
+<div class="card tight">
+<p class="small"><strong>시뮬레이션 이후 확률을 쓸 수 있게 됐습니다.</strong> 예전 방식이 "70% 이상"이라고 한 사건은 실제로 42% 일어났고, 몬테카를로 밴픽 굴리기에서는 67% 일어났습니다(튜닝에 쓰지 않은 138경기).</p>
+</div>
+<div class="card tight">
+<p class="small"><strong>조합 가치는 결과를 맞히고, 픽 추천에서 벗어난 것은 패배와 연관됩니다.</strong> 학습 밖 LCK 301경기에서 팀 실력·진영에 조합 가치를 더하면 로그 손실이 0.6261에서 0.6065로 내려갔고, 놓친 가치가 결과에 대해 갖는 기울기는 −0.70 [−1.35, −0.11]이었습니다.</p>
+</div>
+<div class="card tight">
+<p class="small"><strong>밴 순위는 통과하지 못했습니다.</strong> 놓친 밴 가치의 기울기는 −1.40 [−3.71, +0.61]으로 구간이 0을 포함합니다. 대시보드의 밴 화면에도 그렇게 적혀 있습니다.</p>
+</div>
+<div class="callout" style="margin-top:30px">
+<p class="big">보고 방식</p>
+<p class="money">예측은 검증됨, 추천은 연관</p>
+<p class="sub">상대 모델은 고정한 뒤 본 적 없는 경기로 한 번 시험했습니다. 추천 확인은 팀 실력(Elo)과 진영만 통제한 관찰 경기이므로, 픽 추천을 따르는 것이 승리와 함께 간다는 것을 보여 줄 뿐 승리의 원인임을 보여 주지는 않습니다.</p>
+</div>
+<h4 style="margin-top:34px">한눈에 보기</h4>
+<div class="card">
+<div class="pair">
+<span class="lbl">대회 경기</span>
+<span class="txt">LCK, LCK CL, LPL, LEC, LCS, 2026년 8월 25일까지 (LCK 447)</span>
+<span class="num">2,055경기</span>
+</div>
+<div class="pair">
+<span class="lbl">밴픽 순서</span>
+<span class="txt">LCK 경기 × 20단계, 밴·픽 10,060건</span>
+<span class="num">503경기</span>
+</div>
+<div class="pair">
+<span class="lbl">솔로랭크</span>
+<span class="txt">LCK 선수 58명의 계정 105개, 10/15/20/25분 프레임과 킬 이벤트 포함</span>
+<span class="num">27,177경기</span>
+</div>
+<div class="pair">
+<span class="lbl">최종 검증</span>
+<span class="txt">8월 26일부터의 플레이인·플레이오프 경기, 모델을 고정한 뒤 한 번만 평가</span>
+<span class="num">55경기</span>
+</div>
+<div class="pair">
+<span class="lbl">인과 주장</span>
+<span class="txt">추천에 대해서는 없음. 관찰 경기이며 Elo와 진영만 통제</span>
+<span class="num">—</span>
+</div>
+</div>
+</section>
+<section id="s1">
+<p class="sec-no">01</p>
+<h3>개요</h3>
+<p class="sec-sub">무엇을 만들었고, 왜 예측과 추천을 나눴는가</p>
+<p>밴픽은 20단계입니다. 각 팀이 정해진 순서로 밴과 픽을 하고, 모든 선택이 상대가 할 수 있는 것을 바꿉니다. 분석관은 상대가 다음에 무엇을 가져갈 가능성이 큰지, 그리고 우리 선택 중 무엇이 더 강한 완성 조합을 남기는지 알아야 합니다.</p>
+<p>챔피언을 승률로 줄 세우는 당연해 보이는 방법은 서로 다른 두 가지를 섞습니다. <strong>강팀이 고르면 그 챔피언이 좋아 보이고</strong>, 프로 팀의 선택은 메타, 선수들의 챔피언 폭, 상대가 방금 한 선택에 달려 있습니다. 그래서 이 프로젝트는 팀이 실제로 <em>무엇을 고르는지</em>의 모델(M4)과 팀 실력을 통제한 뒤 챔피언이 <em>얼마나 가치 있는지</em>의 추정(이길 가치)을 따로 두고, 추천기(M5)에서만 둘을 합칩니다.</p>
+<div class="grid2">
+<div class="card tight">
+<h4>접근</h4>
+<p class="small">근거를 보여 줄 수 있는 모델: 가치 쪽은 계수와 구간이 나오는 GLM(로지스틱, 릿지, 엘라스틱넷, 포아송)을 썼습니다. LightGBM은 적중이 목적인 상대 예측에만 섞었습니다. 모든 분할은 시간 순서이고, 플레이오프는 끝까지 열어 보지 않았습니다.</p>
+</div>
+<div class="card tight">
+<h4>범위</h4>
+<p class="small">입력 하나(M4 변수로 쓴 일별 챔피언 메타 점수)는 팀원이 만든 것이며 데이터 표에 표시했습니다. 출처 근거가 붙은 선수·팀 프로필(05장 D)과 로컬 밴픽 대시보드도 이 프로젝트에 포함됩니다.</p>
+</div>
+</div>
+<p class="takeaway">핵심 결과: 가장 잘 검증된 것은 상대 모델입니다. 픽 추천기는 학습 밖 확인을 연관으로서 통과하고, 밴 추천기는 통과하지 못합니다.</p>
+</section>
+<section id="s2">
+<p class="sec-no">02</p>
+<h3>비즈니스 질문</h3>
+<p class="sec-sub">분석관에게 필요한 것, 그리고 답을 오도할 수 있는 것</p>
+<div class="card">
+<h4>지금까지의 밴픽을 보고, T1은 다음에 무엇을 밴하거나 픽해야 하는가?</h4>
+<p class="small">구체적으로: 고를 수 있는 챔피언마다 상대가 이후에 가져갈 확률은 얼마이고, 그 챔피언을 우리가 가져가거나 막으면 완성된 10명 조합의 예상 승률이 얼마나 바뀌는가?</p>
+</div>
+<div class="card">
+<h4>두 가지 함정 <span class="chip warn">교란과 누수</span></h4>
+<p class="small"><strong>팀 실력.</strong> 주로 강팀이 고른 챔피언은 무엇을 하든 자주 이깁니다. 그래서 이길 가치는 경기 전 Elo, 선수 숙련도, 그리고 솔로랭크에서는 그 판의 프로 선수 수를 통제합니다.</p>
+<p class="small"><strong>미래 데이터.</strong> 무작위로 학습/평가를 나누면 미래 경기로 과거를 맞히게 됩니다. 여기서는 모든 분할을 날짜로 했고, 패치 이름(26.01~26.16)은 기간 이름표로만 씁니다.</p>
+</div>
+<div class="stats">
+<div class="stat"><p class="k">학습 데이터 끝</p><p class="v blue">8월 25일</p></div>
+<div class="stat"><p class="k">최종 검증 시작</p><p class="v violet">8월 26일</p></div>
+<div class="stat"><p class="k">밴픽 단계</p><p class="v mint">20</p></div>
+<div class="stat"><p class="k">최종 검증 횟수</p><p class="v ink">1</p></div>
+</div>
+</section>
+<section id="s3">
+<p class="sec-no">03</p>
+<h3>데이터</h3>
+<p class="sec-sub">밴픽 모델에 쓴 자료, 그리고 쓰지 못한 것</p>
+<div class="card">
+<h4>밴픽 모델에 쓴 자료</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th class="tl">자료</th><th class="tl">출처</th><th class="tl">규모</th><th class="tl">쓰는 곳</th></tr></thead>
+<tbody>
+<tr><td class="tl lead">대회 경기 기록</td><td class="tl">Oracle's Elixir CSV</td><td class="tl">5개 리그, 2,055경기 (LCK 447)</td><td class="tl">M1~M3, 이길 가치</td></tr>
+<tr><td class="tl lead">LCK 밴픽 순서</td><td class="tl">Leaguepedia Cargo API</td><td class="tl">503경기 × 20단계</td><td class="tl">M4</td></tr>
+<tr><td class="tl lead">솔로랭크</td><td class="tl">Riot Games API (match-v5 + timeline)</td><td class="tl">선수 58명의 27,177경기</td><td class="tl">M0 속성, M1~M3, 숙련도</td></tr>
+<tr><td class="tl lead">패치 변경</td><td class="tl">Riot 패치노트 (KR)</td><td class="tl">26.01~26.21, 챔피언 변경 834건</td><td class="tl">M0 리워크 판정, M4</td></tr>
+<tr><td class="tl lead">챔피언 정보</td><td class="tl">Data Dragon, Meraki 역할 분류</td><td class="tl">챔피언 173개</td><td class="tl">이름 매핑, M0 점검</td></tr>
+<tr><td class="tl lead">로스터와 일정</td><td class="tl">Leaguepedia</td><td class="tl">10팀, 선수 67명, 매치 188개</td><td class="tl">라인업, 시리즈</td></tr>
+<tr><td class="tl lead">메타 점수</td><td class="tl">팀원 산출물</td><td class="tl">경기일 111일 × 챔피언 172개</td><td class="tl">M4 메타 변수</td></tr>
+</tbody>
+</table>
+</div>
+<p class="small" style="margin-top:14px"><strong>왜 솔로랭크인가.</strong> LCK는 447경기뿐이라 챔피언 성격과 상성을 재기에 턱없이 부족합니다. 리서치 대상 선수 본인의 솔로랭크 경기는 양을 늘리면서도 프로 메타에 가깝습니다. 그래서 모델을 솔로랭크 → 대회 5개 리그 → LCK로 쌓고, 아래 층일수록 0 쪽으로 강하게 당깁니다.</p>
+</div>
+<div class="card tight">
+<h4>쓰지 못한 것 <span class="chip info">수집 규칙</span></h4>
+<p class="small">수집은 robots.txt를 따랐고(프로젝트용으로 직접 만든 RFC 9309 해석기), 요청 사이에 1~2초를 기다렸으며, 403·429·캡차가 처음 나오면 그 사이트를 멈췄습니다. 대회 킬·위치 이벤트가 있는 LoL Esports 실시간 통계 피드는 비공개 API라서, 대회 경기는 Oracle's Elixir 요약 지표(15분 골드 등)를 대신 썼습니다. 2026년 밴픽 규칙(First Selection, 피어리스)이 달라서 2025년 데이터는 뺐습니다.</p>
+</div>
+<div class="card tight">
+<h4>알려진 빈 곳</h4>
+<p class="small">솔로랭크 경기 목록 API가 계정 89개 중 28개의 오래된 경기를 잘라서 줬기 때문에, 시즌 초 숙련도가 낮게 잡힐 수 있습니다. 출전한 선수 67명 중 2명은 솔로랭크 계정을 찾지 못했고, LCK 1경기는 Oracle's Elixir에 없어서 밴픽만 있습니다.</p>
+</div>
+</section>
+<section id="s4">
+<p class="sec-no">04</p>
+<h3>검증 설계</h3>
+<p class="sec-sub">네 개의 기간, 각각 하나의 역할</p>
+<div class="card">
+<div class="table-wrap">
+<table>
+<thead><tr><th class="tl">구분</th><th class="tl">기간</th><th class="tl">용도</th></tr></thead>
+<tbody>
+<tr><td class="tl lead">학습</td><td class="tl">2026 시즌 시작 ~ 8월 25일</td><td class="tl">모든 모델 학습</td></tr>
+<tr><td class="tl lead">리허설</td><td class="tl">LCK 26.14, 26.15, Road to MSI</td><td class="tl">설정(규제, 변수 묶음)만 고름. 계수는 매번 그 이전 데이터로 다시 학습</td></tr>
+<tr><td class="tl lead">추가 평가</td><td class="tl">26.08, 26.09, 26.10</td><td class="tl">튜닝에 쓰지 않은 경기로 이길 가치와 재생 시험을 다시 확인</td></tr>
+<tr class="mark"><td class="tl lead">최종 검증</td><td class="tl">8월 26일부터의 플레이인·플레이오프 55경기</td><td class="tl">M4를 먼저 고정하고 한 번만 평가. 이후 바꾼 것 없음</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="card">
+<h4>① 리허설은 그 시점에 알 수 있었던 것만 씁니다</h4>
+<p class="small">챔피언 속성, 조합 예측, M4를 리허설 패치마다 그 패치 이전 데이터로 다시 만들었습니다.</p>
+</div>
+<div class="card">
+<h4>② 한 리허설에서 여러 변형 중 고르면 낙관적이 됩니다</h4>
+<p class="small">그래서 M4는 플레이오프로 한 번 더 확인했고, 이길 가치와 재생 결과는 리허설에 쓰지 않은 패치로 확인했습니다. 추가 패치로 결정 하나가 바뀌었습니다(05장 B).</p>
+</div>
+<div class="card">
+<h4>③ 통과 기준은 돌리기 전에 적었습니다</h4>
+<p class="small">동점권, 조합 맥락, 밴 확인은 통과 기준(예: "95% 구간의 상한이 0보다 작음")을 돌리기 전에 결정 기록에 적어 두었습니다.</p>
+</div>
+</section>
+<section id="s5">
+<p class="sec-no">05</p>
+<h3>분석</h3>
+<p class="sec-sub">상대 모델, 이길 가치, 추천기, 리서치 프로필</p>
+<h4>A · M4: 상대는 무엇을 픽하거나 밴할까?</h4>
+<p>모델은 밴픽 단계마다 고를 수 있던 약 120~134개 챔피언 중 팀이 실제로 무엇을 골랐는지 학습합니다. 조건부 로짓(단계 안 소프트맥스)으로 시작해 변수 묶음을 하나씩 더하며 리허설로 비교했습니다: 메타, 픽 순서 적합, 선수 챔피언 폭과 숙련도, 빈 포지션, 피어리스 제외, 반응형 변수(상대 픽에 대한 응수, 조합·카운터 막기), 선픽·후픽 팀의 밴 습관, 같은 시리즈의 앞 세트.</p>
+<div class="card">
+<div class="table-wrap">
+<table>
+<thead><tr><th class="tl">리허설 단계 (LCK 26.14, 26.15, RTM)</th><th>픽 상위 5</th><th>밴 상위 5</th><th class="tl">바꾼 것</th></tr></thead>
+<tbody>
+<tr><td class="tl">기준선 (메타 + 빈 포지션 + 선수 챔피언 폭)</td><td class="num">45.6%</td><td class="num">50.1%</td><td class="tl"></td></tr>
+<tr><td class="tl">조건부 로짓 첫 버전</td><td class="num">57.6%</td><td class="num">54.9%</td><td class="tl">순서, 선수 챔피언 폭, 메타</td></tr>
+<tr><td class="tl">+ 반응형 변수</td><td class="num">61.9%</td><td class="num">64.3%</td><td class="tl">두 번째 밴 페이즈 33.0 → 57.4%</td></tr>
+<tr><td class="tl">픽 LightGBM (5개 리그, LCK 가중치 3)</td><td class="num">67.2%</td><td class="num"></td><td class="tl">비선형 +3.6 pp, 5개 리그 +1.0 pp</td></tr>
+<tr class="mark"><td class="tl lead">최종 (+ 시리즈 변수, 밴 앙상블)</td><td class="num lead">66.5%</td><td class="num lead">69.8%</td><td class="tl">여기서 고정</td></tr>
+</tbody>
+</table>
+</div>
+<p class="small" style="margin-top:14px"><strong>넣어 봤지만 뺀 것</strong>(리허설에서 ±0.5 pp 이내): 이길 가치, 팀별 계수, 블라인드 픽 안전도, 챔피언 임베딩, 리서치 언급, 국제·컵 대회, 시리즈 단위 피어리스 계획. 픽은 조건부 로짓보다 확실히 나은 LightGBM을 쓰고(62.6 → 67.2%), 밴은 선형 모델이 더 나았기 때문에 선형 모델과 LightGBM의 z점수 앙상블을 씁니다.</p>
+</div>
+<figure>
+<img alt="플레이오프 55경기에서 상위 1, 3, 5 적중률을 보여 주는 막대그래프. 픽: 기준선 14.0, 31.5, 41.6% vs M4 26.7, 50.4, 63.5%. 밴: 기준선 17.5, 32.4, 43.8% vs M4 30.0, 52.2, 64.7%." src="assets/m4_topk.png"/>
+<figcaption>남겨 둔 플레이오프 55경기로 한 번만 평가한 최종 검증. 상위 5는 리허설보다 3~5포인트 낮지만 기준선과의 차이(+21~22포인트)는 더 큽니다.</figcaption>
+</figure>
+<figure>
+<img alt="밴픽 페이즈별 상위 5 적중률, 기준선 vs M4: 밴 페이즈 1 56.7 → 68.8, 픽 페이즈 1 36.7 → 64.5, 밴 페이즈 2 24.5 → 58.6, 픽 페이즈 2 49.1 → 61.8%." src="assets/m4_phase.png"/>
+<figcaption>가장 크게 오른 것은 두 번째 밴 페이즈(+34.1포인트)이며, 여기서는 반응형 변수가 신호의 대부분을 냅니다.</figcaption>
+</figure>
+<h4 style="margin-top:38px">B · 이길 가치: 팀 실력을 통제한 뒤 챔피언의 가치</h4>
+<p>0/1 결과 하나는 잡음이 큽니다. 대신 10, 15, 20, 25분의 골드 차이를 로그 오즈 척도의 "이기고 있는 상태"로 바꾸고, 시점마다 팀 실력을 통제한 채 챔피언 × 포지션에 릿지 회귀를 합니다. 그 시점 전에 끝난 경기는 ±3.5로 둡니다. 별도의 로지스틱 항이 같은 골드에서 이기는 몫을 돌려주므로, 골드를 앞서지 않고도 이기는 챔피언이 불리하게 매겨지지 않습니다.</p>
+<div class="card">
+<div class="table-wrap">
+<table>
+<thead><tr><th class="tl">변형 (평가 패치 5개, 대회 970경기)</th><th>로그 손실</th></tr></thead>
+<tbody>
+<tr><td class="tl">M1 조합 성격 모델만</td><td class="num">0.6430</td></tr>
+<tr><td class="tl">통제만 (리그, Elo, 숙련도)</td><td class="num">0.6356</td></tr>
+<tr><td class="tl">M1 + 시간대 골드 경로 (두 패치 기준 최선)</td><td class="num">0.6355</td></tr>
+<tr class="mark"><td class="tl lead">M1 없는 시간대 골드 경로 (채택)</td><td class="num lead">0.6285</td></tr>
+</tbody>
+</table>
+</div>
+<p class="small" style="margin-top:14px"><strong>채택한 변형이 바뀐 이유.</strong> 리허설 패치 두 개만 보면 M1 + 경로가 최선이었습니다. 패치 다섯 개로 넓히자 M1은 시즌 초에 약했고, M1에 대해 학습한 가중치는 모든 패치에서 0 근처(−0.43 ~ 0.22)였습니다. 두 패치로 고른 데에 운이 섞였던 것이라 M1을 뺐습니다. 동전 던지기는 0.693입니다.</p>
+</div>
+<figure>
+<img alt="이길 가치 변형 6개의 대회 로그 손실을 보여 주는 가로 막대그래프. 시간대 골드 경로만 쓴 것이 0.6285로 가장 낮고, M1 조합 성격 모델만 쓴 것이 0.6430으로 가장 높습니다." src="assets/value_variants.png"/>
+<figcaption>평가 패치마다 그 이전 데이터로만 학습했습니다. 축은 0.62에서 시작합니다.</figcaption>
+</figure>
+<figure>
+<img alt="200경기 이상인 챔피언 중 이길 가치 상위 10개와 하위 10개를 95% 구간과 함께 보여 주는 점 그래프. 세나 원딜 약 +4.8포인트부터 바루스 원딜 약 −4.4포인트까지." src="assets/champion_value.png"/>
+<figcaption>200경기 이상인 챔피언 × 포지션 212개 중 44개는 구간이 0을 포함하지 않습니다. 구간은 부트스트랩 50회입니다.</figcaption>
+</figure>
+<h4 style="margin-top:38px">C · M5: 남은 밴픽을 끝까지 진행해 보기</h4>
+<p>예전 버전은 단계별 확률을 서로 독립인 것처럼 더했습니다. 그래서 "이후 세 단계에서 30%, 30%, 20%"를 57%로 만들었는데, 챔피언은 한 번만 가져갈 수 있고 그 사이에 밴될 수도 있습니다. 지금 추천기는 대신 시뮬레이션을 합니다.</p>
+<div class="card">
+<ol class="small" style="padding-left:20px;margin:0">
+<li>현재 밴픽 상태에서 M4가 남은 모든 단계에 대해 양 팀의 확률을 냅니다(상대 = 예측, T1 = 평소 습관).</li>
+<li>T1 후보마다 그 선택 직후 상태에서 M4를 다시 계산하므로, 상대가 어떻게 반응할지가 반영됩니다.</li>
+<li>남은 밴픽을 중복 없이 1,500~4,500번 끝까지 진행하고, 포지션이 찰수록 확률을 낮춥니다. 모든 후보가 같은 난수를 씁니다.</li>
+<li>완성된 조합마다 Elo 차이와 진영, 챔피언 이길 가치의 합, 선수 × 챔피언 숙련도 × 0.32로 승률을 매기고 평균합니다.</li>
+<li>1위와의 차이가 이길 가치의 불확실성 안에 있는 픽 후보는 동점권으로 묶고, T1이 평소 고르는 순서로 정렬합니다.</li>
+</ol>
+<p class="code" style="margin-top:16px">win rate = σ( base + (Σ T1 values − Σ opponent values) / 25 )
+base     = 0.093 × side + 2.32 × (T1 Elo − opponent Elo) / 400</p>
+</div>
+<figure>
+<img alt="상대가 이번 페이즈 안에 특정 챔피언을 고르는 사건의 보정 곡선. 예전의 독립 방식은 평평해져서 예측 약 78%에서 실제 42%에 그치고, 몬테카를로 굴리기는 67%에 이르며 대각선에 더 가깝습니다." src="assets/calibration.png"/>
+<figcaption>튜닝에 쓰지 않은 26.08~26.10 LCK 138경기를 단계마다 되감아 확인했습니다. 굴리기는 예측 합 ÷ 실제 개수도 0.93에서 1.00으로 맞췄습니다.</figcaption>
+</figure>
+<h4 style="margin-top:38px">D · 리서치 프로필</h4>
+<p>밴픽 모델과 함께, 선수 58명과 팀 10개에 대해 기사·인터뷰·팬 커뮤니티가 각각을 어떻게 보는지를 정리한 프로필을 만들었습니다. 모든 주장에는 출처, 날짜, 원문 인용이 붙어 있습니다. Claude 하위 에이전트는 주장 뽑기와 프로필 초안 두 단계만 했고, 검색·저장·인용 확인·평가는 코드가 했습니다.</p>
+<div class="card">
+<div class="table-wrap">
+<table>
+<thead><tr><th class="tl">지표</th><th>값</th><th>기준</th></tr></thead>
+<tbody>
+<tr><td class="tl">뽑힌 주장</td><td class="num">10,497</td><td class="num"></td></tr>
+<tr><td class="tl">원문에서 찾은 인용</td><td class="num lead">94.0%</td><td class="num">70%</td></tr>
+<tr><td class="tl">인용이 뒷받침하는 주장 (사람 검토 256건)</td><td class="num lead">98.4%</td><td class="num">80%</td></tr>
+<tr><td class="tl">올바른 사람에게 귀속된 주장 (같은 표본)</td><td class="num lead">94.9%</td><td class="num">85%</td></tr>
+</tbody>
+</table>
+</div>
+<p class="small" style="margin-top:14px">경기 기록과 대조해 보면, 출처들의 선수 전반 평가는 그 선수의 평소 라인 골드와 같은 방향이었지만(순위 상관 +0.34, p 0.01, 57명), 라인전이나 특정 챔피언에 대한 평가는 거의 그렇지 않았습니다(+0.04 ~ +0.13). M4에 리서치 언급을 넣어도 나아지지 않아서, 프로필은 대시보드에서 근거 자료로만 보여 줍니다.</p>
+</div>
+</section>
+<section id="s6">
+<p class="sec-no">06</p>
+<h3>결과</h3>
+<p class="sec-sub">추천기의 학습 밖 확인</p>
+<p>8월 25일까지의 전체 데이터로 만든 표로 계산한 예상 승률은 학습 안 값이고, 고르지 않은 픽의 실제 결과는 관찰할 수 없습니다. 그래서 LCK 8개 기간(301경기)마다 그 이전 데이터로 이길 가치 표와 M4를 다시 만들고 두 가지를 물었습니다.</p>
+<div class="card">
+<div class="table-wrap">
+<table>
+<thead><tr><th class="tl">확인</th><th class="tl">결과</th><th class="tl">해석</th></tr></thead>
+<tbody>
+<tr class="mark"><td class="tl lead">① 조합 가치가 Elo와 진영 위에서 결과를 맞히는가?</td><td class="tl">로그 손실 0.6261 → 0.6065, 차이 −0.0196 [−0.0347, −0.0046]</td><td class="tl"><span class="chip hold">통과</span></td></tr>
+<tr class="mark"><td class="tl lead">② 픽 추천에서 벗어난 팀이 더 졌는가?</td><td class="tl">기울기 −0.70 [−1.35, −0.11], p 0.04, 픽 차례 3,020번</td><td class="tl"><span class="chip hold">통과</span></td></tr>
+<tr><td class="tl">밴 확인, 같은 설계</td><td class="tl">기울기 −1.40 [−3.71, +0.61], 밴 차례 3,020번</td><td class="tl"><span class="chip rej">미통과</span></td></tr>
+</tbody>
+</table>
+</div>
+<p class="small" style="margin-top:14px">효과는 주로 확실히 나쁜 조합에서 나옵니다. 조합 가치 차이 하위 25%에서 블루는 팀 실력과 진영으로 52% 이길 것으로 기대됐지만 실제로는 37% 이겼습니다. 이길 가치 설정에 전혀 쓰지 않은 두 기간(26.07, 26.16, 70경기)에서는 로그 손실 차이가 −0.0406이었습니다. 효과는 작고 기간마다 다릅니다(26.09와 Road to MSI에서는 도움이 없었음).</p>
+</div>
+<figure>
+<img alt="학습 밖 301경기에서 조합 이길 가치 차이 4분위별 블루 기대 승률 vs 실제 승률 막대그래프: 블루 조합이 훨씬 나쁠 때 52 vs 37%, 이어서 55 vs 67, 55 vs 61, 훨씬 좋을 때 54 vs 65%." src="assets/rec_check_quartiles.png"/>
+<figcaption>조합 가치 표는 기간마다 그 이전 데이터로 다시 만들었습니다. 관찰 데이터이므로 연관입니다.</figcaption>
+</figure>
+<figure>
+<img alt="학습 밖 시험 6개와 95% 구간을 보여 주는 forest plot. 구간이 0 왼쪽에 있어 통과한 것: 팀 실력 위의 조합 이길 가치, 픽 추천에서 벗어난 정도. 통과하지 못한 것: M1 조합 성격, 조합 맥락, 선수-챔피언 숙련도, 밴 추천에서 벗어난 정도." src="assets/tests_forest.png"/>
+<figcaption>모든 시험을 한 장에. 통과는 95% 구간 전체가 0 왼쪽에 있다는 뜻입니다. 조합 성격, 조합 맥락, 숙련도는 결과 예측에 도움이 되지 않아 대시보드에서 근거로만 보여 줍니다.</figcaption>
+</figure>
+<h4 style="margin-top:38px">밴 순위가 통과하지 못한 이유</h4>
+<div class="card">
+<p class="small">밴 점수의 앞부분은 맞습니다. 밴 1순위 후보가 풀렸을 때 상대가 실제로 가져간 비율은 23.0%, 예측은 22.9%였습니다. 뒷부분, 즉 밴이 상대 조합 가치를 얼마나 낮추는지는 결과에 나타나지 않았습니다. 밴 순위는 픽보다 더 쏠려 있고(상위 5개 챔피언이 1순위의 50.8%), 첫 밴 1순위의 18.7%는 밴한 팀이 나중에 직접 픽한 챔피언이었습니다. 우리 쪽을 고정해 두기 때문에 점수가 세지 않는 비용입니다.</p>
+</div>
+<div class="callout" style="margin-top:26px">
+<p class="big">보고 방식</p>
+<p class="money">픽 추천: 학습 밖에서 유지되는 연관. 밴: 참고용.</p>
+<p class="sub">대시보드는 밴 점수를 그대로 두되 검증 미통과로 표시하고, 대신 상대의 예상 픽을 보라고 안내합니다.</p>
+</div>
+</section>
+<section id="s7">
+<p class="sec-no">07</p>
+<h3>비즈니스 시사점</h3>
+<p class="sec-sub">밴픽 준비에 주는 의미</p>
+<div class="card">
+<h4>① 예측과 가치를 따로 보기</h4>
+<p class="small">팀이 무엇을 고를지와 무엇이 이기는지는 다른 값입니다. 이길 가치는 M4에 거의 보탬이 되지 않았고, 프로 픽 비중(상위 5개 챔피언이 픽의 약 15%)은 가치만으로 매긴 순위보다 훨씬 고르게 퍼져 있습니다. <strong>준비 자료에는 두 값을 섞은 점수 하나가 아니라 두 열을 모두 보여 줘야 합니다.</strong></p>
+</div>
+<div class="card">
+<h4>② 같은 시리즈의 앞 세트가 강한 근거입니다</h4>
+<p class="small">2세트 이후 밴의 39.5%는 같은 팀이 시리즈 앞 세트에서 했던 밴의 반복입니다. <strong>피어리스 시리즈에서는 앞 세트가 다음 밴픽을 가장 잘 예측하는 자료 가운데 하나입니다.</strong></p>
+</div>
+<div class="card">
+<h4>③ 쌍 효과는 결과가 아니라 라인 골드에 나타납니다</h4>
+<p class="small">강한 맞라인 상성은 15분 골드를 약 ±150~250 움직이고 쌍 항은 라인 골드 R²를 0.066에서 0.074로 올렸지만, 결과 예측에 넣으면 오히려 나빠졌습니다. <strong>상성은 밴픽 중 근거로는 쓸모 있지만 승률 보정으로는 아닙니다.</strong></p>
+</div>
+<h4 style="margin-top:38px">권고</h4>
+<div class="rec">
+<h4><span class="rn">01</span> 밴 계획에는 상대 모델을 쓰기</h4>
+<dl>
+<div class="rrow"><dt>누가</dt><dd>밴픽 분석관</dd></div>
+<div class="rrow"><dt>무엇을</dt><dd>밴 가치 순위가 아니라 상대의 예상 픽과 그 위협도로 밴을 계획합니다</dd></div>
+<div class="rrow"><dt>왜</dt><dd>상대 확률은 남겨 둔 검증을 통과했고 실제로 가져간 비율과 맞았습니다(23.0% vs 22.9%). 밴 가치 순위는 통과하지 못했습니다</dd></div>
+</dl>
+</div>
+<div class="rec">
+<h4><span class="rn">02</span> 픽 추천은 후보 목록으로 다루기</h4>
+<dl>
+<div class="rrow"><dt>누가</dt><dd>코칭 스태프</dd></div>
+<div class="rrow"><dt>무엇을</dt><dd>1순위 카드 하나만 보지 말고 동점권과 근거 칩(주력, 숙련, 시너지, 상성)을 함께 읽습니다</dd></div>
+<div class="rrow"><dt>왜</dt><dd>1순위 추천은 챔피언 단독 가치가 높은 몇몇 챔피언에 기댑니다. 동점권 규칙으로 상위 5 비중을 39.0%에서 35.8%로 낮췄을 뿐입니다</dd></div>
+</dl>
+</div>
+<div class="rec">
+<h4><span class="rn">03</span> 조합 효과를 넣기 전에 이벤트 단위 대회 데이터 확보하기</h4>
+<dl>
+<div class="rrow"><dt>누가</dt><dd>분석 책임자</dd></div>
+<div class="rrow"><dt>무엇을</dt><dd>대회 이벤트 데이터(시각이 찍힌 킬, 위치, 오브젝트)를 공식 경로로 라이선스합니다</dd></div>
+<div class="rrow"><dt>왜</dt><dd>조합 성격, 그 비가산 몫, 맞라인 상성은 요약 지표만으로는 모두 대회 예측을 개선하지 못했습니다. 더 세밀한 결과가 이들을 다시 시험하는 가장 직접적인 방법입니다</dd></div>
+</dl>
+</div>
+</section>
+<section id="s8">
+<p class="sec-no">08</p>
+<h3>한계</h3>
+<p class="sec-sub">이 설계로 보여 줄 수 없는 것</p>
+<div class="card">
+<h4>추천에 대한 인과 주장은 없습니다</h4>
+<p class="small">픽 추천에서 더 벗어난 팀이 더 졌지만(기울기 −0.70, p 0.04), Elo와 진영만 통제했으므로 다른 요인이 섞였을 수 있습니다. 가장 잘 검증된 것은 상대가 무엇을 고를지에 대한 확률입니다.</p>
+</div>
+<div class="grid2">
+<div class="card tight">
+<h4>이길 가치는 챔피언 단위입니다</h4>
+<p class="small">조합 상호작용은 굴리기 안에서 포지션을 채우는 방식으로만 들어갑니다. 그래서 추천이 몇몇 챔피언(애쉬, 럼블, 신드라)에 쏠립니다.</p>
+</div>
+<div class="card tight">
+<h4>굴리기는 일부 정적입니다</h4>
+<p class="small">굴리기 안에서 고른 챔피언은 M4 변수에 다시 반영되지 않고, 1수 앞보기만 반영됩니다. T1의 남은 차례는 평소 습관으로 채웁니다.</p>
+</div>
+<div class="card tight">
+<h4>과신이 조금 남아 있습니다</h4>
+<p class="small">50~70%라고 한 사건은 실제로 44~51% 일어났습니다.</p>
+</div>
+<div class="card tight">
+<h4>프로필은 의견을 담습니다</h4>
+<p class="small">리서치 프로필은 출처들이 선수를 어떻게 보는지이지 실제 기량이 아닙니다. 사람 검토는 주장 256건을 봤고, 68개 대상 중 9개에 직접 반영했습니다.</p>
+</div>
+</div>
+</section>
+<section id="s9">
+<p class="sec-no">09</p>
+<h3>도구와 기술</h3>
+<p class="sec-sub">무엇을 어디에 썼는지</p>
+<div class="card">
+<h4>프로그래밍과 데이터 처리</h4>
+<div class="skills">
+<span class="skill">Python</span>
+<span class="skill">pandas</span>
+<span class="skill">NumPy</span>
+<span class="skill">scikit-learn</span>
+<span class="skill">LightGBM</span>
+<span class="skill">REST API 수집</span>
+<span class="skill">robots.txt 준수</span>
+</div>
+</div>
+<div class="card">
+<h4>모델링</h4>
+<div class="skills">
+<span class="skill">조건부 로짓</span>
+<span class="skill">순위 학습 (Learning to Rank)</span>
+<span class="skill">계층 릿지 / 엘라스틱넷</span>
+<span class="skill">포아송·분수 로짓</span>
+<span class="skill">몬테카를로 시뮬레이션</span>
+<span class="skill">온도 보정</span>
+</div>
+</div>
+<div class="card">
+<h4>검증</h4>
+<div class="skills">
+<span class="skill">시간 순서 분할</span>
+<span class="skill">한 번만 하는 최종 검증</span>
+<span class="skill">부트스트랩 구간</span>
+<span class="skill">시험 전에 정한 통과 기준</span>
+<span class="skill">재생 시험</span>
+</div>
+</div>
+<div class="card">
+<h4>작업 원칙</h4>
+<div class="skills">
+<span class="skill">누수 방지</span>
+<span class="skill">교란 요인 통제</span>
+<span class="skill">LLM 출력 검증</span>
+<span class="skill">연관과 인과 구분 보고</span>
+</div>
+</div>
+</section>
+<section id="s10">
+<p class="sec-no">10</p>
+<h3>저장소</h3>
+<p class="sec-sub">코드, 설계 문서, 전체 설명</p>
+<a class="btn" href="https://github.com/jiwoon-oh/lol-project" rel="noopener" target="_blank">GitHub 코드·결과물 <span class="arw">→</span></a>
+<p class="small" style="color:var(--ink-3);max-width:76ch">저장소에는 파이프라인과 모델 코드, 밴픽 대시보드와 스카우팅 리포트 코드, 시연 영상이 들어간 README(영어·한국어), 한국어 설계 문서와 결정 기록이 있습니다. 수집한 원문과 경기 데이터는 저장소에 넣지 않았으므로, 저장소만으로는 모델과 대시보드를 돌릴 수 없습니다.</p>
+</section>
+</main>
+</div>
+<footer class="wrap">
+<p>데이터 · Oracle's Elixir(대회 경기), Leaguepedia(밴픽 순서, 로스터), Riot Games API와 Data Dragon(솔로랭크, 챔피언), 팀원의 일별 메타 점수. 원자료는 재배포하지 않습니다.</p>
+<p>도구 · Python 3, pandas, NumPy, scikit-learn, LightGBM, matplotlib</p>
+<p>Esports Draft Recommendation은 Riot Games의 보증을 받지 않았으며, Riot Games 또는 Riot Games 자산의 제작·관리에 공식적으로 관여하는 누구의 견해도 반영하지 않습니다. Riot Games와 관련 자산은 Riot Games, Inc.의 상표 또는 등록 상표입니다.</p>
+<p>코드 · <a href="https://github.com/jiwoon-oh/lol-project" rel="noopener" target="_blank">GitHub 코드·결과물</a></p>
+</footer>
+<script>
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail a'));
+  var secs  = links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+  if(!('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(!e.isIntersecting) return;
+      var i = secs.indexOf(e.target);
+      links.forEach(function(a,j){ a.classList.toggle('on', j===i); });
+    });
+  }, { rootMargin: '-10% 0px -70% 0px', threshold: 0 });
+  secs.forEach(function(s){ if(s) io.observe(s); });
+})();
+</script>
+</body>
+</html>

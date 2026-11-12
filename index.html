@@ -69,6 +69,11 @@ a:focus-visible,summary:focus-visible{outline:2px solid var(--ink);outline-offse
 .menu{display:flex;flex-direction:column;gap:2px;font-size:15px}
 .menu a{text-decoration:none}
 .menu a:hover{text-decoration:underline}
+.menu .lang{display:flex;gap:2px;width:max-content;margin-top:10px;border:1px solid var(--line);border-radius:999px;padding:2px}
+.menu .lang span,.menu .lang a{font-size:12px;font-weight:600;letter-spacing:.04em;line-height:1;padding:5px 10px;border-radius:999px;text-decoration:none}
+.menu .lang span{background:var(--ink);color:var(--bg)}
+.menu .lang a{color:#666460}
+.menu .lang a:hover{color:var(--ink);text-decoration:none}
 
 .go{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
 .limits{margin:0;font-size:14px;line-height:1.45;color:var(--mute-text);max-width:32ch}
@@ -165,6 +170,7 @@ footer{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
       <li><a href="#contact">Contact</a></li>
       <li><a href="https://github.com/jiwoon-oh" target="_blank" rel="noopener">GitHub ↗</a></li>
       <li><a href="mailto:jiwoonds@gmail.com">Email ↗</a></li>
+      <li class="lang"><span aria-current="page">EN</span><a href="index.ko.html" hreflang="ko" lang="ko" aria-label="한국어로 보기">KO</a></li>
     </ul>
   </nav>
   <div class="c-side">

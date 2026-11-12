@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Jiwoon Oh — 데이터 분석가</title>
+<meta content="통계 분석, 가설 검정, 관찰·패널 데이터, 머신러닝으로 일하는 데이터 분석가입니다. 케이스 스터디 5개: 고정효과로 본 캠페인 반응 분석, 남겨 둔 경기로 검증한 e스포츠 밴픽 추천, 성향점수 매칭을 쓴 서울 폐업 위험 분석, 가구 매출 집중 분석, 세 프로모션 비교." name="description"/>
+<meta content="website" property="og:type"/>
+<meta content="https://jiwoon-oh.github.io/portfolio/" property="og:url"/>
+<meta content="Jiwoon Oh — 데이터 분석가" property="og:title"/>
+<meta content="통계 분석, 가설 검정, 패널 데이터, 머신러닝. 케이스 스터디 5개: 캠페인 반응, e스포츠 밴픽 추천, 서울 폐업 위험, 매출 집중, 프로모션 비교." property="og:description"/>
+<meta content="https://jiwoon-oh.github.io/portfolio/assets/og-cover.png" property="og:image"/>
+<meta content="1200" property="og:image:width"/>
+<meta content="630" property="og:image:height"/>
+<meta content="Jiwoon Oh, Data Analyst: statistical analysis, hypothesis testing and machine learning" property="og:image:alt"/>
+<meta content="summary_large_image" name="twitter:card"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800&amp;family=Inter:wght@400;500&amp;display=swap" rel="stylesheet"/>
+<style>
+/* ============================================================
+   Landing page only. Case-study pages keep assets/case.css;
+   this page does not load it.
+   Swiss / editorial: warm grey ground, charcoal type, hairlines.
+   ============================================================ */
+:root{
+  --bg:#E7E5E0; --ink:#262626; --mute:#9C9A95; --line:rgba(0,0,0,.18);
+  /* #9C9A95 is 2.2:1 on --bg: kept for the large headline words and [✓] marks;
+     small text uses --mute-text (4.7:1) */
+  --mute-text:#666460;
+  /* headline grey 3.1:1 on --bg; headline charcoal 4.4:1 against it */
+  --head-mute:#82807B; --head-ink:#1A1A1A;
+  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --display:"Inter Tight","Inter",system-ui,sans-serif;
+  --pad:28px;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:400 15px/1.6 var(--sans);-webkit-font-smoothing:antialiased}
+p,h1,h2,h3,ul{margin:0}
+ul{padding:0;list-style:none}
+img{max-width:100%}
+
+a{color:inherit;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:3px}
+a:hover{text-decoration-thickness:2px}
+a:focus-visible,summary:focus-visible{outline:2px solid var(--ink);outline-offset:3px}
+
+/* small bracket labels: [01], [✓] */
+.lab{font-size:12px;line-height:1.4;letter-spacing:.02em;color:var(--mute-text)}
+.display{font-family:var(--display);font-weight:800;text-transform:uppercase;
+  letter-spacing:-.03em;line-height:.95}
+
+/* ── header + hero (first screen) ─────────────────────────────
+   3 columns ≈ 30 / 40 / 30. Row 1: initials · empty cell · menu.
+   Row 2: limitations line + link · headline across columns 2–3. */
+.hero{display:grid;grid-template-columns:3fr 4fr 3fr;grid-template-rows:auto 1fr;
+  min-height:100vh;min-height:100svh;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.hero > *{padding:var(--pad)}
+.hero > * + *{border-left:1px solid var(--line)}
+.c-mark{grid-column:1;grid-row:1}
+.c-intro{grid-column:2;grid-row:1}
+.c-menu{grid-column:3;grid-row:1;display:flex;justify-content:space-between;gap:16px;border-left:0}
+.c-side{grid-column:1;grid-row:2;border-left:0;display:flex;flex-direction:column;gap:36px}
+.c-head{grid-column:2 / span 2;grid-row:2;display:flex;flex-direction:column;justify-content:flex-end;gap:22px}
+
+.mark{font-family:var(--display);font-weight:800;font-size:30px;letter-spacing:-.04em;
+  text-decoration:none;line-height:1}
+.menu{display:flex;flex-direction:column;gap:2px;font-size:15px}
+.menu a{text-decoration:none}
+.menu a:hover{text-decoration:underline}
+.menu .lang{display:flex;gap:2px;width:max-content;margin-top:10px;border:1px solid var(--line);border-radius:999px;padding:2px}
+.menu .lang span,.menu .lang a{font-size:12px;font-weight:600;letter-spacing:.04em;line-height:1;padding:5px 10px;border-radius:999px;text-decoration:none}
+.menu .lang span{background:var(--ink);color:var(--bg)}
+.menu .lang a{color:#666460}
+.menu .lang a:hover{color:var(--ink);text-decoration:none}
+
+.go{display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.limits{margin:0;font-size:14px;line-height:1.45;color:var(--mute-text);max-width:32ch}
+.seework{font-size:15px;font-weight:500}
+
+h1.headline{font-size:clamp(46px,7.6vw,138px);color:var(--head-mute);max-width:12ch}
+h1.headline .on{color:var(--head-ink)}
+
+/* ── sections: two columns with a hairline between ───────── */
+.sec{display:grid;grid-template-columns:3fr 7fr;border-bottom:1px solid var(--line);scroll-margin-top:0}
+.sec > *{padding:calc(var(--pad) * 1.6) var(--pad)}
+.sec > * + *{border-left:1px solid var(--line)}
+.sec h2{font-size:clamp(34px,4.2vw,64px);margin:14px 0 22px}
+.sec .lead{color:#55534F;max-width:46ch;margin:0 0 24px}
+
+.checks li{font-size:14px;line-height:1.75}
+.checks li::before{content:"[✓]" / "";color:var(--mute);margin-right:8px;font-size:12px}
+
+/* ── Selected work: accordion (details / summary, no JS) ── */
+.acc details{border-bottom:1px solid var(--line)}
+.acc details:last-child{border-bottom:0}
+.acc summary{list-style:none;cursor:pointer;padding:26px 0 24px;
+  display:grid;grid-template-columns:1fr auto;column-gap:20px;row-gap:8px}
+.acc details:first-child summary{padding-top:0}
+.acc summary::-webkit-details-marker{display:none}
+.acc .ptitle{font-size:clamp(22px,2.3vw,34px);line-height:1}
+.acc .pq{display:block;grid-column:1;font-size:14px;color:var(--mute-text);max-width:60ch}
+.acc .arw{grid-column:2;grid-row:1;font-size:22px;line-height:1}
+.acc .arw::after{content:"↓"}
+.acc details[open] .arw::after{content:"↑"}
+.acc summary:hover .ptitle{text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:5px}
+
+.pbody{padding:0 0 30px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,360px);gap:24px;align-items:start}
+.acc details[open] .pbody{animation:reveal .22s ease-out}
+@keyframes reveal{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+.pmeta{font-size:14px;margin:0 0 6px}
+.pmeta .lab{font-size:12px}
+.pmethods{font-size:14px;color:#55534F;margin:0 0 16px}
+.plinks{font-size:15px;font-weight:500;display:flex;gap:22px;flex-wrap:wrap}
+.pshot{display:block;aspect-ratio:16 / 10;overflow:hidden;border-radius:2px}
+.pshot img{display:block;width:100%;height:100%;object-fit:cover;filter:saturate(.8)}
+
+/* ── about ───────────────────────────────────────────────── */
+.about-copy p{max-width:68ch;margin:0 0 16px}
+.about-copy p:last-child{margin-bottom:0}
+.stack{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;
+  margin-top:34px;padding-top:24px;border-top:1px solid var(--line)}
+.stack .lab{margin:0 0 8px}
+
+/* ── contact ─────────────────────────────────────────────── */
+.contact-links{display:flex;flex-direction:column;gap:6px;font-size:clamp(18px,1.7vw,24px);font-weight:500;margin-top:18px}
+
+footer{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
+  padding:18px var(--pad) 28px;font-size:12px;color:var(--mute-text)}
+
+/* ── responsive: one column, horizontal lines only ───────── */
+@media (max-width:900px){
+  :root{--pad:20px}
+  .hero{grid-template-columns:1fr;grid-template-rows:none;min-height:0}
+  .hero > *{grid-column:1 !important;grid-row:auto !important}
+  .hero > * + *{border-left:0;border-top:1px solid var(--line)}
+  .c-intro{display:none}
+  .c-menu{border-top:0;padding-top:4px}
+  .c-head{border-top:0;padding-top:36px}
+  .c-head{order:2}
+  .c-side{order:3}
+  h1.headline{font-size:clamp(40px,12vw,84px)}
+  .sec{grid-template-columns:1fr}
+  .sec > * + *{border-left:0;border-top:1px solid var(--line)}
+  .pbody{grid-template-columns:1fr}
+  .stack{grid-template-columns:1fr 1fr}
+}
+@media (max-width:480px){
+  .stack{grid-template-columns:1fr}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .acc details[open] .pbody{animation:none}
+}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<style>:root{--sans:"Inter","Noto Sans KR",-apple-system,system-ui,"Segoe UI",sans-serif;--display:"Inter Tight","Noto Sans KR","Inter",-apple-system,system-ui,sans-serif}body{word-break:keep-all;overflow-wrap:break-word}</style>
+</head>
+<body>
+<!-- ══ header + hero ══════════════════════════════════════ -->
+<header class="hero" id="top">
+<div class="c-mark">
+<a aria-label="Jiwoon Oh, 홈" class="mark" href="#top">JO.</a>
+</div>
+<div aria-hidden="true" class="c-intro"></div>
+<nav aria-label="메인" class="c-menu">
+<ul class="menu">
+<li><a href="#work">Work</a></li>
+<li><a href="#about">About</a></li>
+<li><a href="#contact">Contact</a></li>
+<li><a href="https://github.com/jiwoon-oh" rel="noopener" target="_blank">GitHub ↗</a></li>
+<li><a href="mailto:jiwoonds@gmail.com">Email ↗</a></li>
+<li class="lang"><a aria-label="View in English" href="index.html" hreflang="en" lang="en">EN</a><span aria-current="page">KO</span></li>
+</ul>
+</nav>
+<div class="c-side">
+<div class="go">
+<p class="limits">모든 분석은 추정치를 그 한계와 함께 보고합니다.</p>
+<a class="seework" href="#work">작업 보기 ↘</a>
+</div>
+</div>
+<div class="c-head">
+<h1 class="headline display"><span class="on">데이터</span>로 <span class="on">비즈니스 질문</span>에 답합니다.</h1>
+</div>
+</header>
+<main>
+<!-- ══ work ═══════════════════════════════════════════════ -->
+<section class="sec" id="work">
+<div>
+<p class="lab">[01] 주요 작업</p>
+<h2 class="display">프로젝트</h2>
+<p class="lead">각 케이스 스터디는 데이터에 대한 질문에서 시작해 그 질문에 맞는 방법을 씁니다: 캠페인 반응에는 고정효과 패널 모형, e스포츠 밴픽 추천에는 밴픽 시뮬레이션을 곁들인 예측 모델, 관찰 데이터인 서울 상권에는 성향점수 매칭, 매출 집중에는 기술·예측 분석, 프로모션 연구에는 직접적인 집단 비교.</p>
+<ul class="checks">
+<li>패널 · 고정효과</li>
+<li>예측 · 시뮬레이션</li>
+<li>관찰 연구 · 매칭</li>
+<li>기술 · 예측</li>
+<li>집단 비교</li>
+</ul>
+</div>
+<div class="acc">
+<details open="">
+<summary>
+<h3 class="ptitle display">캠페인 반응 이질성</h3>
+<span aria-hidden="true" class="arw"></span>
+<span class="pq">캠페인은 저지출 고객에게 훨씬 효과적으로 보입니다. 캠페인 때문일까요, 누가 받았기 때문일까요?</span>
+</summary>
+<div class="pbody">
+<div>
+<p class="pmeta"><span class="lab">[패널 · 고정효과]</span></p>
+<p class="pmethods">이원 고정효과 · 사전 효과 검정 · BH-FDR · 가구-주 172,500개</p>
+<p class="plinks"><a aria-label="케이스 스터디: 캠페인 반응 이질성" href="projects/dunnhumby-customer/case2/index.ko.html">케이스 스터디 ↗</a><a aria-label="캠페인 반응 이질성의 GitHub 코드와 결과물" href="https://github.com/jiwoon-oh/dunnhumby-campaign-response" rel="noopener" target="_blank">코드 ↗</a></p>
+</div>
+<a aria-label="케이스 스터디: 캠페인 반응 이질성" class="pshot" href="projects/dunnhumby-customer/case2/index.ko.html"><img alt="장바구니에 빵을 담는 쇼핑객" height="400" loading="lazy" src="assets/thumbs/campaign.webp" width="640"/></a>
+</div>
+</details>
+<details>
+<summary>
+<h3 class="ptitle display">e스포츠 밴픽 추천</h3>
+<span aria-hidden="true" class="arw"></span>
+<span class="pq">모델이 상대의 다음 밴·픽을 예측하고, 우리 쪽 선택 중 무엇이 실제로 더 이기는지 말해 줄 수 있을까요?</span>
+</summary>
+<div class="pbody">
+<div>
+<p class="pmeta"><span class="lab">[예측 · 시뮬레이션]</span></p>
+<p class="pmethods">계층 GLM · LightGBM 순위 모델 · 몬테카를로 밴픽 시뮬레이션 · 대회 2,055경기</p>
+<p class="plinks"><a aria-label="케이스 스터디: e스포츠 밴픽 추천" href="projects/lol-draft/index.ko.html">케이스 스터디 ↗</a><a aria-label="e스포츠 밴픽 추천의 GitHub 코드와 결과물" href="https://github.com/jiwoon-oh/lol-project" rel="noopener" target="_blank">코드 ↗</a></p>
+</div>
+<a aria-label="케이스 스터디: e스포츠 밴픽 추천" class="pshot" href="projects/lol-draft/index.ko.html"><img alt="분홍·파란 조명 아래의 레트로 컴퓨터, 휴대용 게임기, 조이스틱, 카세트테이프" height="400" loading="lazy" src="assets/thumbs/lol.webp" width="640"/></a>
+</div>
+</details>
+<details>
+<summary>
+<h3 class="ptitle display">서울 폐업 위험</h3>
+<span aria-hidden="true" class="arw"></span>
+<span class="pq">지원이 순감소 순위를 따른다면, 그 순위는 위험을 매기는 걸까요, 규모를 매기는 걸까요?</span>
+</summary>
+<div class="pbody">
+<div>
+<p class="pmeta"><span class="lab">[관찰 연구 · 매칭]</span></p>
+<p class="pmethods">성향점수 매칭 · 그래디언트 부스팅 · 칸 67,475개</p>
+<p class="plinks"><a aria-label="케이스 스터디: 서울 폐업 위험" href="projects/seoul-closure-risk/index.ko.html">케이스 스터디 ↗</a><a aria-label="서울 폐업 위험의 GitHub 코드와 결과물" href="https://github.com/jiwoon-oh/seoul-closure-risk" rel="noopener" target="_blank">코드 ↗</a></p>
+</div>
+<a aria-label="케이스 스터디: 서울 폐업 위험" class="pshot" href="projects/seoul-closure-risk/index.ko.html"><img alt="간판이 늘어선 서울의 상점가" height="400" loading="lazy" src="assets/thumbs/seoul.webp" width="640"/></a>
+</div>
+</details>
+<details>
+<summary>
+<h3 class="ptitle display">매출 집중</h3>
+<span aria-hidden="true" class="arw"></span>
+<span class="pq">매출 증가는 모두가 주목하는 고지출 고객에게서 오고 있을까요?</span>
+</summary>
+<div class="pbody">
+<div>
+<p class="pmeta"><span class="lab">[기술 · 예측]</span></p>
+<p class="pmethods">로렌츠/지니 · 부트스트랩 CI · 로지스틱 vs RF · 가구 2,500개</p>
+<p class="plinks"><a aria-label="케이스 스터디: 매출 집중" href="projects/dunnhumby-customer/case1/index.ko.html">케이스 스터디 ↗</a><a aria-label="매출 집중의 GitHub 코드와 결과물" href="https://github.com/jiwoon-oh/dunnhumby-revenue-concentration" rel="noopener" target="_blank">코드 ↗</a></p>
+</div>
+<a aria-label="케이스 스터디: 매출 집중" class="pshot" href="projects/dunnhumby-customer/case1/index.ko.html"><img alt="가격표가 붙은 마트 과일 진열대" height="400" loading="lazy" src="assets/thumbs/revenue.webp" width="640"/></a>
+</div>
+</details>
+<details>
+<summary>
+<h3 class="ptitle display">패스트푸드 프로모션 비교</h3>
+<span aria-hidden="true" class="arw"></span>
+<span class="pq">세 프로모션을 나란히 진행했습니다. 데이터가 승자를 가릴 수 있을까요, 아니면 패자만 가릴 수 있을까요?</span>
+</summary>
+<div class="pbody">
+<div>
+<p class="pmeta"><span class="lab">[집단 비교]</span></p>
+<p class="pmethods">ANOVA · Tukey HSD · 매장 137곳</p>
+<p class="plinks"><a aria-label="케이스 스터디: 패스트푸드 프로모션 비교" href="projects/ab-test-fastfood/index.ko.html">케이스 스터디 ↗</a><a aria-label="패스트푸드 프로모션 비교의 GitHub 코드와 결과물" href="https://github.com/jiwoon-oh/fastfood-promotion-ab-test" rel="noopener" target="_blank">코드 ↗</a></p>
+</div>
+<a aria-label="케이스 스터디: 패스트푸드 프로모션 비교" class="pshot" href="projects/ab-test-fastfood/index.ko.html"><img alt="맥주 한 잔 옆 접시에 놓인 버거와 감자튀김" height="400" loading="lazy" src="assets/thumbs/fastfood.webp" width="640"/></a>
+</div>
+</details>
+</div>
+</section>
+<!-- ══ about ══════════════════════════════════════════════ -->
+<section class="sec" id="about">
+<div>
+<p class="lab">[02] 소개</p>
+<h2 class="display">일하는 방식</h2>
+</div>
+<div>
+<div class="about-copy">
+<p>분석은 주로 Python으로 하며, 소매 매출, 매장 단위, 공공 상권, e스포츠 경기 데이터를 다뤘습니다. 여기 있는 연구들은 집단 비교(ANOVA, Tukey HSD), 성향점수 매칭, 고정효과 패널 회귀, 부트스트랩 신뢰구간, 로지스틱 회귀·랜덤 포레스트·그래디언트 부스팅 모델, 몬테카를로 시뮬레이션을 씁니다. 방법은 데이터의 구조와 질문을 따릅니다. 예를 들어 집단의 규모가 다를 때는 매칭을, 같은 가구를 매주 관찰할 때는 가구 고정효과를, 미래 경기로 과거를 예측하면 안 될 때는 시간 순서 분할을 씁니다.</p>
+<p>추정치는 신뢰구간이나 검정과 함께 보고하고, 관찰 연구 결과는 인과 효과가 아니라 보정된 연관으로 기술합니다. 데이터로 두 설명을 구분할 수 없을 때는 둘 다 남기고, 어떤 데이터가 있으면 결론 낼 수 있는지 적습니다.</p>
+<p>각 케이스 스터디에는 설계로 밝힐 수 없는 것과 그것을 해결할 데이터나 분석을 적은 한계 장이 있습니다. 매출 집중과 서울 폐업 위험은 팀 프로젝트였고, 각 페이지에 제가 맡은 부분을 적었습니다. 캠페인 반응 이질성은 같은 데이터의 팀 프로젝트에서 출발했으며, 자세한 내용은 범위 설명에 있습니다. e스포츠 밴픽 추천은 팀원이 만든 입력 하나(일별 챔피언 메타 점수)를 썼고, 범위 설명에 표시했습니다.</p>
+</div>
+<div class="stack">
+<div>
+<p class="lab">방법</p>
+<ul class="checks">
+<li>관찰 연구 분석</li>
+<li>매칭 · 고정효과</li>
+<li>패널 데이터</li>
+<li>가설 검정</li>
+<li>예측 모델링</li>
+<li>시뮬레이션</li>
+</ul>
+</div>
+<div>
+<p class="lab">도구</p>
+<ul class="checks">
+<li>Python</li>
+<li>pandas</li>
+<li>statsmodels</li>
+<li>linearmodels</li>
+<li>scikit-learn</li>
+<li>LightGBM</li>
+<li>SciPy</li>
+<li>SQL</li>
+</ul>
+</div>
+<div>
+<p class="lab">보고</p>
+<ul class="checks">
+<li>matplotlib</li>
+<li>Tableau</li>
+<li>Jupyter</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+<!-- ══ contact ════════════════════════════════════════════ -->
+<section class="sec" id="contact">
+<div>
+<p class="lab">[03] 연락</p>
+<h2 class="display">연락하기</h2>
+</div>
+<div>
+<p>데이터 분석가, 데이터 사이언티스트 직무에 열려 있습니다. 각 연구의 코드는 GitHub에 있습니다.</p>
+<p class="contact-links">
+<a href="mailto:jiwoonds@gmail.com">jiwoonds@gmail.com ↗</a>
+<a href="https://github.com/jiwoon-oh" rel="noopener" target="_blank">github.com/jiwoon-oh ↗</a>
+</p>
+</div>
+</section>
+</main>
+<footer>
+<p>Jiwoon Oh · 데이터 분석가</p>
+<p>일반 HTML과 CSS로 만들었습니다. 케이스 스터디의 그림은 연결된 저장소의 분석 코드가 만듭니다. 사진: Unsplash.</p>
+</footer>
+</body>
+</html>

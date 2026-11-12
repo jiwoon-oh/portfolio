@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>패스트푸드 프로모션 비교: A/B 테스트 분석</title>
+<meta content="매장 137곳에서 4주 동안 세 가지 프로모션 전략을 비교했습니다. 데이터 검증, 가설 검정, 효과 크기, 강건성 점검, 비즈니스 권고." name="description"/>
+<meta content="패스트푸드 프로모션 비교 분석" property="og:title"/>
+<meta content="세 프로모션 중 어느 쪽 매출이 가장 강했는가? 가상 예제 데이터의 매장 137곳에서 세 집단을 비교한 결과, 프로모션 하나는 나머지 둘보다 매출이 낮았고, 그 둘은 통계적으로 구분되지 않았습니다." property="og:description"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="../../assets/case.css" rel="stylesheet"/>
+<style>
+/* this page's pair rows have three columns */
+.pair{grid-template-columns:78px 1fr auto}
+@media (max-width:900px){.pair{grid-template-columns:1fr}}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<style>:root{--sans:"Inter","Noto Sans KR",-apple-system,system-ui,"Segoe UI",sans-serif;--display:"Inter Tight","Noto Sans KR","Inter",-apple-system,system-ui,sans-serif}body{word-break:keep-all;overflow-wrap:break-word}</style>
+</head>
+<body>
+<nav class="nav" id="nav">
+<div class="wrap">
+<a aria-label="Jiwoon Oh, 홈" class="brand" href="../../index.ko.html">JO.</a>
+<ul>
+<li><a href="../../index.ko.html#work">Work</a></li>
+<li><a href="../../index.ko.html#about">About</a></li>
+<li><a href="../../index.ko.html#contact">Contact</a></li>
+<li class="lang"><a aria-label="View in English" href="index.html" hreflang="en" lang="en">EN</a><span aria-current="page">KO</span></li>
+</ul>
+</div>
+</nav>
+<header class="wrap hero">
+<p class="kicker">[Case 05]</p>
+<h1>패스트푸드 프로모션 비교</h1>
+<p class="subtitle">세 프로모션의 매출은 어떻게 달랐는가?</p>
+<p class="lede">데이터 설명은 한 패스트푸드 체인이 신메뉴에 대해 세 가지 프로모션 전략을 매장 137곳에서 비교하는 시나리오를 제시합니다. 저는 이를 가상 예제 데이터로 다룹니다. 4주 동안 프로모션 하나는 나머지 둘보다 신메뉴 매출이 낮았고, 그 둘은 통계적으로 구분되지 않았습니다. 시나리오 추정으로 관찰된 격차를 달러로 바꿨습니다.</p>
+<dl class="byline">
+<div><dt>접근</dt><dd>A/B 테스트 · 비교 분석</dd></div>
+<div><dt>데이터</dt><dd>매장 137곳 · 4주 · 관측치 548개</dd></div>
+<div><dt>도구</dt><dd>Python, pandas, SciPy, statsmodels</dd></div>
+<div><dt>코드</dt><dd><a href="https://github.com/jiwoon-oh/fastfood-promotion-ab-test" rel="noopener" target="_blank">GitHub 코드·결과물 ↗</a></dd></div>
+</dl>
+<div class="picks">
+<div class="pick keep">
+<p class="name">프로모션 1</p>
+<p class="val">$58,100<span class="unit">/주</span></p>
+<span class="tag">배제되지 않음</span>
+</div>
+<div class="pick drop">
+<p class="name">프로모션 2</p>
+<p class="val">$47,330<span class="unit">/주</span></p>
+<span class="tag">중단 또는 재검토</span>
+</div>
+<div class="pick keep">
+<p class="name">프로모션 3</p>
+<p class="val">$55,360<span class="unit">/주</span></p>
+<span class="tag">배제되지 않음</span>
+</div>
+</div>
+<p class="picks-note">매장당 주간 평균 신메뉴 매출(시장 규모 보정 전 원값) · 프로모션 1과 3은 통계적으로 구분되지 않았습니다</p>
+</header>
+<div class="wrap main">
+<nav aria-label="목차" class="rail">
+<h2>목차</h2>
+<ol>
+<li><a href="#s1"><span class="n">01</span>개요</a></li>
+<li><a href="#s2"><span class="n">02</span>비즈니스 질문</a></li>
+<li><a href="#s3"><span class="n">03</span>데이터</a></li>
+<li><a href="#s4"><span class="n">04</span>방법론</a></li>
+<li><a href="#s5"><span class="n">05</span>분석</a></li>
+<li><a href="#s6"><span class="n">06</span>결과</a></li>
+<li><a href="#s7"><span class="n">07</span>비즈니스 시사점</a></li>
+<li><a href="#s8"><span class="n">08</span>한계</a></li>
+<li><a href="#s9"><span class="n">09</span>담당한 부분</a></li>
+<li><a href="#s10"><span class="n">10</span>도구와 기술</a></li>
+<li><a href="#s11"><span class="n">11</span>저장소</a></li>
+</ol>
+</nav>
+<main>
+<!-- 01 ---------------------------------------------------- -->
+<section id="s1">
+<p class="sec-no">01</p>
+<h3>개요</h3>
+<p class="sec-sub">비교의 배경과 범위</p>
+<p class="takeaway">데이터는 한 체인이 신메뉴를 추가하면서 가능한 프로모션 세 가지를 비교하는 시나리오를 설명합니다. 데이터는 가상 예제 데이터로 다루며, 질문은 세 프로모션에서 신메뉴 매출이 어떻게 다른지입니다.</p>
+<p>137개 매장은 각각 한 프로모션에만 속하며 4주 동안 주간 매출이 기록되어 있습니다. 출처는 시장을 무작위로 골랐다고만 적고 프로모션을 무작위로 배정했다고는 적지 않아서, 프로모션이 어떻게 배정됐는지는 데이터로 확인할 수 없었습니다. 또 프로모션이 없는 통제 집단이 없으므로, 이 비교는 세 프로모션이 서로 어떻게 다른지를 보여 줄 뿐 각 프로모션이 아무것도 안 했을 때보다 얼마나 더했는지는 보여 주지 않습니다.</p>
+<p>이 프로젝트는 세 전략의 매출 성과가 달랐는지 평가하고, 그 결과를 비즈니스 권고로 바꿉니다.</p>
+</section>
+<!-- 02 ---------------------------------------------------- -->
+<section id="s2">
+<p class="sec-no">02</p>
+<h3>비즈니스 질문</h3>
+<p class="sec-sub">분석 목표</p>
+<div class="bq">
+<p class="q">세 가지 프로모션 전략 중 매출 성과가 가장 강한 것은 무엇인가?</p>
+<ul>
+<li>세 프로모션의 평균 매출은 의미 있게 다른가?</li>
+<li>어떤 프로모션이 다른 것보다 낫거나 못했고, 얼마나 그랬는가?</li>
+<li>시장 특성의 차이가 대신 결과를 설명할 수 있는가?</li>
+<li>결과는 이상치와 반복 검정에 강건한가?</li>
+</ul>
+</div>
+<p class="note">마지막 두 질문은 관찰된 순위가 강건한지 시험합니다. 시장 규모를 고려하면 사라지거나 한 세그먼트에서만 성립하는 순위는, 비슷한 실제 테스트에서 출시를 결정할 근거로 약합니다.</p>
+</section>
+<!-- 03 ---------------------------------------------------- -->
+<section id="s3">
+<p class="sec-no">03</p>
+<h3>데이터</h3>
+<p class="sec-sub">구조, 변수, 출처</p>
+<div class="stats">
+<div class="stat"><p class="k">관측치</p><p class="v blue">548</p></div>
+<div class="stat"><p class="k">변수</p><p class="v violet">7</p></div>
+<div class="stat"><p class="k">매장</p><p class="v mint">137</p></div>
+<div class="stat"><p class="k">매장당 주 수</p><p class="v ink">4</p></div>
+</div>
+<div class="card">
+<div class="table-wrap">
+<table>
+<thead><tr><th>변수</th><th>설명</th></tr></thead>
+<tbody>
+<tr><td class="num">MarketID</td><td>매장이 속한 지리적 시장</td></tr>
+<tr><td class="num">LocationID</td><td>개별 매장 식별자</td></tr>
+<tr><td class="num">MarketSize</td><td>시장 규모 범주: Small, Medium, Large</td></tr>
+<tr><td class="num">Promotion</td><td>매장에 기록된 프로모션 전략 (1, 2, 3)</td></tr>
+<tr><td class="num">week</td><td>관측 주</td></tr>
+<tr><td class="num">SalesInThousands</td><td>신메뉴 주간 매출, 천 달러 단위</td></tr>
+<tr><td class="num">AgeOfStore</td><td>매장 연차(년)</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><span class="hl">Promotion</span>은 1, 2, 3이라는 숫자로 저장되지만 값은 양이 아니라 이름표입니다. 그룹화나 모델링 전에 범주형으로 바꿔서, 어떤 단계에서도 프로모션 3을 “프로모션 1의 세 배”로 다루지 않게 했습니다.</p>
+<p class="note"><strong>출처 ·</strong> Kaggle의 “Fast Food Marketing Campaign A/B Test”, IBM Watson Analytics 커뮤니티 제공으로 표기. 시나리오 설명이 IBM이 가상 데이터로 표시한 SPSS 예제 파일 testmarket.sav의 설명과 같습니다. 두 파일이 동일한지는 확인하지 못했으므로 데이터는 가상 예제 데이터로 다루며, 교육용 포트폴리오 분석에 사용했습니다. 이 페이지는 이 데이터의 분석을 정리한 것입니다.</p>
+</section>
+<!-- 04 ---------------------------------------------------- -->
+<section id="s4">
+<p class="sec-no">04</p>
+<h3>방법론</h3>
+<p class="sec-sub">분석 단계와 각 단계의 이유</p>
+<p class="takeaway">아래 단계는 분석 순서를 따르며, 각 선택의 이유를 함께 적었습니다.</p>
+<div class="dec">
+<p class="idx">01</p>
+<div>
+<h4>검정 전에 연구 설계 검증하기</h4>
+<p class="why">프로모션 차이를 검정하기 전에 중복, 둘 이상의 프로모션에 나오는 매장, 빠진 주, 배정 균형을 확인했습니다. <b>나중의 결과가 단순히 데이터 결함을 반영하는 것이 아니도록 하기 위해서입니다.</b></p>
+</div>
+</div>
+<div class="dec">
+<p class="idx">02</p>
+<div>
+<h4>분석 단위를 프로모션이 붙는 단위에 맞추기</h4>
+<p class="why">각 매장은 한 프로모션에만 속하지만 파일에는 매장마다 주간 행이 4개 있습니다. 이를 독립으로 다루면 표본이 네 배로 부풀려집니다. 그래서 각 매장을 4주 평균으로 줄였습니다. <b>매장 하나에 프로모션 하나가 붙으므로, 비교하는 단위는 주간 행 548개가 아니라 매장 137곳입니다(같은 시장의 매장을 포함해 매장 사이의 독립은 가정했고 확인하지 않음).</b></p>
+</div>
+</div>
+<div class="dec">
+<p class="idx">03</p>
+<div>
+<h4>가정을 확인하고 그에 맞춰 검정 고르기</h4>
+<p class="why">정규성은 기각됐고 등분산은 기각되지 않았습니다. 한 방법에 기대지 않고 ANOVA와 순위 기반 대안을 함께 돌려서, <b>결론이 모수 검정과 비모수 검정 모두로 뒷받침되도록 했습니다.</b></p>
+</div>
+</div>
+<div class="dec">
+<p class="idx">04</p>
+<div>
+<h4>집단 검정 뒤에 쌍별 비교하기</h4>
+<p class="why">ANOVA는 집단이 다르다는 것은 알려 주지만 어느 집단인지는 알려 주지 않습니다. Tukey HSD로 구체적인 쌍을 찾고 <b>각 격차를 비즈니스 결정에 쓰기 쉬운 달러로 보고했습니다.</b></p>
+</div>
+</div>
+<div class="dec">
+<p class="idx">05</p>
+<div>
+<h4>유의성과 함께 효과 크기 보고하기</h4>
+<p class="why">통계적 유의성과 실질적 중요성은 다른 질문입니다. 효과 크기를 보고해서 <b>통계적으로는 잡히지만 크지 않은 효과를 큰 것으로 읽지 않게 했습니다.</b></p>
+</div>
+</div>
+<div class="dec">
+<p class="idx">06</p>
+<div>
+<h4>강건성과 민감도 점검</h4>
+<p class="why">세 가지 점검을 따로 했습니다: 시장 규모와 매장 연차의 균형 및 시장 규모 보정, 의심스러운 관측치 하나를 뺀 재실행, 시장 규모 세그먼트 검정 세 개에 대한 Bonferroni와 Benjamini-Hochberg 보정. <b>이 점검들을 모두 통과한 결과는 교란, 관측치 하나, 우연을 반영할 가능성이 낮습니다.</b></p>
+</div>
+</div>
+<div class="dec">
+<p class="idx">07</p>
+<div>
+<h4>통계를 돈과 결정으로 바꾸기</h4>
+<p class="why">Tukey 매출 격차를 프로모션 2 매장 47곳의 4주에 적용해 시나리오로 추정했습니다. <b>규모가 붙어 있으면 권고를 평가하기 쉽지만, 이 값은 크기를 보여 줄 뿐 측정된 손실이 아닙니다.</b></p>
+</div>
+</div>
+</section>
+<!-- 05 ---------------------------------------------------- -->
+<section id="s5">
+<p class="sec-no">05</p>
+<h3>분석</h3>
+<p class="sec-sub">데이터 검증, 분석 단위, 통계적 가정, 강건성 점검</p>
+<h4 class="blk">데이터 검증과 배정 점검</h4>
+<p>구조 점검에서는 문제가 없었습니다: 중복 행 없음, 여러 프로모션에 걸친 매장 없음, 빠진 주 없음, 모든 매장이 4주 내내 관측됨. 매장 단위 배정 점검(SRM)에서 불일치가 없었고(p = 0.8898), 시장 규모도 세 프로모션에 비슷하게 퍼져 있어서(p = 0.8800) 세 집단을 서로 비교할 수 있습니다. 다만 이것이 무작위 배정을 증명하지는 않습니다. 출처는 시장을 무작위로 골랐다고만 적고 프로모션을 무작위로 배정했다고는 적지 않습니다.</p>
+<div class="card tight">
+<p class="small"><span class="hl">548행이 들어가 548행이 나왔습니다.</span> 품질 점검에서 지울 것이 없었으므로 아무것도 지우지 않았습니다. IQR 규칙이 표시한 이상치는 이 단계에서 빼지 않고 아래의 이상치 민감도 점검에서 따로 평가해서, 기록된 이유 없이 지운 행이 없게 했습니다.</p>
+</div>
+<h4 class="blk">분석 단위: 주간 행 548개에서 매장 평균 137개로</h4>
+<p>같은 매장의 1주와 2주 같은 주간 관측치는 독립이 아니라 서로 닮았습니다. 매장 평균으로 묶으면 이 문제는 해결되지만 주간 정보가 사라지므로, 묶는 것이 정당한지 확인했습니다.</p>
+<div class="grid3">
+<div class="card tight">
+<h4>주 효과는 보이지 않았습니다</h4>
+<p class="small">주간 행 548개로 한 참고 검정(한 매장의 반복된 주를 독립으로 다룸)에서 공통 주 효과가 없었으므로(p = 0.9935), 평균을 내도 공통 추세가 가려질 가능성은 낮습니다.</p>
+</div>
+<div class="card tight">
+<h4>변동은 주로 매장 사이에 있습니다</h4>
+<p class="small">매장 사이의 퍼짐은 한 매장 안 주 사이 퍼짐의 약 <span class="hl">3.4배</span>였습니다.</p>
+</div>
+<div class="card tight">
+<h4>혼합 모형은 가능한 확장입니다</h4>
+<p class="small">혼합효과 모형은 주간 기록을 유지하면서 매장 안의 의존성을 다룰 수 있습니다. 여기서는 적합하지 않았고 향후 개선에 적어 두었습니다.</p>
+</div>
+</div>
+<h4 class="blk">통계적 가정과 검정 선택</h4>
+<figure>
+<img alt="세 프로모션 집단의 Q-Q 그림. 각각 가운데에서는 기준선을 따르지만 위쪽 꼬리에서 떨어져 올라갑니다." src="assets/qq.png"/>
+<figcaption>세 집단 모두 분포의 몸통에서는 기준선을 따라가다가, 가장 높은 매장 평균이 있는 위쪽 꼬리에서 떨어져 올라갑니다.</figcaption>
+</figure>
+<div class="grid2">
+<div class="card tight">
+<h4>정규성 <span class="chip rej">충족 안 됨</span></h4>
+<p class="small">Shapiro–Wilk가 세 집단 모두에서 정규성을 기각했고(p = 0.0002, &lt;0.0001, 0.0001), 벗어남은 위쪽 꼬리에 있습니다.</p>
+</div>
+<div class="card tight">
+<h4>등분산 <span class="chip hold">기각 안 됨</span></h4>
+<p class="small">Levene 검정은 분산이 다르다는 근거를 찾지 못했으므로(p = 0.6272) 모수적 방법도 쓸 수 있습니다.</p>
+</div>
+</div>
+<p>정규성이 깨졌으므로 ANOVA만으로는 정당화하기 어렵고, 순위 기반 검정만으로는 격차를 달러로 말할 수 없습니다. 집단 크기가 대체로 균형이고(43, 47, 47) 분산 차이도 없었으므로 둘 다 돌려서 <span class="hl">결론이 일치하도록 요구했고</span>, 실제로 일치했습니다.</p>
+<h4 class="blk">쌍별 비교 (Tukey HSD)</h4>
+<figure>
+<img alt="시장 규모 보정 전 Tukey HSD 95% 구간: 프로모션 1 − 2는 +10.77 [2.94, 18.60], 프로모션 3 − 2는 +8.04 [0.39, 15.68], 프로모션 1 − 3은 +2.73 [−5.09, 10.56]" src="assets/tukey.png"/>
+<figcaption>Tukey HSD 쌍별 비교와 95% 신뢰구간, 세 쌍에 대해 Tukey 방법으로 보정(보정 p: 1 vs 2 0.0040, 1 vs 3 0.6862, 2 vs 3 0.0371). 0선을 포함하지 않는 구간은 5% 수준에서 통계적으로 유의합니다.</figcaption>
+</figure>
+<div class="card">
+<div class="pair">
+<span class="lbl">P1 · P2</span>
+<span class="txt">프로모션 2는 매장-주당 프로모션 1보다 평균 약 <strong>$10,770 낮았습니다</strong></span>
+<span><span class="chip rej">유의</span></span>
+</div>
+<div class="pair">
+<span class="lbl">P1 · P3</span>
+<span class="txt">프로모션 1과 3 사이의 $2,735 격차는 0과 구분되지 않습니다</span>
+<span><span class="chip na">구분 안 됨</span></span>
+</div>
+<div class="pair">
+<span class="lbl">P2 · P3</span>
+<span class="txt">프로모션 3은 매장-주당 프로모션 2보다 평균 약 <strong>$8,035 높았습니다</strong></span>
+<span><span class="chip rej">유의</span></span>
+</div>
+</div>
+<h4 class="blk">강건성 점검</h4>
+<p>세 가지 점검으로 프로모션 2의 낮은 매출이 시장 규모나 특이한 관측치 하나로 설명되는지, 그리고 세그먼트별 검정이 다중검정 보정 후에도 유의한지 물었습니다. 어떤 점검도 차이를 없애지 못했습니다.</p>
+<div class="card">
+<h4>다른 설명으로서의 시장 규모와 매장 연차</h4>
+<p class="small">시장 규모는 프로모션보다 매출과 훨씬 강하게 연관되지만(주효과 모형에서 부분 η² 0.593 vs 0.195), 시장 규모(p = 0.8800)와 매장 연차(p = 0.6387) 모두 <span class="hl">프로모션 사이에 불균형이 없었습니다</span>. 시장 규모를 통제해도 프로모션 차이는 약해지지 않았습니다: 프로모션 1 − 2는 +$10.77K로 같고 구간이 좁아졌으며([2.94, 18.60] → [5.73, 15.80]), 프로모션 3 − 2는 +$8.04K에서 +$9.75K로 올랐습니다([0.39, 15.68] → [4.82, 14.69]). 따라서 관찰된 시장 규모는 차이를 설명하지 못합니다. 관찰되지 않은 매장 특성은 통제하지 않았습니다.</p>
+</div>
+<div class="card">
+<h4>시장 규모 보정 모형</h4>
+<p class="small">같은 매장 평균 137개에서 프로모션 × 시장 규모 상호작용은 유의하지 않았으므로(F = 1.32, p = 0.2659) 주효과 모형을 해석합니다. Small 시장은 매장이 15곳뿐이라 이 검정의 검정력은 낮습니다. 시장 규모를 보정한 뒤에도 프로모션 2는 두 대안보다 낮습니다: 프로모션 1 − 2는 +$10.77K [5.73, 15.80], 프로모션 3 − 2는 +$9.75K [4.82, 14.69](Tukey–Kramer 95% 구간, 보정 전은 +$10.77K [2.94, 18.60]와 +$8.04K [0.39, 15.68]). 프로모션 1 − 3은 여전히 구분되지 않습니다(+$1.02K [−4.03, 6.06]). 구간이 0을 포함한다고 둘이 같다는 뜻은 아닙니다. 부분 η²는 프로모션 0.195, 시장 규모 0.593입니다. 관찰된 시장 규모를 보정해도 관찰되지 않은 매장 특성은 통제되지 않으므로 인과 추정이 아닙니다.</p>
+</div>
+<div class="card">
+<h4>원 평균과 시장 규모 보정 평균</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th>프로모션</th><th>원 평균 [95% CI]</th><th>보정 평균 [95% CI]</th></tr></thead>
+<tbody>
+<tr><td class="num">1</td><td class="num">58.10 [53.17, 63.03]</td><td class="num">61.06 [57.79, 64.33]</td></tr>
+<tr><td class="num">2</td><td class="num">47.33 [43.07, 51.59]</td><td class="num">50.29 [47.08, 53.51]</td></tr>
+<tr><td class="num">3</td><td class="num">55.36 [50.55, 60.17]</td><td class="num">60.05 [56.88, 63.21]</td></tr>
+</tbody>
+</table>
+</div>
+<p class="small" style="margin-top:12px">매장당 주간 평균 신메뉴 매출, 천 달러 단위(매장 n = 43, 47, 47). 보정 평균은 세 시장 규모에 같은 가중치를 둡니다.</p>
+</div>
+<div class="card">
+<h4>특이한 관측치 하나에 대한 민감도</h4>
+<p class="small">IQR 규칙이 표시한 주간 관측치 46개(각 프로모션 안에서) 중 <span class="hl-r">45개가 큰 시장 하나</span>(MarketID 3)에서 나왔으며, 이는 데이터 오류라기보다 큰 시장의 실제 매출일 가능성이 큽니다. 지웠다면 실제 변동을 지웠을 것입니다. 매장 하나(507)는 유난히 낮은 주가 한 번 있었습니다(17.34). 입력 오류라는 직접 근거가 없어서 남겨 두고, 확인 삼아 이 매장을 뺀 ANOVA를 다시 돌렸습니다(F 5.85 → 5.78, p 0.0037 → 0.0039). 결론은 바뀌지 않았습니다.</p>
+</div>
+<figure>
+<img alt="매장 507의 주간 매출은 1~4주에 38.65, 17.34, 33.14, 23.44천 달러였고, 시장 6의 다른 매장 14곳의 4주 평균은 29.5~43.3이었습니다" src="assets/outlier507.png"/>
+<figcaption>유일한 특이 사례: 2주(17.34)는 다른 주보다 훨씬 낮고, 4주(23.44)도 같은 시장 다른 매장의 4주 평균(29.5~43.3)보다 낮습니다. 데이터에는 휴업이나 재고 부족을 기록한 항목이 없습니다.</figcaption>
+</figure>
+<div class="card">
+<h4>시장 세그먼트 간 일관성과 다중검정 보정</h4>
+<p class="small">프로모션 2는 작은 시장, 중간 시장, 큰 시장 모두에서 평균이 가장 낮았습니다. 세그먼트마다 따로 검정하면 검정을 세 번 하게 되어(시장 규모마다 프로모션의 일원 ANOVA, 매장 n = 15, 80, 42) 거짓 양성 가능성이 커지므로, 세 p값에 Bonferroni와 Benjamini-Hochberg 보정을 모두 적용했습니다. <span class="hl">세 세그먼트 모두 보정 후에도 유의했습니다</span>(각 세그먼트의 세 집단 ANOVA. 세그먼트 안의 쌍별 차이는 검정하지 않음). 보정 전 p값은 0.003183(Small), 0.000104(Medium), 0.007732(Large), Bonferroni 보정은 0.009550, 0.000313, 0.023195, Benjamini-Hochberg 보정은 0.004775, 0.000313, 0.007732입니다. 세그먼트 평균은 기술 통계입니다. 다른 보정은 하지 않았습니다. 종합 검정(Levene, ANOVA, Kruskal-Wallis)은 같은 귀무가설에 대한 병렬 검정이라 서로에 대해 보정하지 않았고, Tukey 결과에는 Tukey 자체 보정이 들어 있습니다. 작은 시장 세그먼트는 매장 15곳(집단당 약 5곳)뿐이라 결과가 작은 표본에 기대므로 나머지 둘보다 무게가 작습니다. 프로모션 × 시장 규모 상호작용 검정은 유의하지 않았지만(p = 0.2659), Small 시장 매장이 15곳뿐이라 검정력이 낮습니다.</p>
+</div>
+<figure>
+<img alt="시장 규모별 프로모션 평균 매출. 프로모션 2는 작은 시장, 중간 시장, 큰 시장 모두에서 가장 낮습니다." src="assets/segbar.png"/>
+<figcaption>프로모션 2는 모든 시장 규모에서 평균이 가장 낮으므로, 순위를 세그먼트 하나의 결과가 아니라 일관된 패턴으로 봅니다.</figcaption>
+</figure>
+</section>
+<!-- 06 ---------------------------------------------------- -->
+<section id="s6">
+<p class="sec-no">06</p>
+<h3>결과</h3>
+<p class="sec-sub">주요 결과</p>
+<p class="takeaway">프로모션 2는 두 대안보다 매출이 낮았습니다. 프로모션 1과 3은 매출로 구분되지 않았습니다.</p>
+<figure>
+<img alt="프로모션별 매장 4주 평균 137개의 상자 그림. 평균은 프로모션 1, 2, 3이 각각 58.1, 47.3, 55.4천 달러입니다" src="assets/box.png"/>
+<figcaption>매장당 4주 평균 매출(n = 43, 47, 47). 프로모션 2의 중앙값이 가장 낮지만(46.7 vs 56.1, 49.9천 달러) 상자는 겹칩니다.</figcaption>
+</figure>
+<div class="grid2">
+<div class="card tight">
+<h4>프로모션 2의 매출이 낮았음 <span class="chip rej">일관됨</span></h4>
+<p class="small">두 대안보다 매출이 낮았고, 모든 시장 규모에서, 시장 규모를 보정한 뒤에도 그랬으며, 의심스러운 관측치를 빼도 거의 바뀌지 않았습니다(p 0.0037 → 0.0039).</p>
+</div>
+<div class="card tight">
+<h4>프로모션 1과 3은 구분되지 않았음 <span class="chip na">미결</span></h4>
+<p class="small">전체로는 격차가 잡히지 않았고(+$2.73K, 구간 [−5.09, 10.56]), 시장 규모별로는 방향이 일관되지 않습니다: Small(+0.65)과 Medium(+2.20)에서는 프로모션 1이 높고, Large에서는 프로모션 3이 높습니다(프로모션 1 − 3 = −1.97).</p>
+</div>
+</div>
+<h4 class="blk">효과 크기</h4>
+<p>프로모션은 매장 매출 변동의 약 <span class="hl">8%</span>와 연관되며(일원 η² = 0.0802), 관례상 중간 크기 효과입니다. 나머지 변동은 대부분 시장 규모와 다른 매장 특성과 관련될 것입니다.</p>
+<p>프로모션 차이는 위의 점검 전반에서 일관되지만 매장 매출 변동의 주된 원인은 아니므로, 이 결과에 기댄 기대치도 그에 맞게 정해야 합니다.</p>
+</section>
+<!-- 07 ---------------------------------------------------- -->
+<section id="s7">
+<p class="sec-no">07</p>
+<h3>비즈니스 시사점</h3>
+<p class="sec-sub">통계 결과의 실무적 의미</p>
+<p class="takeaway">시나리오 추정: 프로모션 2를 쓴 매장 47곳의 4주에 Tukey 차이를 적용하면 프로모션 1 대비 약 2백만 달러 차이가 납니다(측정된 손실이 아니며, 가상 예제 데이터 기반).</p>
+<div class="grid2" style="margin-bottom:16px">
+<div class="callout">
+<p class="big">프로모션 1 대비</p>
+<p class="money" style="color:var(--rose)">$2,024,700</p>
+<p class="sub">매장 47곳 × 4주, 시나리오 추정(측정된 손실 아님)<br/>매장-주당 약 $10,770</p>
+</div>
+<div class="callout">
+<p class="big">프로모션 3 대비</p>
+<p class="money" style="color:var(--amber)">$1,510,600</p>
+<p class="sub">매장 47곳 × 4주, 시나리오 추정(측정된 손실 아님)<br/>매장-주당 약 $8,035</p>
+</div>
+</div>
+<div class="card">
+<h4>이 수치를 읽는 법</h4>
+<p class="small">매장당 주간 격차는 약 $10,770입니다(시장 규모 보정 전 Tukey 차이). 이를 매장 47곳의 4주에 적용하면 위의 시나리오 수치가 나옵니다. <span class="hl-r">$2M은 가상 예제 데이터에 기반한 시나리오 추정이며, 어떤 매장이 실제로 잃었다고 측정된 금액이 아닙니다.</span></p>
+<p class="small">또한 점추정이며 실행 비용, 매장별 반응 차이, 계절성, 이익률을 반영하지 않습니다. 측정한 결과는 매출이므로 각 프로모션을 운영하는 비용은 포함되지 않습니다.</p>
+</div>
+<h4 class="blk">권고</h4>
+<div class="card">
+<h4><span class="chip rej">중단 또는 재검토</span>  프로모션 2</h4>
+<p class="small">이 가상 시나리오에서 데이터는 프로모션 2를 중단하거나 재검토하자는 쪽을 가리킵니다. 프로모션 2는 돌려 본 모든 점검에서 신메뉴 매출이 낮았습니다: 두 대안 모두에 대한 통계적으로 유의한 격차, 모든 시장 세그먼트에서의 일관성, 관찰된 시장 규모나 매장 연차로 설명되지 않는 격차(시장 규모 보정 후에도 남음: 보정 프로모션 1 − 2 +$10.77K [5.73, 15.80], 프로모션 3 − 2 +$9.75K [4.82, 14.69]), 의심스러운 관측치를 뺐을 때의 안정성.</p>
+</div>
+<div class="card">
+<h4><span class="chip na">미정</span>  프로모션 1 또는 프로모션 3</h4>
+<p class="small">매출 데이터로는 둘을 구분할 수 없으므로, 선택은 이 데이터에 없는 정보로 해야 합니다: 실행·마케팅 비용, 운영 복잡도, 재고·물류 부담, 고객 유지, 장기적인 매출 흐름.</p>
+<p class="small">어느 쪽으로 정하기 전에 그 정보를 먼저 모아야 합니다.</p>
+</div>
+</section>
+<!-- 08 ---------------------------------------------------- -->
+<section id="s8">
+<p class="sec-no">08</p>
+<h3>한계</h3>
+<p class="sec-sub">이 분석이 답할 수 없는 것</p>
+<div class="grid2">
+<div class="card tight">
+<h4>4주라는 기간</h4>
+<p class="small">장기 효과는 평가할 수 없고, 지속되는 효과와 처음의 새로움 효과를 구분할 수 없습니다. 프로모션이 더 이상 새롭지 않을 때도 순위가 유지되는지는 알 수 없습니다.</p>
+</div>
+<div class="card tight">
+<h4>주간 정보는 묶였습니다</h4>
+<p class="small">매장 단위로 평균을 내서 독립된 관측치를 얻었지만 주 단위의 움직임은 볼 수 없게 됐습니다.</p>
+</div>
+<div class="card tight">
+<h4>프로모션 없는 집단이 없습니다</h4>
+<p class="small">비교는 세 프로모션 사이에서만 이뤄지므로, 각 프로모션이 아무것도 안 했을 때보다 얼마나 더했는지는 보여 줄 수 없습니다.</p>
+</div>
+<div class="card tight">
+<h4>배정 기록이 불완전합니다</h4>
+<p class="small">출처는 시장의 무작위 선택만 적고 프로모션의 무작위 배정은 적지 않습니다. 배정 절차는 기록되어 있지 않고, 매장 단위 배정 점검 통과(p = 0.8898)가 무작위 배정을 증명하지는 않습니다.</p>
+</div>
+<div class="card tight">
+<h4>비용·이익 데이터가 없습니다</h4>
+<p class="small">데이터에는 매출은 있지만 프로모션, 인건비, 마케팅, 운영 비용은 없습니다. 이 분석은 수익성이 아니라 매출 성과를 평가합니다.</p>
+</div>
+<div class="card tight">
+<h4>얇은 세그먼트</h4>
+<p class="small">작은 시장 집단은 집단당 약 5곳뿐입니다. 세그먼트 결과는 보정 후에도 유의했지만 작은 표본에 기대므로, 더 많은 데이터로 다시 시험해야 합니다.</p>
+</div>
+<div class="card tight">
+<h4>가상 예제 데이터</h4>
+<p class="small">IBM은 같은 내용의 SPSS 예제 파일을 가상 데이터로 표시합니다. 결과는 방법을 보여 줄 뿐 실제 캠페인에 대한 근거가 아닙니다.</p>
+</div>
+</div>
+<h4 class="blk">향후 개선</h4>
+<ul class="plain">
+<li>평균을 내는 대신 주간 관측치를 직접 쓰는 혼합효과 모형</li>
+<li>지속 효과와 새로움 효과를 구분할 수 있는 더 긴 관측 기간</li>
+<li>매출이 아니라 이익으로 비교할 수 있도록 비용·마진 데이터</li>
+<li>고객 단위 행동과 유지 지표</li>
+<li>검정력을 높인 프로모션과 시장 특성의 상호작용 효과(현재 상호작용 검정 p = 0.2659는 Small 시장 매장이 15곳뿐이라 검정력이 낮음)</li>
+</ul>
+</section>
+<!-- 09 ---------------------------------------------------- -->
+<section id="s9">
+<p class="sec-no">09</p>
+<h3>담당한 부분</h3>
+<p class="sec-sub">분석에서 제가 맡은 범위</p>
+<ul class="plain">
+<li>비즈니스 질문을 세우고 검정 가능한 가설로 바꿈</li>
+<li>배정 일관성과 배정 균형을 포함해 데이터를 검증함</li>
+<li>분석 단위를 정하고 묶는 것을 근거로 정당화함</li>
+<li>통계적 가정을 평가하고 그에 맞춰 방법을 고름</li>
+<li>집단 비교, 비모수 강건성 점검, 쌍별 사후 검정을 수행함</li>
+<li>교란 변수와 상호작용 효과를 조사함</li>
+<li>결과의 강건성을 확인하려고 민감도 분석과 다중검정 분석을 함</li>
+<li>통계 결과를 매출 영향의 시나리오 추정으로 바꿈</li>
+<li>데이터로 정할 수 없는 것까지 포함해 최종 권고를 씀</li>
+</ul>
+</section>
+<!-- 10 ---------------------------------------------------- -->
+<section id="s10">
+<p class="sec-no">10</p>
+<h3>도구와 기술</h3>
+<p class="sec-sub">무엇을 어디에 썼는지</p>
+<div class="card tight">
+<h4>프로그래밍과 데이터 처리</h4>
+<div class="tags"><span>Python</span><span>pandas</span><span>NumPy</span></div>
+</div>
+<div class="card tight">
+<h4>통계와 비교 검정</h4>
+<div class="tags"><span>A/B 테스트</span><span>가설 검정</span><span>일원 ANOVA</span><span>이원 ANOVA</span><span>Kruskal-Wallis</span><span>Tukey HSD</span><span>Levene 검정</span><span>Shapiro-Wilk</span><span>효과 크기</span><span>다중검정 보정</span></div>
+</div>
+<div class="card tight">
+<h4>분석 방법</h4>
+<div class="tags"><span>탐색적 데이터 분석</span><span>이상치 분석</span><span>민감도 분석</span><span>교란 분석</span><span>배정 검증</span></div>
+</div>
+<div class="card tight">
+<h4>시각화</h4>
+<div class="tags"><span>Matplotlib</span><span>Seaborn</span></div>
+</div>
+</section>
+<!-- 11 ---------------------------------------------------- -->
+<section id="s11">
+<p class="sec-no">11</p>
+<h3>저장소</h3>
+<p class="sec-sub">노트북, 코드, 전체 설명</p>
+<p><a class="repo" href="https://github.com/jiwoon-oh/fastfood-promotion-ab-test" rel="noopener" target="_blank">GitHub 코드·결과물 <span>→</span></a></p>
+<p class="note">저장소에는 Jupyter 노트북(promotion_ab_test, ab_figures), 결과 CSV, 그림 코드가 있으며, 다시 실행하면 출력 해시가 같았습니다. 전체 README도 들어 있습니다.</p>
+</section>
+</main>
+</div>
+<footer class="wrap">
+<p>데이터 · “Fast Food Marketing Campaign A/B Test”(Kaggle, IBM Watson Analytics 커뮤니티 제공으로 표기). 시나리오가 IBM이 가상 데이터로 표시한 SPSS 예제 파일 testmarket.sav의 설명과 같음. 가상 예제 데이터로 다루며 교육용 포트폴리오 분석에 사용</p>
+<p>도구 · Python 3, pandas, SciPy, statsmodels, matplotlib</p>
+<p>코드 · <a href="https://github.com/jiwoon-oh/fastfood-promotion-ab-test" rel="noopener" target="_blank">GitHub 코드·결과물</a></p>
+</footer>
+<script>
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail a'));
+  var secs  = links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+  if(!('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(!e.isIntersecting) return;
+      var i = secs.indexOf(e.target);
+      links.forEach(function(a,j){ a.classList.toggle('on', j===i); });
+    });
+  }, { rootMargin: '-10% 0px -70% 0px', threshold: 0 });
+  secs.forEach(function(s){ if(s) io.observe(s); });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>고객 지출과 매출 집중: Dunnhumby 케이스 스터디</title>
+<meta content="매출 증가가 고지출 고객에게서 나왔는지 검정합니다. 순위 기반 검정, 부트스트랩 구간, 기여 분해 결과, 초기 상위 20% 가구는 이후 기간에 덜 썼고 매출 비중도 줄었으며, 나머지 가구는 더 썼습니다." name="description"/>
+<meta content="고객 지출과 매출 집중: Dunnhumby 케이스 스터디" property="og:title"/>
+<meta content="83주 안정 기간의 데이터에 있는 가구 2,500개, 그중 2,095개를 두 10주 기간(17~26주, 90~99주)으로 비교하고 지출 증가가 어디서 왔는지 분해했습니다." property="og:description"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet"/>
+<link href="../../../assets/case.css" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;800&amp;display=swap" rel="stylesheet"/>
+<style>:root{--sans:"Inter","Noto Sans KR",-apple-system,system-ui,"Segoe UI",sans-serif;--display:"Inter Tight","Noto Sans KR","Inter",-apple-system,system-ui,sans-serif}body{word-break:keep-all;overflow-wrap:break-word}</style>
+</head>
+<body>
+<nav class="nav" id="nav">
+<div class="wrap">
+<a aria-label="Jiwoon Oh, 홈" class="brand" href="../../../index.ko.html">JO.</a>
+<ul>
+<li><a href="../../../index.ko.html#work">Work</a></li>
+<li><a href="../../../index.ko.html#about">About</a></li>
+<li><a href="../../../index.ko.html#contact">Contact</a></li>
+<li class="lang"><a aria-label="View in English" href="index.html" hreflang="en" lang="en">EN</a><span aria-current="page">KO</span></li>
+</ul>
+</div>
+</nav>
+<header class="wrap hero">
+<p class="kicker">[Case 04]</p>
+<h1>매출 집중</h1>
+<p class="subtitle">고객 지출과 매출 집중: 초기 상위 고객은 이후 기간에 덜 썼습니다</p>
+<p class="lede">가설은 매출 증가가 소수의 고지출 가구가 더 쓴 데서 나왔다는 것이었습니다. 모든 검정에서 처음에 지출이 높았던 가구는 이후 기간에 지출이 낮아졌고, 나머지 가구는 늘었습니다. 상위 20% 밖의 가구(넓은 패널)에서 순지출 증가의 대부분은 기존 가구에서 나왔습니다. 이는 인과 추정이 아니라 기여 분해입니다.</p>
+<dl class="byline">
+<div><dt>접근</dt><dd>고객 분석 · 유지</dd></div>
+<div><dt>데이터</dt><dd>데이터의 가구 2,500개 · 83주 안정 기간 · Dunnhumby "The Complete Journey"</dd></div>
+<div><dt>도구</dt><dd>Python, pandas, SciPy, scikit-learn</dd></div>
+<div><dt>코드</dt><dd><a href="https://github.com/jiwoon-oh/dunnhumby-revenue-concentration" rel="noopener" target="_blank">GitHub 코드·결과물 ↗</a></dd></div>
+</dl>
+<div class="picks">
+<div class="pick drop">
+<p class="name">초기 상위 20% · 절대 지출</p>
+<p class="val">−131<span class="unit">중앙값</span></p>
+<span class="tag">가설 지지 안 됨</span>
+</div>
+<div class="pick keep">
+<p class="name">나머지 80%</p>
+<p class="val">+36<span class="unit">중앙값</span></p>
+<span class="tag">지출 증가</span>
+</div>
+<div class="pick split">
+<p class="name">초기 상위 20%의 매출 비중</p>
+<p class="val">54.9 → 42.0<span class="unit">%</span></p>
+<span class="tag">비중 하락</span>
+</div>
+</div>
+<p class="picks-note">기준 기간(17~26주)과 이후 기간(90~99주) 사이의 가구 지출 변화 · 두 기간 모두 거래가 있는 가구 2,095개</p>
+</header>
+<div class="wrap main">
+<nav aria-label="목차" class="rail">
+<h2>목차</h2>
+<ol>
+<li><a href="#s0">00 · 요약<span class="p">여기서 시작</span></a></li>
+<li><a href="#s1">01 · 개요</a></li>
+<li><a href="#s2">02 · 비즈니스 질문</a></li>
+<li><a href="#s3">03 · 데이터<span class="p">데이터의 가구 2,500개</span></a></li>
+<li><a href="#s4">04 · 방법론<span class="p">기준 기간만으로 정의</span></a></li>
+<li><a href="#s5">05 · 분석</a></li>
+<li><a href="#s6">06 · 결과<span class="p">가설 지지 안 됨</span></a></li>
+<li><a href="#s7">07 · 비즈니스 시사점</a></li>
+<li><a href="#s8">08 · 한계</a></li>
+<li><a href="#s9">09 · 도구와 기술</a></li>
+<li><a href="#s10">10 · 저장소</a></li>
+</ol>
+</nav>
+<main>
+<section id="s0">
+<p class="sec-no">00</p>
+<h3>요약</h3>
+<p class="sec-sub">질문, 방법, 결과를 짧게</p>
+<p class="takeaway">가설은 매출 증가가 고지출 고객이 더 쓴 데서 나왔다는 것이었습니다. 데이터에서 초기 상위 20%는 17~26주보다 90~99주에 <em>덜</em> 썼고, 나머지 가구는 더 썼습니다. 두 기간을 비교한 것이라 지출이 왜 바뀌었는지는 밝히지 못하며, 평균으로의 회귀도 배제하지 못합니다.</p>
+<p><strong>검정하는 주장.</strong> 매출 증가가 소수의 고가치 가구에 몰려 있다. 사실이라면 상위 고객은 절대 지출과 매출 비중 모두 늘었어야 합니다.</p>
+<div class="card">
+<h4>세 가지 결과: 지출 변화와 매출 비중</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th class="tl">검정</th><th>결과 (중앙값 변화, 비중 변화는 pp)</th><th class="tl">의미</th></tr></thead>
+<tbody>
+<tr class="mark"><td class="lead tl">상위 20% · 절대 지출</td><td class="num lead" style="color:var(--rose)">−131.45</td><td class="tl">초기 상위 20%의 지출 중앙값이 <strong>감소</strong></td></tr>
+<tr><td class="tl">나머지 80% · 절대 지출</td><td class="num lead" style="color:var(--mint)">+36.49</td><td class="tl">나머지 가구의 지출 중앙값이 <strong>증가</strong></td></tr>
+<tr><td class="tl">상위 20% · 매출 비중</td><td class="num lead" style="color:var(--rose)">−12.91 pp</td><td class="tl">상위 집단의 매출 비중이 감소</td></tr>
+</tbody>
+</table>
+</div>
+<p class="small" style="margin-top:14px">검정 A와 B(앞의 두 줄)는 가구 단위 검정 A~C 세 개 중 두 개입니다. 세 검정은 먼저 함께 Bonferroni 보정했습니다(α = 0.05 / 3 ≈ 0.0167, 검정 C인 집단 간 Mann-Whitney U는 05장에 있음). 검정 D는 H4-1의 세 번째 비교로 계획했지만 처음의 세 검정 묶음에는 없었고, A~C 결과를 본 뒤 추가해서 묶음이 검정 네 개가 됐습니다(α = 0.05 / 4 = 0.0125). Bonferroni 기준은 A~C의 p값에만 적용했고, 각 판정은 두 기준에서 모두 같습니다. 마지막 줄이 검정 D이며 p값이 없고, 비중 변화의 보정 전 95% 부트스트랩 구간이 0을 포함하지 않는지로만 판단합니다. 보정된 구간은 계산하지 않았고 보정 후 유의성도 주장하지 않습니다. 세 줄 모두 H4-1 패널(가구 2,095개, 상위 20% 419개, 나머지 80% 1,676개)을 씁니다. 절대 지출과 매출 비중 어느 쪽으로 봐도 가설은 지지되지 않습니다.</p>
+</div>
+<h4 style="margin-top:34px">주요 결과</h4>
+<div class="card tight">
+<p class="small"><strong>변화의 방향은 기준 기간 길이에 달려 있지 않습니다.</strong> 기준 기간을 8주, 10주, 12주로 다시 돌려도 매번 부호가 같습니다. 이는 민감도 점검이며 평균으로의 회귀를 배제하지는 않습니다.</p>
+</div>
+<div class="card tight">
+<p class="small"><strong>신규·재활성 가구는 상위 20% 밖에 더 많습니다</strong>: 나머지 80%의 43.5%, 상위 20%의 13.6%입니다(넓은 패널: 17~99주에 거래가 있는 가구 2,492개, 상위 20% = 499, 나머지 80% = 1,993). 연관은 중간 정도입니다(Cramér's V = 0.246).</p>
+</div>
+<div class="card tight">
+<p class="small"><strong>연관과 기여는 다른 척도입니다.</strong> 넓은 패널(기준 기간 거래가 없는 가구는 기준 지출을 0으로 둠)에서 이 가구들은 나머지 80%(가구 1,993개)의 인원 기준 43.5%이지만, 그 집단 순지출 증가의 <span class="hl">30.0%</span>만 차지합니다. 증가의 대부분은 신규·재활성 가구가 아니라 <strong>기존 가구</strong>에서 나왔습니다. 이는 인과 추정이 아니라 회계적 분해입니다.</p>
+</div>
+<div class="card tight">
+<p class="small"><strong>탐색적 모델로 어떤 기준 기간 특성이 상위 등급 이탈과 연관되는지 봤습니다.</strong> 인구통계 기록이 있는지가 가장 뚜렷한 연관을 보이고(OR 0.32, 95% CI 0.19~0.51), 방문 빈도는 연관이 확인되지 않았습니다(OR 1.29, CI 0.91~1.87이 1을 포함).</p>
+</div>
+<div class="callout" style="margin-top:30px">
+<p class="big">유지 전략에 주는 의미</p>
+<p class="money">상위 20% 밖의 가구도 고려하기</p>
+<p class="sub">이 데이터에서 지출 증가는 초기 상위 20% 밖의 가구, 그중에서도 주로 기존 고객에게서 나타납니다(넓은 패널, 가구 2,492개, 나머지 80% = 1,993). 과거 지출이 가장 높은 고객만 겨냥한 유지 전략은 관찰된 증가의 대부분을 다루지 못합니다.</p>
+</div>
+<h4 style="margin-top:34px">한눈에 보기</h4>
+<div class="card">
+<div class="pair">
+<span class="lbl">데이터</span>
+<span class="txt">Dunnhumby "The Complete Journey", 83주 안정 기간(17~99주)</span>
+<span class="num">데이터의 가구 2,500</span>
+</div>
+<div class="pair">
+<span class="lbl">방법</span>
+<span class="txt">로렌츠 / 지니 집중도 · 순위 안정성 엘보 · Wilcoxon · Mann-Whitney U · 부트스트랩 CI · 카이제곱 · 기여 분해</span>
+<span class="num">—</span>
+</div>
+<div class="pair">
+<span class="lbl">모델링</span>
+<span class="txt">탐색적 유지 위험 모델: 로지스틱 회귀와 랜덤 포레스트(SHAP), 5겹 층화 CV</span>
+<span class="num">가구 499</span>
+</div>
+<div class="pair">
+<span class="lbl">결론</span>
+<span class="txt">원래 가설은 지지되지 않음. 지출 수준의 수렴이 관찰됨. 나머지 80%(넓은 패널)에서 증가의 대부분은 기존 가구에서 나옴(기여 분해)</span>
+<span class="num">H4</span>
+</div>
+</div>
+</section>
+<section id="s1">
+<p class="sec-no">01</p>
+<h3>개요</h3>
+<p class="sec-sub">무엇을 왜 검정했는가</p>
+<p>흔한 가정은 소수의 고지출 고객이 매출을 떠받치므로 성장도 그들에게서 나온다는 것입니다.</p>
+<p>이 케이스는 그 가정을 검정합니다. 83주 안정 기간의 가구 거래 데이터로 두 10주 기간(17~26주, 90~99주)을 비교해서, 처음부터 고지출이었던 가구가 절대 지출과 전체 매출 비중을 늘렸는지, 그렇지 않다면 증가가 어떤 가구에서 왔는지 묻습니다.</p>
+<div class="grid2">
+<div class="card tight">
+<h4>범위</h4>
+<p class="small">여러 가설을 다룬 팀 프로젝트였습니다. 이 페이지는 <strong>그중 제가 분석한 H4</strong>를 정리한 것입니다.</p>
+</div>
+<div class="card tight">
+<h4>상위 고객의 정의가 중요한 이유</h4>
+<p class="small">직접 검정하면 순환이 됩니다. "상위 고객"을 전체 기간으로 정의하면 분석은 <em>"성장한 가구가 고지출로 분류됐는가"</em>를 재게 되고, 답은 당연히 그렇다입니다. 그래서 집단은 어떤 검정보다 먼저 기준 기간만으로 정의해야 합니다.</p>
+</div>
+</div>
+<p class="takeaway">이 결과는 유지 예산을 어디에 쓸지에 영향을 줍니다. 성장이 고지출 고객에게 몰려 있다면 그들을 지키는 프로그램이 그 성장을 다룹니다. 그렇지 않다면 그들만 겨냥한 프로그램은 이후 기간에 지출이 낮아진 집단을 겨냥하게 됩니다.</p>
+</section>
+<section id="s2">
+<p class="sec-no">02</p>
+<h3>비즈니스 질문</h3>
+<p class="sec-sub">가설 H4와 검정 가능한 두 주장</p>
+<div class="card">
+<h4>H4: 매출 증가는 소수의 고지출 가구에 몰려 있다</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th>#</th><th class="tl">주장</th><th class="tl">반증 조건</th></tr></thead>
+<tbody>
+<tr><td class="num lead">H4-1</td><td class="tl"><em>기준 기간으로 고정한</em> 상위 X% 가구는 이후에 매출 비중과 절대 지출이 모두 늘었다</td><td class="tl">둘 중 하나라도 늘지 않음</td></tr>
+<tr><td class="num lead">H4-2</td><td class="tl">상위 고객 여부는 신규·재활성 여부와 연관된다</td><td class="tl">분할표에서 연관이 없음</td></tr>
+</tbody>
+</table>
+</div>
+</div>
+<div class="stats">
+<div class="stat"><p class="k">데이터의 가구</p><p class="v blue">2,500</p></div>
+<div class="stat"><p class="k">안정 기간</p><p class="v violet">83주</p></div>
+<div class="stat"><p class="k">기준 기간</p><p class="v ink">10주</p></div>
+<div class="stat"><p class="k">기준선</p><p class="v ink">상위 20%</p></div>
+</div>
+</section>
+<section id="s3">
+<p class="sec-no">03</p>
+<h3>데이터</h3>
+<p class="sec-sub">데이터 출처, 기준 기간 선택, 상위 X% 기준선</p>
+<div class="card">
+<h4>출처</h4>
+<p class="small"><strong>Dunnhumby "The Complete Journey"</strong>: 가구 2,500개의 가구 단위 거래 기록과 인구통계, 캠페인, 쿠폰, 상품 표. 분석은 <strong>83주 안정 기간(17~99주)</strong>을 씁니다. 2,500개 가구 중 2,492개가 17~99주에 거래가 있고, 아래 단계는 서로 다른 부분집합을 씁니다: 집중도 지표 2,272개, H4-1 검정 2,095개, 교차표와 모델 2,492개.</p>
+<p class="small" style="color:var(--ink-3)">데이터는 교육용 포트폴리오 목적으로 사용했습니다. 이 페이지는 팀 프로젝트 중 제가 분석한 부분(가설 H4)을 정리한 것입니다.</p>
+</div>
+<p class="takeaway" style="margin-top:26px">이 분석의 두 매개변수는 데이터의 성질이 아니라 분석가의 선택입니다: 기준 기간 길이와 "상위 X%" 기준선. 둘 다 고정하기 전에 데이터로 확인했습니다.</p>
+<div class="card">
+<h4>선택 1 · 기준 기간 길이</h4>
+<p class="small">짧은 기간은 잡음으로 가구 순위를 매기고, 긴 기간은 측정할 기간을 다 써 버립니다. 후보 길이마다 기간을 홀수 주와 짝수 주로 나누고, 두 반쪽에서 따로 가구 순위를 매겨 두 순위의 상관을 구했습니다. 그 길이에서 순위가 얼마나 재현되는지를 직접 재는 방법입니다.</p>
+<div class="stats" style="margin-bottom:0">
+<div class="stat"><p class="k">엘보</p><p class="v blue">10주</p></div>
+<div class="stat"><p class="k">순위 상관</p><p class="v amber">ρ = 0.697</p></div>
+<div class="stat"><p class="k">상한 적용</p><p class="v ink">기간의 15% 이하</p></div>
+</div>
+<p class="small" style="margin-top:14px"><strong>뚜렷한 엘보는 없었습니다.</strong> ρ = 0.697은 중간 정도라서 상위 X% 명단에는 잡음이 어느 정도 섞여 있습니다. 그래서 05장의 민감도 점검으로 결과가 기간 길이에 달려 있는지 시험합니다.</p>
+</div>
+<div class="card">
+<h4>선택 2 · 상위 X% 기준선</h4>
+<p class="small">관례적인 20%를 쓰기 전에 지출의 집중도를 쟀습니다.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th class="tl">지표</th><th>값</th></tr></thead>
+<tbody>
+<tr class="mark"><td class="lead tl">지니 계수</td><td class="num lead">0.532</td></tr>
+<tr><td class="tl">상위 10%의 매출 비중</td><td class="num">36.1%</td></tr>
+<tr><td class="tl">상위 20%의 매출 비중</td><td class="num">55.4%</td></tr>
+<tr><td class="tl">상위 30%의 매출 비중</td><td class="num">68.9%</td></tr>
+</tbody>
+</table>
+</div>
+<p class="small" style="margin-top:14px"><strong>분포는 80/20 법칙을 따르지 않습니다.</strong> 80/20이라면 상위 20%가 매출의 80%를 가져야 하지만 여기서는 55.4%입니다(17~26주에 거래가 있는 가구 2,272개). 지출은 집중되어 있지만 분포의 나머지도 상당한 비중을 차지합니다. 엘보 탐지는 기준선을 <span class="hl">18%</span>로 잡아 관례적인 기준과 가까웠으므로 <span class="hl">20%</span>를 채택했습니다.</p>
+</div>
+<figure>
+<img alt="17~26주 가구 지출의 로렌츠 곡선: 상위 10%, 20%, 30% 가구가 매출의 36.1%, 55.4%, 68.9%를 차지하고, 지니 = 0.532." src="assets/lorenz-curve.png"/>
+<figcaption>지니 계수 = 0.532(곡선과 대각선 사이 면적의 두 배), 17~26주에 거래가 있는 가구 2,272개 기준. 곡선이 부드럽게 꺾여 뚜렷한 기준점이 하나로 보이지 않아서, 20%를 채택하기 전에 엘보 탐지(18%)로 확인했습니다.</figcaption>
+</figure>
+<div class="card tight">
+<h4>이상치 처리</h4>
+<p class="small">IQR 규칙은 거래 금액의 7.34%를 이상치로 표시했습니다. 지출은 오른쪽으로 치우쳐 있으므로, 이를 데이터 문제의 근거가 아니라 IQR 규칙이 이 분포에 맞지 않는 것으로 봤습니다. 또 가설이 고지출 가구<strong>에 대한</strong> 것이므로, 그들을 지우면 시험할 데이터를 지우게 됩니다. 모든 관측치를 남기고 대신 순위 기반 검정을 썼습니다.</p>
+</div>
+</section>
+<section id="s4">
+<p class="sec-no">04</p>
+<h3>방법론</h3>
+<p class="sec-sub">기준 기간만으로 집단 정의, 통계 검정 선택</p>
+<div class="card">
+<h4>상위 고객을 기준 기간 데이터로만 정의</h4>
+<p class="small"><strong>"상위 X%"는 기준 기간 데이터만으로 고정하고 다시 계산하지 않습니다.</strong></p>
+<p class="small">이후 기간 데이터가 정의에 들어가면 질문이 <em>"이미 고지출이었던 가구가 성장했는가?"</em>에서 <em>"성장한 가구가 고지출로 분류됐는가?"</em>로 조용히 바뀌고, 실제 패턴과 상관없이 양의 결과가 나옵니다. 뒤의 모든 결과가 이 규칙에 기댑니다.</p>
+</div>
+<div class="card">
+<h4>분포에 따른 검정 선택</h4>
+<div class="table-wrap">
+<table>
+<thead><tr><th class="tl">확인</th><th class="tl">결과</th><th class="tl">결론</th></tr></thead>
+<tbody>
+<tr><td class="tl">정규성 (Shapiro-Wilk)</td><td class="tl">두 집단 모두 기각</td><td class="tl">모수적 평균 검정을 쓰지 않음</td></tr>
+<tr><td class="tl">등분산 (Levene)</td><td class="tl">기각, 상위 20%의 분산이 나머지의 3배 이상</td><td class="tl">합동 분산 t검정을 쓰지 않음</td></tr>
+<tr class="mark"><td class="lead tl">결정</td><td class="tl" colspan="2">집단 내 변화는 Wilcoxon 부호 순위, 집단 간은 Mann-Whitney U, 비중 지표는 부트스트랩</td></tr>
+</tbody>
+</table>
+</div>
+<p class="small" style="margin-top:14px">서로 관련된 가구 단위 검정 세 개(A~C)는 먼저 함께 <strong>Bonferroni 보정</strong>했습니다: α = 0.05 / 3 ≈ 0.0167. 부트스트랩 검정 D는 H4-1의 세 번째 비교로 계획했지만 처음의 세 검정 묶음에는 없었고, A~C 결과를 본 뒤 추가해서 묶음이 검정 네 개가 됐습니다(α = 0.05 / 4 = 0.0125). Bonferroni 기준은 검정 A~C의 p값에만 적용했고 두 기준 모두에서 유의하므로 판정은 바뀌지 않습니다. 검정 D는 p값이 없고 보정 전 95% 부트스트랩 구간이 0을 포함하지 않는지로만 판단합니다. 다중성을 보정한 구간은 계산하지 않았고 보정 후 유의성도 주장하지 않습니다. 05-C장의 기존 vs 신규 비교는 별도의 H4-2 검정이며, 아래에 자체 p값과 함께 보고합니다.</p>
+</div>
+<div class="grid2">
+<div class="card tight">
+<h4>비중 지표의 부트스트랩 구간</h4>
+<p class="small">매출 비중은 가구별 값이 아니라 집단 단위 비율이라서 순위 기반 검정을 쓸 수 없습니다. <strong>5,000회 부트스트랩</strong>으로 구간을 직접 만들었습니다.</p>
+</div>
+<div class="card tight">
+<h4>기준 기간 길이에 대한 민감도 점검</h4>
+<p class="small">첫 결과는 가설과 반대로 나왔습니다. 초깃값이 높아서 뽑힌 집단은 나중에 평균 쪽으로 다가가는 경향이 있으므로 <strong>평균으로의 회귀</strong>가 가능한 설명이었고, 그래서 기준 기간 길이에 대한 강건성 점검을 했습니다. 이 점검은 평균으로의 회귀를 배제하지 못합니다.</p>
+</div>
+</div>
+</section>
+<section id="s5">
+<p class="sec-no">05</p>
+<h3>분석</h3>
+<p class="sec-sub">민감도 점검, 집단 검정, 기여 분석</p>
+<h4>A · 기준 기간 길이에 대한 민감도</h4>
+<p>기준 기간과 이후 기간 사이의 가구별 지출 변화를 비교하자 H4-1의 예측과 반대가 나왔습니다: 나머지 80%는 늘고 상위 20%는 줄었습니다. 이것이 고른 기준 기간에 달려 있는지 보려고 기준 기간 8주, 10주, 12주로 비교를 반복했습니다.</p>
+<div class="card">
+<div class="table-wrap">
+<table>
+<thead><tr><th>기준 기간 길이</th><th>나머지 80% (평균 변화)</th><th>상위 20% (평균 변화)</th></tr></thead>
+<tbody>
+<tr><td class="tl">8주</td><td class="num">+92.42</td><td class="num">−97.16</td></tr>
+<tr class="mark"><td class="lead tl">10주</td><td class="num lead">+102.74</td><td class="num lead">−111.49</td></tr>
+<tr><td class="tl">12주</td><td class="num">+117.85</td><td class="num">−120.21</td></tr>
+</tbody>
+</table>
+</div>
+<p class="small" style="margin-top:14px"><strong>모든 기준 기간 길이에서 부호가 같고, 기준 기간이 길어질수록 두 집단의 차이가 조금 커집니다.</strong> 이는 완전한 식별 전략이 아니라 민감도 점검이며, 평균으로의 회귀를 배제하지 않습니다. 명단은 꽤 안정적이어서 세 명단의 Jaccard 겹침은 <span class="hl">0.76~0.86</span>입니다.</p>
+</div>
+<figure>
+<img alt="기준 기간 길이 8, 10, 12주에 따른 상위 20%와 나머지 80%의 평균 지출 변화. 기간이 길어질수록 두 선이 벌어집니다." src="assets/sensitivity-window.png"/>
+<figcaption>모든 기준 기간 길이에서 부호가 같고 차이가 조금 커집니다(189.6 → 214.2 → 238.1). 민감도 점검이며 평균으로의 회귀를 배제하지 않습니다.</figcaption>
+</figure>
+<p class="takeaway">결과의 부호는 8주, 10주, 12주 기준 기간에서 안정적이지만 평균으로의 회귀를 배제할 수 없습니다. 그래서 이 패턴을 <strong>지출 수준의 수렴</strong>으로 기술합니다.</p>
+<h4 style="margin-top:38px">B · 지출 변화와 매출 비중 검정</h4>
+<div class="card">
+<div class="table-wrap">
+<table>
+<thead><tr><th class="tl">검정</th><th>통계량</th><th>효과 크기</th><th>판정</th></tr></thead>
+<tbody>
+<tr><td class="tl">상위 20% 변화 (Wilcoxon)</td><td class="num">p = 0.00002</td><td class="num">r = −0.209</td><td><span class="chip rej">감소</span></td></tr>
+<tr><td class="tl">나머지 80% 변화 (Wilcoxon)</td><td class="num">p = 8.8 × 10⁻³¹</td><td class="num">—</td><td><span class="chip hold">증가</span></td></tr>
+<tr class="mark"><td class="lead tl">집단 간 차이 (Mann-Whitney U)</td><td class="num lead">p = 3.3 × 10⁻²⁰</td><td class="num lead">r = 0.290</td><td><span class="chip rej">다름</span></td></tr>
+<tr><td class="tl">상위 20% 비중 (부트스트랩)</td><td class="num">−12.91 pp</td><td class="num">보정 전 95% CI가 0을 포함하지 않음</td><td><span class="chip rej">하락</span></td></tr>
+</tbody>
+</table>
+</div>
+<p class="small" style="margin-top:14px">집단 간 검정에서 가장 해석하기 쉬운 값은 공통 언어 효과 크기입니다: <span class="hl">0.355</span>이며, 차이가 없으면 0.5입니다. 각 집단에서 가구를 하나씩 무작위로 뽑으면 상위 20% 가구가 더 많이 성장한 쌍은 35.5%이고, 차이가 없다면 50%여야 합니다.</p>
+</div>
+<figure>
+<img alt="초기 상위 20%의 매출 비중은 54.87%에서 41.96%로 떨어졌고(−12.91 pp), 95% 부트스트랩 구간은 −14.81 ~ −11.07입니다." src="assets/share-bootstrap.png"/>
+<figcaption>두 기간 모두 거래가 있는 2,095개 가구 중 초기 상위 20%인 419개 가구의 매출 비중은 54.87%에서 41.96%로 떨어졌습니다(−12.91 pp, 95% CI −14.81 ~ −11.07). 초기 비중이 위의 55.4% 집중도보다 조금 낮은 것은, 그 값이 17~26주에 활동한 가구 2,272개 전체를 쓰기 때문입니다. 5,000회 부트스트랩에서 구간은 0을 포함하지 않습니다.</figcaption>
+</figure>
+<h4 style="margin-top:38px">C · 연관과 기여</h4>
+<p>관찰된 증가가 나머지 80%에 있었으므로, 다음 질문은 그 증가가 <strong>신규·재활성 가구의 유입</strong>에서 왔는지 <strong>기존 가구가 더 쓴 것</strong>에서 왔는지입니다. 먼저 분할표로 이 가구 유형이 두 집단에 어떻게 나뉘는지 봅니다.</p>
+<div class="card">
+<div class="table-wrap">
+<table>
+<thead><tr><th class="tl">집단</th><th>기존</th><th>신규 / 재활성</th></tr></thead>
+<tbody>
+<tr class="mark"><td class="lead tl">나머지 80%</td><td class="num">1,127 (56.5%)</td><td class="num lead">866 (43.5%)</td></tr>
+<tr><td class="tl">상위 20%</td><td class="num">431 (86.4%)</td><td class="num">68 (13.6%)</td></tr>
+</tbody>
+</table>
+</div>
+<p class="small" style="margin-top:14px">이 표는 17~99주에 거래가 있는 가구 2,492개(상위 20% 499개, 초기 지출 ≥ 535.29)를 다루며, 위의 419개 가구 집단과는 다르게 자른 것입니다. 2,500개 중 나머지 8개(기존 7개, 재활성 1개)는 그 기간에 거래가 없어 표에 없습니다.</p>
+<p class="small" style="margin-top:14px">카이제곱 p = 1.5 × 10⁻³⁴, <strong>Cramér's V = 0.246</strong>으로 중간 정도의 연관입니다. 신규·재활성 가구는 압도적으로 나머지 80%에 있습니다(934개 중 866개).</p>
+</div>
+<div class="card">
+<h4>순증가에 대한 기여</h4>
+<p class="small">이 표와 맞는 해석은 두 가지가 남습니다: 이 가구들이 추가 매출의 큰 부분을 차지했거나, 평균적으로 덜 써서 아래 집단에 몰렸을 뿐이거나. 둘을 구분하려면 그들의 <em>순증가에 대한 실제 비중</em>을 계산해야 합니다.</p>
+<div class="table-wrap">
+<table>
+<thead><tr><th class="tl">코호트</th><th>인원 비중 (나머지 80%)</th><th>순증가 비중 (나머지 80%)</th><th>중앙값 변화</th></tr></thead>
+<tbody>
+<tr class="mark"><td class="lead tl">기존</td><td class="num">56.5%</td><td class="num lead">70.0%</td><td class="num">+51.78</td></tr>
+<tr><td class="tl">신규 / 재활성</td><td class="num">43.5%</td><td class="num" style="color:var(--rose)">30.0%</td><td class="num">+10.26</td></tr>
+</tbody>
+</table>
+</div>
+<p class="small" style="margin-top:14px"><strong>기여가 인원 비중보다 작습니다.</strong> 신규·재활성 가구는 집단의 43.5%이지만 순증가의 30.0%입니다. 기존 가구의 중앙값 변화는 신규·재활성 가구의 약 <span class="hl">5배</span>이고(+51.78 vs +10.26), 평균은 +119.96 vs +67.07입니다. 이는 관찰된 변화의 회계적 분해이지 인과 추정이 아닙니다.</p>
+</div>
+<figure>
+<img alt="나머지 80%(n = 1,993) 안에서 가구 비중 대 순지출 증가 비중: 기존 가구는 가구의 56.5%, 증가의 70.0%이고, 신규·재활성 가구는 43.5%와 30.0%입니다." src="assets/contribution-split.png"/>
+<figcaption>나머지 80% 안에서 인원 비중 대 기여 비중. 기존 가구가 더 큰 집단(56.5%)이고 더 많이 기여합니다(70.0%). 신규·재활성 가구는 집단의 43.5%이고 30.0%를 기여합니다.</figcaption>
+</figure>
+<div class="card tight">
+<h4>통계적 유의성과 효과 크기</h4>
+<p class="small">두 코호트를 직접 검정하면 <strong>p = 0.000928</strong>로 p값이 작습니다. 이는 H4-1의 네 검정 묶음 밖에 있는 별도의 H4-2 검정이고, 노트북에서 다중성 보정이나 판정 기준을 정하지 않았습니다. 효과 크기는 <strong>순위 이연 상관 0.086</strong>이고, 공통 언어 효과 크기는 귀무 0.5 대비 0.457입니다. 가구가 1,993개(신규·재활성 866, 기존 1,127)이면 효과 크기가 작은 차이에도 p값이 작게 나올 수 있으므로, p값과 함께 효과 크기를 보고합니다.</p>
+</div>
+</section>
+<section id="s6">
+<p class="sec-no">06</p>
+<h3>결과</h3>
+<p class="sec-sub">H4-1과 H4-2의 결과, 탐색적 모델</p>
+<div class="grid2">
+<div class="card">
+<h4>H4-1 <span class="chip rej">지지 안 됨</span></h4>
+<p class="small">두 관점 모두에서 상위 20%는 이후 기간에 값이 낮았습니다(H4-1 패널, 가구 2,095개, 상위 20% = 419): 절대 지출 중앙값 131.45 감소, 매출 비중 12.91포인트 감소. 데이터는 대신 <strong>수렴 패턴</strong>을 보여 줍니다: 이후 기간에 초기 상위 20%는 덜 쓰고 나머지 80%는 더 썼습니다.</p>
+</div>
+<div class="card">
+<h4>H4-2 <span class="chip warn">지지되지만 다시 정리</span></h4>
+<p class="small">연관은 성립하지만(Cramér's V = 0.246) 그로부터 큰 <em>기여</em>가 따라 나오지는 않습니다. 넓은 패널(가구 2,492개)에서 나머지 80%(가구 1,993개)의 순지출 증가 중 70%는 기존 가구에서 나왔습니다. <strong>나머지 80% 안에서 관찰된 증가의 대부분은 신규·재활성 가구가 아니라 기존 가구에서 나왔습니다.</strong></p>
+</div>
+</div>
+<h4 style="margin-top:38px">탐색적 유지 위험 모델</h4>
+<p>통계 검정은 두 기간 사이에 무엇이 바뀌었는지 기술할 뿐, 어떤 가구가 상위 등급에서 이탈할 가능성이 큰지는 알려 주지 않습니다. 그래서 기준 기간에 상위 20%였던 499개 가구(17~99주에 거래가 있는 2,492개 중)로 마지막에도 상위에 남았는지 예측하는 모델을 만들었습니다. 모델은 <strong>탐색적</strong>입니다. 499행은 작은 표본이고, 목표는 운영용 점수기가 아니라 연관 요인을 찾는 것입니다.</p>
+<div class="card tight">
+<h4>시간 누수 없음</h4>
+<p class="figures">변수 ← 17~26주  ·  목표 ← 90~99주</p>
+<p class="small">모든 변수는 기준 기간만으로 만들었고, 목표는 이후 기간만으로, 원래 변화량이 아니라 <strong>다시 계산한 순위</strong>로 정의했습니다. 이후 기간 정보는 어느 단계에서도 변수에 들어가지 않습니다.</p>
+</div>
+<div class="card">
+<div class="table-wrap">
+<table>
+<thead><tr><th class="tl">모델</th><th>PR-AUC</th><th class="tl">판정</th></tr></thead>
+<tbody>
+<tr><td class="tl">무작위 기준선</td><td class="num">0.447</td><td class="tl">양성 비율과 같음</td></tr>
+<tr class="mark"><td class="lead tl">로지스틱 회귀</td><td class="num lead">0.685</td><td class="tl"><strong>선택</strong>: 재현율이 더 높고(0.601 vs 0.529) 해석 가능</td></tr>
+<tr><td class="tl">랜덤 포레스트</td><td class="num">0.657</td><td class="tl">재현율이 더 낮음(0.529 vs 0.601). 499개 표본은 트리 모델에 너무 작을 수 있음</td></tr>
+</tbody>
+</table>
+</div>
+<p class="small" style="margin-top:14px"><strong>주 지표는 정확도가 아니라 PR-AUC와 재현율이었습니다.</strong> 위험 가구를 놓치는 비용이 유지 메시지 하나를 더 보내는 비용보다 크다면 재현율에 더 무게를 둬야 합니다. 캠페인 비용 자료가 없어서 이익 최적 기준값은 정하지 못했습니다. 이 데이터와 표본 크기에서는 <strong>로지스틱 회귀가 더 나은 모델</strong>입니다: 이탈한 223개 가구 중 89개(40%)를 놓쳤고, 포레스트는 105개(47%)를 놓쳤습니다.</p>
+</div>
+<figure>
+<img alt="로그 척도의 오즈비와 95% 부트스트랩 구간 forest plot: 인구통계 기록 있음 0.32, 기준 지출 0.64, 소득 구간 0.73은 구간이 1을 포함하지 않고, 범주 다양성 0.74는 경계선에서만 1을 포함하지 않으며(상한 0.998), 방문 빈도 1.29와 프로모션 노출 0.96은 1을 포함합니다." src="assets/odds-ratios.png"/>
+<figcaption>굵은 표시는 95% 부트스트랩 구간이 1을 포함하지 않는 변수입니다(인구통계 기록 있음, 기준 지출, 소득 구간, 그리고 경계선에서 범주 다양성, 상한 0.998). 흐린 표시는 구간이 1을 포함합니다. 첫 번째 변수는 has_demo 플래그, 즉 인구통계 기록이 있는지입니다. 수치형 변수는 1 SD당, 이진 변수는 0 vs 1이라 크기를 직접 비교할 수 없습니다.</figcaption>
+</figure>
+<div class="grid2">
+<div class="card tight">
+<h4>로지스틱 모델의 두 가지 결과</h4>
+<p class="small"><strong>인구통계 기록이 있는 것이 상위 등급 유지와 가장 뚜렷한 연관을 보입니다</strong>(OR = 0.32, 95% CI 0.19~0.51). 참여도를 대신하는 것일 수 있지만, 기록이 있어서 가구가 상위에 남는다는 것을 보여 주지는 않습니다.</p>
+<p class="small"><strong>방문 빈도는 연관이 확인되지 않았습니다</strong>. 모델의 다른 변수를 고려하면 OR 1.29(1 SD당, 95% CI 0.91~1.87로 1을 포함)입니다. 점추정은 위험이 높은 쪽으로 기울지만 위험 요인으로 읽어서는 안 됩니다.</p>
+</div>
+<div class="card tight">
+<h4>랜덤 포레스트 SHAP 중요도와의 비교</h4>
+<p class="small">랜덤 포레스트의 SHAP 중요도는 로지스틱 결과와 꽤 겹칩니다. 상위 5개 변수 중 4개(인구통계 기록, 기준 지출, 범주 다양성, 소득 구간)는 로지스틱에서도 구간이 1을 포함하지 않는 변수입니다(범주 다양성은 경계선, 상한 0.998).</p>
+<p class="small">포레스트는 선형 로지스틱 모델이 보여 주지 못하는 비선형 패턴, 예를 들어 기준 지출이 높을 때 평평해지는 모양도 보여 줄 수 있습니다.</p>
+</div>
+</div>
+<figure>
+<img alt="변수 10분위별 평균 SHAP 값: 기준 지출은 가장 낮은 분위의 +0.091에서 9분위 −0.082, 10분위 −0.084로 떨어지며 1,246 위에서는 평평하고, 범주 다양성은 최상위 분위에서 −0.061까지 계속 떨어집니다." src="assets/shap-saturation.png"/>
+<figcaption>기준 지출은 초기 지출 약 1,250 위에서 평평해집니다(9분위 평균 SHAP −0.082, 10분위 −0.084). 범주 다양성은 위쪽에서 평평해지지 않습니다. 약 77개 범주 아래에서는 평평하고(약 +0.03), 그 위로 계속 떨어집니다(최상위 분위 −0.061). 이는 모델을 기술한 것이지, 어떤 기준값 근처의 가구를 겨냥했을 때의 효과를 시험한 것이 아닙니다.</figcaption>
+</figure>
+<div class="card tight">
+<h4>모델 검증</h4>
+<p class="figures">순열 검정 p = 0.001 (1,000회, 가능한 최솟값)  ·  층화 더미 기준선(PR-AUC 0.4325)보다 나음  ·  학습/검증 간 큰 차이의 징후 없음</p>
+<p class="small">순열 검정은 결과를 무작위로 섞은 것보다 성능이 낫다는 것을 시사하고, 학습/검증 간 큰 차이의 징후는 없습니다. 검증 PR-AUC는 마지막 다섯 학습 크기에서 평평하므로(0.680~0.687) 가구를 훨씬 더 늘려도 그림이 바뀔 것 같지는 않습니다. 다른 기간이나 다른 소매업체에서의 성능은 시험하지 않았습니다.</p>
+</div>
+</section>
+<section id="s7">
+<p class="sec-no">07</p>
+<h3>비즈니스 시사점</h3>
+<p class="sec-sub">유지 프로그램과 보고에 주는 의미</p>
+<div class="card">
+<h4>① 관찰된 증가는 상위 20% 밖에 있습니다</h4>
+<p class="small">관찰된 지출 증가는 나머지 80%에 있습니다. 넓은 패널(가구 2,492개, 나머지 80% = 1,993)에서 그 대부분(70.0%)은 기존 가구에서 나왔습니다. 초기 고지출 고객을 지키는 것만으로 만든 전략은 지출 중앙값이 131.45 떨어진 집단을 겨냥하게 됩니다(H4-1 패널, 가구 2,095개, 상위 20% = 419).</p>
+</div>
+<div class="card">
+<h4>② 신규·재활성 가구의 기여는 인원 비중보다 작았습니다</h4>
+<p class="small">넓은 패널에서 신규·재활성 가구는 나머지 80%(가구 1,993개)의 43.5%이지만 순지출 증가의 30%입니다. 이는 회계적 분해이며, 유치 노력이 효과가 있었는지나 예산을 어디에 써야 하는지를 보여 주지는 않습니다.</p>
+</div>
+<div class="card">
+<h4>③ 인구통계 기록이 있는 것은 상위 등급 유지와 연관됩니다</h4>
+<p class="small">인구통계 기록이 있는 것이 가장 뚜렷한 연관을 보이고(OR 0.32), 기준 지출도 연관되지만(1 SD당 OR 0.64) 둘은 척도가 달라 순위를 매기지 않습니다. 참여도 지표 후보로 확인해 볼 만하지만, 이 데이터로는 참여 저하가 지출 감소에 앞서는지 뒤따르는지 알 수 없습니다.</p>
+</div>
+<div class="card">
+<h4>④ 기준 지출에 대한 모델의 반응은 위쪽에서 평평해집니다</h4>
+<p class="small">랜덤 포레스트에서 기준 지출과 예측 위험의 연관은 초기 지출 약 1,250 위에서 평평해집니다. 범주 다양성은 위쪽에서 평평해지지 않습니다. 이는 모델의 예측을 기술한 것이며, 어떤 기준값 근처의 유지 노력이 더 큰 성과를 낸다는 것을 보여 주지는 않습니다.</p>
+</div>
+<h4 style="margin-top:38px">권고</h4>
+<div class="rec">
+<h4><span class="rn">01</span> 유지 프로그램을 상위 20% 밖으로 넓히는 것을 시험하기</h4>
+<dl>
+<div class="rrow"><dt>누가</dt><dd>CRM·로열티 프로그램 담당자</dd></div>
+<div class="rrow"><dt>무엇을</dt><dd>순수한 상위 20% 정의에서 상위 20% 밖의 기존 가구 쪽으로 예산 가중치를 옮기는 것을 시험합니다. 이 분석의 결과가 아니라 평가할 가설입니다</dd></div>
+<div class="rrow"><dt>왜</dt><dd>H4-1 패널(가구 2,095개)에서 상위 20%는 중앙값 131.45 줄었고 나머지 80%는 중앙값 36.49 늘었습니다. 상위 20% 정의로는 관찰된 증가가 있는 가구를 겨냥하지 못합니다</dd></div>
+<div class="rrow"><dt>확인 방법</dt><dd>방향을 바꾼 프로그램에서 상위 20% 밖 가구의 짝지은 일부를 제외하고, 두 기간 뒤 유지율을 비교합니다</dd></div>
+</dl>
+</div>
+<div class="rec">
+<h4><span class="rn">02</span> 인구통계 기록이 없는 것이 상위 등급 이탈 신호인지 확인하기</h4>
+<dl>
+<div class="rrow"><dt>누가</dt><dd>유지 분석팀, 고객 인사이트팀</dd></div>
+<div class="rrow"><dt>무엇을</dt><dd>지출과 함께 <strong>가구에 인구통계 기록이 있는지, 구매 외 접점(프로필 작성, 프로그램 참여)에 어떻게 참여하는지</strong>를 추적해, 이것이 누가 상위 등급에서 이탈하는지에 대한 정보를 담고 있는지 확인합니다</dd></div>
+<div class="rrow"><dt>왜</dt><dd>모델에서 인구통계 기록이 있는 것이 상위 등급 유지와 가장 뚜렷한 연관을 보였습니다(OR = 0.32, 95% CI 0.19~0.51). 수치형 변수는 1 SD당, 이진 변수는 0 vs 1이라 오즈비를 크기 순으로 줄 세우지 않습니다</dd></div>
+<div class="rrow"><dt>주의</dt><dd>가구 499개 탐색적 모델의 연관입니다. 이 신호를 측정할 근거는 되지만 그것으로 결정을 자동화할 근거는 되지 않으며, 이 데이터로는 참여 저하가 지출 감소에 앞서는지 뒤따르는지 알 수 없습니다</dd></div>
+</dl>
+</div>
+<div class="rec">
+<h4><span class="rn">03</span> 매출 집중도를 추이로 보고하기</h4>
+<dl>
+<div class="rrow"><dt>누가</dt><dd>영업 보고</dd></div>
+<div class="rrow"><dt>무엇을</dt><dd>상위 20% 매출 비중을 <strong>한 시점이 아니라 시계열로</strong> 보고합니다. 집중도 표본(17~26주에 거래가 있는 가구 2,272개)에서 상위 20%는 기준 기간 매출의 55.4%를 차지했고, 가구 2,095개 H4-1 패널의 초기 상위 20% 419개 가구는 기준 기간 54.87%, 90~99주 41.96%로 12.91포인트 떨어졌습니다</dd></div>
+<div class="rrow"><dt>왜</dt><dd>한 시점의 집중도로는 기준 기간 상위 집단의 비중이 오르는지 내리는지 알 수 없습니다</dd></div>
+</dl>
+</div>
+</section>
+<section id="s8">
+<p class="sec-no">08</p>
+<h3>한계</h3>
+<p class="sec-sub">이 분석이 뒷받침할 수 없는 것</p>
+<p class="takeaway">이 분석은 수렴 패턴을 기록합니다. 왜 일어났는지는 설명하지 않으며 인과 연구도 아닙니다.</p>
+<div class="grid2">
+<div class="card tight">
+<h4>기여 분석은 인과 추론이 아닙니다</h4>
+<p class="small">05-C장은 증가가 어디서 왔는지 분해합니다. 반사실은 세우지 않습니다. 신규·재활성 가구가 없었다면 무슨 일이 <em>일어났을지</em>는 여기서 아무것도 말해 주지 않습니다.</p>
+</div>
+<div class="card tight">
+<h4>중간 정도의 기준 기간 신뢰도</h4>
+<p class="small">고른 기간에서 홀수/짝수 순위 상관은 ρ = 0.697이므로 상위 X% 명단에는 실제 잡음이 섞여 있습니다. 민감도 점검이 이를 줄이지만 없애지는 못합니다. 순위 기반 집단 선택은 기준 기간을 고정하고 민감도를 시험해도 평균으로의 회귀 효과를 낼 수 있습니다.</p>
+</div>
+<div class="card tight">
+<h4>모델링 단계의 작은 표본</h4>
+<p class="small">가구 499개는 트리 앙상블에는 작고, 로지스틱 회귀에서도 겹 사이의 분산이 보입니다. 그래서 이 단계를 예측이 아니라 탐색으로 다룹니다. 목표는 고객 이탈이 아니라 지출 기준 상위 20%에 남는지입니다.</p>
+</div>
+<div class="card tight">
+<h4>변화의 이유는 밝히지 못했습니다</h4>
+<p class="small">수렴은 기술했지만 그 이유는 밝히지 못했습니다. 고가치 고객 이탈, 경쟁사로의 대체, 아래 등급의 전반적 성장 중 무엇을 반영하는지 이 데이터로는 구분할 수 없습니다.</p>
+</div>
+<div class="card tight">
+<h4>전부 관찰 연구입니다</h4>
+<p class="small">무작위화도, 알려진 배정 방식도 없습니다. 모든 결과는 확정된 효과가 아니라 기술적 비교나 연관입니다(로지스틱 모델 추정치는 모델의 다른 변수를 보정한 값).</p>
+</div>
+<div class="card tight">
+<h4>패널 하나, 소매업체 하나</h4>
+<p class="small">한 소매업체의 가구 2,500개이며, 그중 2,492개가 83주 기간에 거래가 있습니다. 수렴 패턴은 이 사업, 이 기간, 이 고객층에 고유한 것일 수 있습니다.</p>
+</div>
+</div>
+</section>
+<section id="s9">
+<p class="sec-no">09</p>
+<h3>도구와 기술</h3>
+<p class="sec-sub">무엇을 어디에 썼는지</p>
+<div class="card">
+<h4>프로그래밍과 데이터 처리</h4>
+<div class="skills">
+<span class="skill">Python</span>
+<span class="skill">pandas</span>
+<span class="skill">NumPy</span>
+<span class="skill">SciPy</span>
+</div>
+</div>
+<div class="card">
+<h4>통계와 가설 검정</h4>
+<div class="skills">
+<span class="skill">가설 검정</span>
+<span class="skill">Wilcoxon 부호 순위</span>
+<span class="skill">Mann-Whitney U</span>
+<span class="skill">Shapiro-Wilk</span>
+<span class="skill">Levene 검정</span>
+<span class="skill">카이제곱 검정</span>
+<span class="skill">부트스트랩 신뢰구간</span>
+<span class="skill">Bonferroni 보정</span>
+<span class="skill">효과 크기 분석</span>
+<span class="skill">민감도 분석</span>
+</div>
+</div>
+<div class="card">
+<h4>분포와 집중도 분석</h4>
+<div class="skills">
+<span class="skill">로렌츠 곡선</span>
+<span class="skill">지니 계수</span>
+<span class="skill">파레토 분석</span>
+<span class="skill">순위 안정성 검정</span>
+<span class="skill">엘보 탐지</span>
+<span class="skill">Jaccard 유사도</span>
+<span class="skill">기여 분해</span>
+</div>
+</div>
+<div class="card">
+<h4>머신러닝</h4>
+<div class="skills">
+<span class="skill">scikit-learn</span>
+<span class="skill">로지스틱 회귀</span>
+<span class="skill">랜덤 포레스트</span>
+<span class="skill">SHAP</span>
+<span class="skill">층화 K겹</span>
+<span class="skill">VIF 진단</span>
+<span class="skill">변수 설계</span>
+<span class="skill">순서형·원-핫 인코딩</span>
+</div>
+</div>
+<div class="card">
+<h4>모델 평가</h4>
+<div class="skills">
+<span class="skill">PR-AUC</span>
+<span class="skill">재현율</span>
+<span class="skill">혼동 행렬</span>
+<span class="skill">순열 검정</span>
+<span class="skill">더미 기준선</span>
+<span class="skill">학습 곡선</span>
+</div>
+</div>
+<div class="card">
+<h4>작업 원칙</h4>
+<div class="skills">
+<span class="skill">누수 방지</span>
+<span class="skill">순환 정의 방지</span>
+<span class="skill">데이터 기반 기준값 선택</span>
+<span class="skill">p값과 함께 효과 크기 보고</span>
+</div>
+</div>
+</section>
+<section id="s10">
+<p class="sec-no">10</p>
+<h3>저장소</h3>
+<p class="sec-sub">노트북, 코드, 전체 설명</p>
+<a class="btn" href="https://github.com/jiwoon-oh/dunnhumby-revenue-concentration" rel="noopener" target="_blank">GitHub 코드·결과물 <span class="arw">→</span></a>
+<p class="small" style="color:var(--ink-3);max-width:76ch">저장소에는 따로 내려받는 원본 데이터에서 모든 숫자와 그림을 만드는 Jupyter 노트북(README에 적힌 순서로 실행)과, 이 페이지에서 압축한 단계를 모두 담은 README가 있습니다.</p>
+<div class="card tight" style="margin-top:24px">
+<h4>관련 분석: Case 01</h4>
+<p class="small">Case 01은 같은 데이터에 다른 질문을 던집니다. 이원 고정효과로 캠페인 반응이 고객 지출 등급에 따라 다른지 봅니다. <a href="../case2/index.ko.html">Case 01 읽기 →</a></p>
+</div>
+</section>
+</main>
+</div>
+<footer class="wrap">
+<p>데이터 · Dunnhumby “The Complete Journey”, 데이터의 가구 2,500개, 83주 안정 기간(17~99주). 교육용 포트폴리오 목적으로 사용했습니다.</p>
+<p>도구 · Python 3, pandas, NumPy, SciPy, scikit-learn, SHAP, matplotlib</p>
+<p>범위 · 이 페이지는 팀 프로젝트의 가설 H4를 다룹니다. 다른 가설은 다른 팀원이 맡았습니다.</p>
+<p>코드 · <a href="https://github.com/jiwoon-oh/dunnhumby-revenue-concentration" rel="noopener" target="_blank">GitHub 코드·결과물</a></p>
+</footer>
+<script>
+(function(){
+  var links = Array.prototype.slice.call(document.querySelectorAll('.rail a'));
+  var secs  = links.map(function(a){ return document.querySelector(a.getAttribute('href')); });
+  if(!('IntersectionObserver' in window)) return;
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(!e.isIntersecting) return;
+      var i = secs.indexOf(e.target);
+      links.forEach(function(a,j){ a.classList.toggle('on', j===i); });
+    });
+  }, { rootMargin: '-10% 0px -70% 0px', threshold: 0 });
+  secs.forEach(function(s){ if(s) io.observe(s); });
+})();
+</script>
+</body>
+</html>
