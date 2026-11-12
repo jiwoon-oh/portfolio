@@ -14,9 +14,8 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Jiwoon Oh, Data Analyst: statistical analysis, hypothesis testing and machine learning">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" crossorigin>
 <style>
 /* ============================================================
    Landing page only. Case-study pages keep assets/case.css;
@@ -30,8 +29,8 @@
   --mute-text:#666460;
   /* headline grey 3.1:1 on --bg; headline charcoal 4.4:1 against it */
   --head-mute:#82807B; --head-ink:#1A1A1A;
-  --sans:"Inter",system-ui,-apple-system,"Segoe UI",sans-serif;
-  --display:"Inter Tight","Inter",system-ui,sans-serif;
+  --sans:"Pretendard Variable","Pretendard",system-ui,-apple-system,"Segoe UI","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --display:var(--sans);
   --pad:28px;
 }
 *,*::before,*::after{box-sizing:border-box}
@@ -153,6 +152,14 @@ footer{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;
   html{scroll-behavior:auto}
   .acc details[open] .pbody{animation:none}
 }
+
+/* hover: coral #FC726C on every link (callout boxes keep their own colours) */
+:root{--coral:#FC726C}
+a{transition:color .2s,text-decoration-color .2s}
+a:hover{color:var(--coral);text-decoration-color:var(--coral)}
+.menu a:hover,.c-menu .lang a:hover{color:var(--coral)}
+.acc summary:hover .ptitle{color:var(--coral);text-decoration-color:var(--coral)}
+@media (prefers-reduced-motion:reduce){a{transition:none}}
 </style>
 </head>
 <body>

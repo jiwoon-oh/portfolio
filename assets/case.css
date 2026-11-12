@@ -6,7 +6,7 @@
    numbered sections → footer.
 
    Colours and type follow the landing page: warm grey ground,
-   charcoal text, Inter Tight for headings, Inter for body,
+   charcoal text, Pretendard for headings and body (Latin and Hangul),
    1px hairlines, no shadows or blur. Charts keep their own
    colours inside the PNGs; text on the page is achromatic.
 
@@ -29,8 +29,8 @@
      bold weight, not colour. */
   --blue:var(--ink); --violet:var(--ink); --rose:var(--ink); --mint:var(--ink); --amber:var(--ink);
   --r:2px;
-  --sans:"Inter",-apple-system,system-ui,"Segoe UI",sans-serif;
-  --display:"Inter Tight","Inter",-apple-system,system-ui,sans-serif;
+  --sans:"Pretendard Variable","Pretendard",-apple-system,system-ui,"Segoe UI","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+  --display:var(--sans);
   /* code and formulas only */
   --mono:ui-monospace,"SFMono-Regular",Consolas,"Liberation Mono",monospace;
 }
@@ -323,3 +323,10 @@ a:focus-visible{outline-color:var(--green)}
   .rail a.on::before{transform:scaleX(1)}
 }
 @media (prefers-reduced-motion:reduce){.rail a,.rail a::before{transition:none}}
+
+/* hover: coral #FC726C on every link; callout boxes keep their own colours */
+a{transition:color .2s,text-decoration-color .2s}
+a:hover{color:var(--coral);text-decoration-color:var(--coral)}
+.nav .lang a:hover,.rail a:hover,.rail a.on:hover{color:var(--coral)}
+.callout a:hover{color:var(--on-green);text-decoration-color:var(--on-green)}
+@media (prefers-reduced-motion:reduce){a{transition:none}}
