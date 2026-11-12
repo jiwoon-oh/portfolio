@@ -172,7 +172,9 @@ th{font-size:11px;letter-spacing:.06em;color:var(--ink-3);font-weight:500;text-t
 th.tl,td.tl{text-align:left}
 td.lead{font-weight:600}
 tr:last-child td{border-bottom:none}
-tr.mark td{background:rgba(0,0,0,.035)}
+tr.mark td{background:rgba(30,65,55,.12);color:var(--green)}
+tr.mark{--blue:var(--green);--violet:var(--green);--rose:var(--green);--mint:var(--green);--amber:var(--green)}
+tr.mark .chip{color:inherit;border-color:rgba(30,65,55,.35)}
 
 /* pair rows */
 .pair{display:grid;grid-template-columns:104px 1fr auto auto;gap:14px;align-items:baseline;
